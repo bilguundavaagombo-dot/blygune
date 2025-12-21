@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Монгол Чеф - Гараар Бүтээх</title>
+    <title>Монгол Чеф - Pro Version</title>
     <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Public+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,6 +11,7 @@
             --nyt-black: #121212;
             --nyt-gray: #f7f7f7;
             --gemini-blue: #4E86F5;
+            --easy-green: #2D8B57;
             --border-color: #ddd;
             --font-serif: 'Frank Ruhl Libre', serif;
             --font-sans: 'Public Sans', sans-serif;
@@ -30,23 +31,19 @@
             padding: 0 20px; background: white; z-index: 1000; position: fixed; top: 0; width: 100%;
         }
         .logo { font-family: var(--font-serif); font-weight: 700; font-size: 1.4rem; letter-spacing: -0.5px; text-transform: uppercase; color: black; cursor: pointer; }
-        .cart-count { background: var(--nyt-red); color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-left: 5px; }
 
-        /* --- LAYOUT & RESPONSIVENESS --- */
+        /* --- LAYOUT --- */
         .page { 
             position: absolute; top: 60px; left: 0; width: 100%; height: calc(100% - 60px); 
             display: none; flex-direction: column; align-items: center; 
-            overflow-y: auto; padding-bottom: 80px;
+            overflow-y: auto; padding-bottom: 100px; /* More space for bottom bar */
         }
         .active-page { display: flex !important; animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Container for Desktop Centering */
-        .container {
-            width: 100%; max-width: 800px; padding: 20px; display: flex; flex-direction: column; align-items: center;
-        }
+        .container { width: 100%; max-width: 800px; padding: 20px; display: flex; flex-direction: column; align-items: center; }
 
-        /* --- HOME PAGE --- */
+        /* --- HOME --- */
         #home { justify-content: center; text-align: center; background: var(--nyt-gray); }
         .hero-content { margin-top: 5vh; }
         .daily-pick { font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; color: var(--nyt-red); text-transform: uppercase; margin-bottom: 15px; }
@@ -58,123 +55,101 @@
             cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; 
             width: 100%; max-width: 300px;
         }
-        .btn-primary:hover { background-color: #b01b00; }
-
-        /* --- SELECTION / INPUT PAGE --- */
+        
+        /* --- SELECTION --- */
         #selection { background: white; }
         
-        .controls-wrapper {
-            display: flex; flex-wrap: wrap; gap: 15px; width: 100%; margin-bottom: 30px; justify-content: center;
-        }
+        .controls-wrapper { display: flex; flex-wrap: wrap; gap: 15px; width: 100%; margin-bottom: 20px; justify-content: center; }
 
-        /* Dropdown & Counter Styles */
         .control-box {
             display: flex; align-items: center; justify-content: space-between; gap: 10px;
             background: #f9f9f9; padding: 12px 20px; border-radius: 8px; border: 1px solid #eee;
-            width: 100%; /* Mobile full width */
+            width: 100%; 
         }
-        /* Desktop Adjustment */
-        @media (min-width: 768px) {
-            .control-box { width: auto; min-width: 200px; }
-        }
+        @media (min-width: 768px) { .control-box { width: auto; min-width: 200px; } }
 
-        .control-label { font-size: 0.75rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-        .style-select { border: none; background: transparent; font-family: var(--font-serif); font-size: 1.1rem; font-weight: bold; outline: none; text-align: right; flex-grow: 1; cursor: pointer; }
+        .control-label { font-size: 0.75rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0; }
+        .style-select { border: none; background: transparent; font-family: var(--font-serif); font-size: 1.1rem; font-weight: bold; outline: none; text-align: right; flex-grow: 1; cursor: pointer; width: 100%; }
         
         .serving-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ccc; background: white; cursor: pointer; font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
         .serving-count { font-family: var(--font-serif); font-size: 1.3rem; font-weight: bold; padding: 0 15px; }
 
-        /* Big Input Field */
-        .input-wrapper { width: 100%; position: relative; margin-bottom: 20px; }
-        .big-input {
-            width: 100%; padding: 20px; border: 2px solid #eee; border-radius: 12px;
-            font-family: var(--font-serif); font-size: 1.2rem; outline: none; transition: 0.3s;
-        }
+        /* Input Area with Mic */
+        .input-wrapper { width: 100%; position: relative; margin-bottom: 10px; }
+        .big-input { width: 100%; padding: 20px; padding-right: 50px; border: 2px solid #eee; border-radius: 12px; font-family: var(--font-serif); font-size: 1.2rem; outline: none; transition: 0.3s; }
         .big-input:focus { border-color: var(--nyt-black); box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
-        .enter-hint { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #aaa; font-size: 0.8rem; pointer-events: none; display: none; }
-        @media (min-width: 768px) { .enter-hint { display: block; } }
+        
+        .mic-btn {
+            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #ccc;
+            transition: 0.2s;
+        }
+        .mic-btn.listening { color: var(--nyt-red); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        /* Added Ingredients List (Chips) */
-        .ingredients-display {
-            display: flex; flex-wrap: wrap; gap: 10px; width: 100%; margin-top: 10px;
+        /* Pantry Toggle */
+        .pantry-toggle {
+            display: flex; align-items: center; gap: 10px; width: 100%; 
+            background: #fff8f6; padding: 10px 15px; border-radius: 8px; border: 1px solid #ffebe6;
+            margin-bottom: 20px; font-size: 0.9rem; color: #555;
         }
-        .ingredient-chip {
-            background: #fff; border: 1px solid #ddd; padding: 8px 15px; border-radius: 50px;
-            font-size: 1rem; display: flex; align-items: center; gap: 8px; animation: popIn 0.3s;
-            font-family: var(--font-serif); box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
+        .pantry-checkbox { width: 18px; height: 18px; accent-color: var(--nyt-red); }
+
+        .ingredients-display { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; margin-top: 10px; }
+        .ingredient-chip { background: #fff; border: 1px solid #ddd; padding: 8px 15px; border-radius: 50px; font-size: 1rem; display: flex; align-items: center; gap: 8px; animation: popIn 0.3s; font-family: var(--font-serif); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .chip-remove { cursor: pointer; color: #999; font-weight: bold; font-size: 1.2rem; line-height: 1; }
         .chip-remove:hover { color: var(--nyt-red); }
 
         .empty-state { text-align: center; color: #aaa; width: 100%; margin-top: 40px; font-style: italic; }
 
-        /* Action Bar (Fixed Bottom) */
-        .action-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%; 
-            background: white; border-top: 1px solid #eee; padding: 15px 20px;
-            display: flex; justify-content: center; z-index: 1000;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-        }
-        .btn-analyze {
-            background: var(--nyt-black); color: white; width: 100%; max-width: 600px;
-            padding: 15px; border-radius: 50px; font-weight: bold; font-size: 1rem; border: none; cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center; padding: 15px 30px;
-        }
+        .action-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #eee; padding: 15px 20px; display: flex; justify-content: center; z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
+        .btn-analyze { background: var(--nyt-black); color: white; width: 100%; max-width: 600px; padding: 15px; border-radius: 50px; font-weight: bold; font-size: 1rem; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; }
         .btn-analyze:disabled { background: #ccc; cursor: not-allowed; }
 
-        /* --- RESULT / ANALYSIS PAGE --- */
+        /* --- RESULT PAGE --- */
         #result-page { background: white; }
-        
         .result-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; width: 100%; }
         .result-sub { color: var(--nyt-red); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 10px; }
         .result-title { font-family: var(--font-serif); font-size: 2rem; margin-bottom: 10px; }
         
-        .info-grid { 
-            display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; margin-bottom: 40px; 
-        }
+        .info-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; margin-bottom: 40px; }
         @media (min-width: 768px) { .info-grid { grid-template-columns: 1fr 1fr; } }
 
-        .info-card { 
-            background: #fafafa; padding: 25px; border-radius: 12px; border: 1px solid #eee; 
-        }
+        .info-card { background: #fafafa; padding: 25px; border-radius: 12px; border: 1px solid #eee; }
         .info-label { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
         .info-content { font-family: var(--font-serif); font-size: 1.2rem; color: #333; }
         .ai-badge { display: inline-block; background: #e0f0ff; color: var(--gemini-blue); font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; vertical-align: middle; margin-left: 5px; font-family: var(--font-sans); }
 
-        .gemini-box {
-            background: linear-gradient(135deg, #f0f7ff, #ffffff);
-            border: 2px solid var(--gemini-blue); border-radius: 16px; padding: 30px;
-            text-align: center; width: 100%; margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(78, 134, 245, 0.15);
-        }
+        .gemini-box { background: linear-gradient(135deg, #f0f7ff, #ffffff); border: 2px solid var(--gemini-blue); border-radius: 16px; padding: 30px; text-align: center; width: 100%; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(78, 134, 245, 0.15); }
         .gemini-text { font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 20px; line-height: 1.4; }
-        .btn-gemini {
-            background: var(--gemini-blue); color: white; border: none;
-            padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer;
-            display: inline-flex; align-items: center; gap: 10px; transition: 0.2s;
-            box-shadow: 0 5px 15px rgba(78, 134, 245, 0.3); width: 100%; justify-content: center;
-        }
+        
+        .gemini-buttons { display: flex; flex-direction: column; gap: 15px; }
+        @media (min-width: 768px) { .gemini-buttons { flex-direction: row; } }
+
+        .btn-gemini { background: var(--gemini-blue); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; box-shadow: 0 5px 15px rgba(78, 134, 245, 0.3); width: 100%; }
         .btn-gemini:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(78, 134, 245, 0.4); }
 
-        .start-over { color: #999; text-decoration: underline; background: none; border: none; cursor: pointer; margin-bottom: 50px; }
+        .btn-gemini-easy { background: var(--easy-green); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; box-shadow: 0 5px 15px rgba(45, 139, 87, 0.3); width: 100%; }
+        .btn-gemini-easy:hover { transform: translateY(-2px); background: #267a4b; }
 
+        .start-over { color: #999; text-decoration: underline; background: none; border: none; cursor: pointer; margin-bottom: 50px; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="logo" onclick="startOver()">МОНГОЛ<span style="color:var(--nyt-red);">ЧЕФ</span></div>
-        <div style="font-size:0.9rem; font-weight:600;">ГАР УТАС & ВЭБ</div>
+        <div style="font-size:0.9rem; font-weight:600;">PRO</div>
     </header>
 
     <div id="home" class="page active-page">
         <div class="container">
             <div class="hero-content">
-                <p class="daily-pick">Бүтээлч Гал Тогоо</p>
+                <p class="daily-pick">Ухаалаг Гал Тогоо</p>
                 <h1 class="hero-title">Танд юу байна, <br>Түүгээр жор бүтээе</h1>
                 <p class="hero-desc">
-                    Бэлэн цэс сонгох шаардлагагүй. Зөвхөн гэртээ байгаа орцуудаа бичээд, AI тогоочоос төгс жорыг асуугаарай.
+                    Бэлэн цэс сонгох шаардлагагүй. Орцоо бичээд (эсвэл хэлээд), AI тогоочоос өөрт тохирсон жорыг асуугаарай.
                 </p>
                 <button class="btn-primary" onclick="startApp()">Эхлүүлэх</button>
             </div>
@@ -187,12 +162,18 @@
                 <div class="control-box">
                     <span class="control-label">ХООЛНЫ ТӨРӨЛ</span>
                     <select id="cuisine-style" class="style-select">
-                        <option value="generic">Тогоочийн сонголт</option>
-                        <option value="mongolian">Монгол уламжлалт</option>
-                        <option value="asian">Ази хуурга</option>
-                        <option value="italian">Итали / Европ</option>
-                        <option value="soup">Шөл / Зутан</option>
-                        <option value="healthy">Эрүүл / Хөнгөн</option>
+                        <option value="generic">✨ Тогоочийн сонголт</option>
+                        <option value="mongolian">🇲🇳 Монгол уламжлалт</option>
+                        <option value="korean">🇰🇷 Солонгос амт</option>
+                        <option value="asian">🥢 Ази хуурга</option>
+                        <option value="italian">🍝 Итали / Европ</option>
+                        <option value="russian">🇷🇺 Орос / Славян</option>
+                        <option value="soup">🍲 Шөл / Зутан</option>
+                        <option value="spicy">🌶️ Халуун ногоотой</option>
+                        <option value="healthy">🥗 Эрүүл / Хөнгөн</option>
+                        <option value="vegan">🥬 Цагаан хоол</option>
+                        <option value="breakfast">🍳 Өглөөний цай</option>
+                        <option value="dessert">🍰 Амттан / Бэйкери</option>
                     </select>
                 </div>
 
@@ -208,11 +189,16 @@
 
             <div class="input-wrapper">
                 <input type="text" id="custom-input" class="big-input" placeholder="Орцоо бичээд Enter дар..." onkeypress="handleEnter(event)">
+                <button class="mic-btn" onclick="startDictation()">🎙️</button>
                 <span class="enter-hint">ENTER дарж нэмэх</span>
             </div>
 
-            <div id="ingredients-area" class="ingredients-display">
-                </div>
+            <div class="pantry-toggle">
+                <input type="checkbox" id="pantry-check" class="pantry-checkbox" checked>
+                <label for="pantry-check">Гэрт үндсэн амтлагч байгаа (Давс, Перц, Тос, Сонгино)</label>
+            </div>
+
+            <div id="ingredients-area" class="ingredients-display"></div>
             
             <div id="empty-msg" class="empty-state">Одоогоор орц сонгогдоогүй байна.</div>
         </div>
@@ -252,11 +238,19 @@
 
             <div class="gemini-box">
                 <p class="gemini-text">
-                    <span id="gemini-count" style="font-weight:bold;"></span> хүнд зориулсан, <span id="gemini-style" style="font-weight:bold;"></span> хэв маягийн жорыг бүрэн эхээр нь авмаар байна уу?
+                    <span id="gemini-count" style="font-weight:bold;"></span> хүнд зориулсан жорыг ямар хувилбараар авмаар байна?
                 </p>
-                <button class="btn-gemini" onclick="askGemini()">
-                    <span>✨ Gemini AI-аас Жор Асуух</span>
-                </button>
+                
+                <div class="gemini-buttons">
+                    <button class="btn-gemini" onclick="askGemini('gourmet')">
+                        <span>✨ Мэргэжлийн Жор</span>
+                    </button>
+                    
+                    <button class="btn-gemini-easy" onclick="askGemini('easy')">
+                        <span>⚡ Хурдан & Хялбар Жор</span>
+                    </button>
+                </div>
+
                 <p style="margin-top:15px; font-size:0.8rem; color:#666;">
                     Товч дарснаар таны бүх тохиргоог хуулж, Gemini чатыг автоматаар нээнэ.
                 </p>
@@ -270,6 +264,20 @@
         let ingredients = [];
         let servings = 2;
 
+        // --- Load from History (Local Storage) ---
+        window.onload = function() {
+            const saved = localStorage.getItem('mongolChefIngredients');
+            if(saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if(parsed.length > 0) {
+                        ingredients = parsed;
+                        // Don't auto-navigate, just fill data
+                    }
+                } catch(e) {}
+            }
+        };
+
         // --- Navigation ---
         function switchPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
@@ -277,10 +285,16 @@
             document.getElementById(pageId).scrollTop = 0;
         }
 
-        function startApp() { switchPage('selection'); setTimeout(() => document.getElementById('custom-input').focus(), 300); }
+        function startApp() { 
+            switchPage('selection'); 
+            updateUI();
+            setTimeout(() => document.getElementById('custom-input').focus(), 300); 
+        }
+        
         function startOver() { 
             ingredients = []; 
             servings = 2; 
+            localStorage.removeItem('mongolChefIngredients');
             updateUI(); 
             switchPage('home'); 
         }
@@ -297,25 +311,34 @@
             if (e.key === 'Enter') {
                 const input = document.getElementById('custom-input');
                 const val = input.value.trim();
-                if (val) {
-                    addIngredient(val);
-                    input.value = '';
-                }
+                if (val) { addIngredient(val); input.value = ''; }
             }
         }
 
         function addIngredient(name) {
-            // Capitalize first letter
-            name = name.charAt(0).toUpperCase() + name.slice(1);
-            if (!ingredients.includes(name)) {
-                ingredients.push(name);
-                updateUI();
-            }
+            // Check for multi-word input via voice (e.g., "Meat, Potato")
+            const items = name.split(/[,\s]+/).filter(i => i.length > 0);
+            
+            items.forEach(item => {
+                // Capitalize first letter
+                let cleanName = item.charAt(0).toUpperCase() + item.slice(1);
+                if (!ingredients.includes(cleanName)) {
+                    ingredients.push(cleanName);
+                }
+            });
+            
+            saveToStorage();
+            updateUI();
         }
 
         function removeIngredient(name) {
             ingredients = ingredients.filter(i => i !== name);
+            saveToStorage();
             updateUI();
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('mongolChefIngredients', JSON.stringify(ingredients));
         }
 
         function updateUI() {
@@ -343,6 +366,36 @@
             }
         }
 
+        // --- Voice Input Logic ---
+        function startDictation() {
+            if (window.hasOwnProperty('webkitSpeechRecognition')) {
+                const recognition = new webkitSpeechRecognition();
+                const micBtn = document.querySelector('.mic-btn');
+
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = "mn-MN"; // Set to Mongolian
+                
+                micBtn.classList.add('listening');
+                recognition.start();
+
+                recognition.onresult = function(e) {
+                    const transcript = e.results[0][0].transcript;
+                    addIngredient(transcript); // Auto add result
+                    micBtn.classList.remove('listening');
+                    recognition.stop();
+                };
+
+                recognition.onerror = function(e) {
+                    recognition.stop();
+                    micBtn.classList.remove('listening');
+                    alert("Дуу таних алдаа гарлаа. Та бичиж оруулна уу.");
+                }
+            } else {
+                alert("Таны хөтөч дуу хоолойгоор бичихийг дэмжихгүй байна. Chrome хөтөч ашиглана уу.");
+            }
+        }
+
         // --- Analysis Logic ---
         function generateAnalysis() {
             switchPage('result-page');
@@ -354,9 +407,8 @@
             // Update Text
             document.getElementById('result-summary').innerText = ingredients.join(' • ');
             document.getElementById('gemini-count').innerText = servings;
-            document.getElementById('gemini-style').innerText = styleName;
-
-            // Smart Pairing Logic (Basic)
+            
+            // Smart Pairing Logic
             let pairing = "Ус, Нимбэгтэй ус";
             
             if (styleVal === 'mongolian') pairing = "Сүүтэй цай, Аарц, Хярам";
@@ -364,16 +416,33 @@
             else if (styleVal === 'asian') pairing = "Ногоон цай, Шар айраг";
             else if (styleVal === 'healthy') pairing = "Шинэхэн жүүс, Детокс ус";
             else if (styleVal === 'soup') pairing = "Хар талх, Сармистай талх";
+            else if (styleVal === 'korean') pairing = "Сожү, Арвайн цай";
+            else if (styleVal === 'russian') pairing = "Хар цай, Компот, Морс";
+            else if (styleVal === 'breakfast') pairing = "Кофе, Сүү, Жүржийн шүүс";
+            else if (styleVal === 'spicy') pairing = "Сүү, Тараг, Ласси";
+            else if (styleVal === 'vegan') pairing = "Ногооны смүүти, Ургамлын цай";
+            else if (styleVal === 'dessert') pairing = "Халуун шоколад, Латте, Цай";
 
             document.getElementById('pairing-text').innerText = pairing;
         }
 
         // --- Gemini Jump ---
-        function askGemini() {
+        function askGemini(mode) {
             const style = document.getElementById('cuisine-style').options[document.getElementById('cuisine-style').selectedIndex].text;
-            const ingList = ingredients.join(', ');
+            const hasPantry = document.getElementById('pantry-check').checked;
             
-            const prompt = `Та бол мэргэжлийн тогооч. Надад дараах орцууд байна: ${ingList}. Би ${style} хэв маягаар, ${servings} хүнд зориулж хоол хиймээр байна. 1. Эхлээд энэ хоолны нэг хүнд ногдох илчлэг болон шим тэжээлийг тооцоол. 2. Дараа нь алхам алхмаар хийх зааврыг орцны нарийн хэмжээтэй нь (грамм/халбага) бичиж өг.`;
+            let ingList = ingredients.join(', ');
+            let pantryNote = hasPantry ? " (Мөн надад давс, перц, тос, сонгино, сармис гэх мэт үндсэн амтлагчид байгаа)" : "";
+            
+            let prompt = "";
+
+            if (mode === 'easy') {
+                // EASY MODE PROMPT
+                prompt = `Та бол найрсаг тогооч. Надад эдгээр орцууд байна: ${ingList}${pantryNote}. Би ${servings} хүнд зориулж, МАШ ХУРДАН, ХЯЛБАР аргаар хоол хиймээр байна. 20 минутад багтах энгийн жор санал болго. Орцны хэмжээг халбагаар эсвэл аягаар хэлж өгвөл сайн.`;
+            } else {
+                // GOURMET MODE PROMPT
+                prompt = `Та бол мэргэжлийн тогооч. Надад дараах орцууд байна: ${ingList}${pantryNote}. Би ${style} хэв маягаар, ${servings} хүнд зориулж хоол хиймээр байна. 1. Эхлээд энэ хоолны нэг хүнд ногдох илчлэг болон шим тэжээлийг тооцоол. 2. Дараа нь алхам алхмаар хийх зааврыг орцны нарийн хэмжээтэй нь (грамм/халбага) бичиж өг.`;
+            }
             
             navigator.clipboard.writeText(prompt).then(() => {
                 alert("Асуултыг хуулж авлаа! Gemini нээгдэх үед Paste (Ctrl+V) хийгээрэй.");
