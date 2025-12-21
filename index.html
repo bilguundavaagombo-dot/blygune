@@ -1,434 +1,421 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="mn">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.2">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mongol Cooking - Ingredient Analyst</title>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Public+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nyt-red: #E32400;
+            --nyt-black: #121212;
+            --nyt-gray: #f7f7f7;
+            --gemini-blue: #4E86F5;
+            --border-color: #ddd;
+            --font-serif: 'Frank Ruhl Libre', serif;
+            --font-sans: 'Public Sans', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body { 
+            background-color: #fff; color: var(--nyt-black); font-family: var(--font-sans);
+            height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column;
+        }
+
+        /* --- Header --- */
+        header {
+            height: 70px; border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; background: white; z-index: 1000; position: fixed; top: 0; width: 100%;
+        }
+        .logo { font-family: var(--font-serif); font-weight: 700; font-size: 1.8rem; letter-spacing: -0.5px; text-transform: uppercase; color: black; cursor: pointer; }
+        .nav-actions button { background: none; border: none; font-family: var(--font-sans); font-weight: 600; font-size: 0.9rem; cursor: pointer; margin-left: 20px; color: #333; text-transform: uppercase; }
+        .nav-actions button:hover { color: var(--nyt-red); }
+        .cart-badge { background: var(--nyt-red); color: white; padding: 2px 8px; border-radius: 50%; font-size: 0.8rem; font-weight: bold; margin-left: 5px; }
+
+        /* --- Layout --- */
+        .page { position: absolute; top: 70px; left: 0; width: 100%; height: calc(100% - 70px); display: none; flex-direction: column; align-items: center; overflow-y: auto; padding-bottom: 50px; }
+        .active-page { display: flex !important; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* --- Home --- */
+        #home { justify-content: center; text-align: center; background: var(--nyt-gray); }
+        .hero-content { max-width: 800px; padding: 0 20px; }
+        .daily-pick { font-family: var(--font-sans); font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; color: var(--nyt-red); text-transform: uppercase; margin-bottom: 15px; }
+        .hero-title { font-family: var(--font-serif); font-size: clamp(3rem, 8vw, 5rem); line-height: 1.1; margin-bottom: 30px; color: var(--nyt-black); }
+        .hero-desc { font-size: 1.2rem; line-height: 1.6; color: #555; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .btn-primary { background-color: var(--nyt-red); color: white; border: none; padding: 15px 40px; font-size: 1rem; font-weight: 700; border-radius: 4px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-primary:hover { background-color: #b01b00; }
+
+        /* --- Selection --- */
+        #selection { background: white; padding-top: 40px; }
+        .section-header { text-align: center; margin-bottom: 40px; max-width: 800px; width: 100%; padding: 0 20px; }
+        .section-title { font-family: var(--font-serif); font-size: 2.5rem; margin-bottom: 10px; }
+        
+        .style-container { display: inline-flex; align-items: center; gap: 15px; background: #f9f9f9; padding: 10px 20px; border-radius: 50px; border: 1px solid #eee; margin-bottom: 25px; }
+        .style-label { font-size: 0.8rem; font-weight: 700; color: #888; letter-spacing: 1px; }
+        .style-select { border: none; background: transparent; font-family: var(--font-serif); font-size: 1.1rem; font-weight: bold; color: var(--nyt-black); cursor: pointer; outline: none; text-align: center; }
+
+        .search-bar-container { width: 100%; max-width: 600px; margin: 0 auto 40px auto; position: relative; }
+        .search-input { width: 100%; padding: 15px 20px; border: 1px solid #ccc; font-family: var(--font-sans); font-size: 1rem; border-radius: 4px; }
+        .search-input:focus { outline: none; border-color: black; }
+        .add-btn-inline { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 8px 15px; border-radius: 4px; font-weight: bold; cursor: pointer; }
+
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; width: 100%; max-width: 1200px; padding: 0 20px; }
+        .card { background: white; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; }
+        .card:hover .card-img { opacity: 0.9; } .card:hover .card-title { text-decoration: underline; text-decoration-color: #ccc; }
+        .card-img-container { width: 100%; aspect-ratio: 4/3; overflow: hidden; margin-bottom: 15px; background: #eee; }
+        .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+        .card-meta { display: flex; justify-content: space-between; align-items: start; }
+        .card-title { font-family: var(--font-serif); font-weight: 700; font-size: 1.4rem; line-height: 1.2; margin-bottom: 5px; color: var(--nyt-black); }
+        .card-desc { font-size: 0.9rem; color: #666; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px; }
+        .select-indicator { width: 24px; height: 24px; border: 1px solid #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 5px; transition: 0.2s; }
+        .card.selected .select-indicator { background: var(--nyt-red); border-color: var(--nyt-red); }
+        .card.selected .select-indicator::after { content: '✓'; color: white; font-size: 0.8rem; }
+
+        /* --- Insights / Analysis Page --- */
+        #recipe-page { background: white; align-items: center; padding-top: 40px; }
+        
+        .analysis-container { width: 100%; max-width: 900px; margin: 0 auto; padding: 0 20px; text-align: center; }
+        
+        .analysis-header { margin-bottom: 40px; }
+        .analysis-label { color: var(--nyt-red); font-weight: bold; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 15px; text-transform: uppercase; }
+        .analysis-title { font-family: var(--font-serif); font-size: 3rem; margin-bottom: 20px; line-height: 1; }
+        .analysis-ingredients { color: #666; font-family: var(--font-serif); font-size: 1.2rem; font-style: italic; }
+
+        /* Dashboard Grid */
+        .dashboard-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; width: 100%; margin-bottom: 50px; text-align: left;
+        }
+
+        .info-card { border: 1px solid #eee; padding: 25px; border-radius: 8px; background: #fafafa; }
+        .info-card h4 { font-family: var(--font-sans); font-size: 0.9rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .big-number { font-family: var(--font-serif); font-size: 3rem; font-weight: 700; color: var(--nyt-black); line-height: 1; }
+        .sub-text { font-size: 0.9rem; color: #555; margin-top: 5px; }
+        .benefit-list { list-style: none; padding: 0; }
+        .benefit-list li { margin-bottom: 8px; font-family: var(--font-serif); font-size: 1.1rem; }
+        .benefit-list li::before { content: '✓'; color: var(--nyt-red); margin-right: 10px; font-weight: bold; }
+
+        /* Gemini Call to Action */
+        .gemini-box {
+            background: linear-gradient(135deg, #f0f7ff, #ffffff);
+            border: 2px solid var(--gemini-blue);
+            border-radius: 12px; padding: 40px;
+            text-align: center; margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(78, 134, 245, 0.1);
+        }
+        .gemini-text { font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 20px; }
+        .btn-gemini-large {
+            background: var(--gemini-blue); color: white; border: none;
+            padding: 18px 40px; font-size: 1.1rem; border-radius: 50px;
+            cursor: pointer; font-weight: 700; transition: 0.2s;
+            display: inline-flex; align-items: center; gap: 10px;
+            box-shadow: 0 5px 15px rgba(78, 134, 245, 0.3);
+        }
+        .btn-gemini-large:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(78, 134, 245, 0.4); }
+
+        /* --- Sidebar --- */
+        #sidebar { position: fixed; top: 0; right: -400px; width: 350px; height: 100vh; background: white; border-left: 1px solid #ddd; z-index: 2000; padding: 90px 30px 30px 30px; transition: 0.3s ease-in-out; display: flex; flex-direction: column; box-shadow: -5px 0 20px rgba(0,0,0,0.05); }
+        .sidebar-title { font-family: var(--font-serif); font-size: 1.8rem; margin-bottom: 20px; }
+        .pantry-list { flex-grow: 1; overflow-y: auto; }
+        .pantry-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eee; font-family: var(--font-sans); font-size: 0.95rem; }
+        .remove-btn { color: #999; cursor: pointer; font-size: 0.8rem; text-transform: uppercase; }
+        .remove-btn:hover { color: var(--nyt-red); }
+        .floating-action { position: fixed; bottom: 30px; right: 30px; z-index: 900; display: none; }
+
+        @media (max-width: 800px) {
+            .hero-title { font-size: 3rem; }
+            .grid-layout { grid-template-columns: 1fr; }
+            #sidebar { width: 100%; }
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="mn"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Mongol Chef - Custom Input&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;500;700&amp;family=Playfair+Display:ital,wght@0,600;0,800;1,600&amp;display=swap" rel="stylesheet"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>:root {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--gold: #D4AF37;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--gold-dim: #8a701e;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--dark: #0a0a0a;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--card-bg: #141414;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--text-main: #f0f0f0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--text-muted: #888888;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>* { margin: 0; padding: 0; box-sizing: border-box; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>body {<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--dark);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: var(--text-main);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Manrope', sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 100vh; width: 100vw; overflow: hidden;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>body::before {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");</p>
-<p class="p1"><span class="Apple-converted-space">            </span>pointer-events: none; z-index: -1;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>h1, h2, .fancy-font { font-family: 'Playfair Display', serif; font-weight: 600; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.hero-title {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: clamp(4rem, 15vw, 8rem);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>line-height: 0.85;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: var(--gold);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-transform: uppercase;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>letter-spacing: -2px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(to bottom, #fff4cc, #D4AF37);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>-webkit-background-clip: text;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>-webkit-text-fill-color: transparent;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.page {<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: absolute; top: 0; left: 0; width: 100%; height: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: none; flex-direction: column; align-items: center;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 40px 20px; overflow-y: auto;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>scrollbar-width: none;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.page::-webkit-scrollbar { display: none; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.active-page { display: flex !important; animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* --- Custom Input Section --- */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.custom-add-box {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex; gap: 10px; width: 100%; max-width: 600px; margin-bottom: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.custom-input {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-grow: 1; background: transparent; border: 1px solid #333; color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 15px; font-family: 'Manrope', sans-serif; font-size: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.custom-input:focus { outline: none; border-color: var(--gold); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-add {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: transparent; border: 1px solid var(--gold); color: var(--gold);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 0 25px; cursor: pointer; font-weight: bold; transition: 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-add:hover { background: var(--gold); color: black; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* --- Cards --- */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.grid-layout {<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 20px; width: 100%; max-width: 1400px; padding-bottom: 150px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.card {<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 420px; border-radius: 4px; background: var(--card-bg);<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: relative; overflow: hidden; cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid rgba(255,255,255,0.05);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.card img { width: 100%; height: 100%; object-fit: cover; transition: 0.7s; opacity: 0.6; filter: grayscale(30%); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.card:hover { border-color: var(--gold); transform: translateY(-5px); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.card:hover img { transform: scale(1.05); opacity: 0.9; filter: grayscale(0%); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.card-info {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: absolute; bottom: 0; left: 0; width: 100%; padding: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, transparent);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(10px); transition: 0.4s;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.card:hover .card-info { transform: translateY(0); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.card-label { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: white; margin-bottom: 5px; display: block; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.card-desc { font-size: 0.85rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.card.selected { border: 2px solid var(--gold); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.card.selected .card-label { color: var(--gold); }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* --- UI Elements --- */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-gold {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: var(--gold); color: #000; padding: 16px 40px; border: none; font-weight: 700;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; transition: 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>clip-path: polygon(10% 0, 100% 0, 100% 75%, 90% 100%, 0 100%, 0 25%);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-gold:hover { background: #fff; transform: scale(1.02); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-outline {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.2);<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 25px; cursor: pointer; transition: 0.3s; font-family: 'Manrope', sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn-outline:hover { border-color: var(--gold); color: var(--gold); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.back-nav {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: fixed; top: 40px; left: 40px; z-index: 100; display: flex; align-items: center; gap: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer; color: var(--text-muted); transition: 0.3s;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.back-nav:hover { color: var(--gold); }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* --- Sidebar --- */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#sidebar {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: fixed; top: 0; right: -500px; width: 400px; height: 100vh;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #111; z-index: 2000; padding: 60px 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: 0.6s cubic-bezier(0.65, 0, 0.35, 1);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-left: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.cart-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #ccc; }</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>#recipe-box {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #111; width: 100%; max-width: 800px; padding: 60px; margin: 50px auto;<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: relative; border: 1px solid rgba(255,255,255,0.1);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#recipe-box::before {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100px; height: 2px; background: var(--gold);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>#cart-btn {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: fixed; top: 40px; right: 40px; z-index: 1500;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: transparent; color: var(--gold); border: 1px solid var(--gold);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 20px; font-weight: bold; cursor: pointer; display: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: 0.3s; border-radius: 50px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>#cart-btn:hover { background: var(--gold); color: black; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>@media (max-width: 600px) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>.hero-title { font-size: 3.5rem; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>#sidebar { width: 100%; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>.grid-layout { grid-template-columns: 1fr; }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>#recipe-box { padding: 30px; margin: 20px auto; }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="home" class="page active-page" style="justify-content: center;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style="text-align: center; z-index: 10;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p style="letter-spacing: 8px; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 20px;"&gt;EST. 2025 • ULAANBAATAR&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1 class="hero-title"&gt;Mongol&lt;br&gt;&lt;span style="font-style: italic;"&gt;Chef&lt;/span&gt;&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p style="color: var(--text-muted); margin: 0 auto 50px; font-size: 1.1rem; max-width: 400px; line-height: 1.6;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>Өөрийн амтыг бүтээ.</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="btn-gold" onclick="startApp()"&gt;ЭХЛҮҮЛЭХ&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="selection" class="page"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="back-nav" onclick="goBack()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;span style="font-size: 1.5rem;"&gt;←&lt;/span&gt; &lt;span&gt;БУЦАХ&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style="width: 100%; max-width: 1400px; margin-top: 60px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p id="subtitle" style="color: var(--gold); letter-spacing: 2px; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 10px;"&gt;&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 id="title" style="font-size: 3rem; color: white;"&gt;&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="custom-add-box"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;input type="text" id="custom-input" class="custom-input" placeholder="Жагсаалтад байхгүй зүйл нэмэх үү? (Жишээ: Хиам, Кимчи...)" onkeypress="handleEnter(event)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="btn-add" onclick="addCustomItem()"&gt;НЭМЭХ&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="display-area" class="grid-layout"&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="confirm-btn" class="btn-gold"<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>style="display:none; position: fixed; bottom: 40px; right: 40px; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.5);"<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">                </span>onclick="confirmSelection()"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>САГСАНД НЭМЭХ</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="recipe-page" class="page"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="recipe-box"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 40px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p style="color: var(--gold); letter-spacing: 3px; font-size: 0.8rem; font-weight: bold;"&gt;THE RECIPE&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h1 style="font-size: 2.5rem; margin-top: 10px;"&gt;ТАНЫ ОНЦГОЙ ЖОР&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;button onclick="window.print()" class="btn-outline"&gt;🖨️ Хэвлэх&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div style="border-top: 1px solid #333; border-bottom: 1px solid #333; padding: 20px 0; margin-bottom: 40px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p style="color: #666; font-size: 0.8rem; margin-bottom: 10px;"&gt;ОРЦУУД:&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;span id="res-ingredients-badges" style="font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--gold-dim); font-style: italic;"&gt;&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="res-steps" style="text-align: left; line-height: 2; font-size: 1.1rem; color: #ccc; margin-bottom: 50px;"&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="btn-outline" style="width: 100%;" onclick="startOver()"&gt;ШИНЭЭР ЭХЛЭХ&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;button id="cart-btn" onclick="toggleSidebar()"&gt;CART (&lt;span id="cart-count"&gt;0&lt;/span&gt;)&lt;/button&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="sidebar"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 style="font-size: 1.5rem; color: white;"&gt;ТАНЫ САГС&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;button onclick="toggleSidebar()" style="background: none; border: none; color: #666; font-size: 2rem; cursor: pointer;"&gt;&amp;times;&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="cart-items" style="flex-grow: 1; overflow-y: auto; padding-right: 10px;"&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="btn-gold" style="width: 100%;" onclick="generateRecipe()"&gt;ЖОР БОЛОВСРУУЛАХ&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const inventory = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>main: [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'УУРАГ (МАХ)', img: 'https://images.unsplash.com/photo-1544025162-d76694265947?w=800', next: 'meat', desc: 'Protein Source' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'НОГОО', img: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800', next: 'vegetables', desc: 'Fresh Greens' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'ХАЧИР', img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800', next: 'carbs', desc: 'Base &amp; Grains' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'СОУС', img: 'https://images.unsplash.com/photo-1472476443507-c7a392dd12c7?w=800', next: 'sauces', desc: 'Rich Flavor' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'АМТЛАГЧ', img: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=800', next: 'spices', desc: 'The Soul' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>],</p>
-<p class="p1"><span class="Apple-converted-space">            </span>meat: [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Үхрийн мах', img: 'https://images.unsplash.com/photo-1603048297172-c92544798d5e?w=800', desc: 'Beef' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Хонины мах', img: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=800', desc: 'Lamb' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Тахианы цээж', img: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=800', desc: 'Chicken Breast' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Салмон', img: 'https://images.unsplash.com/photo-1599084993091-1e83144d72e6?w=800', desc: 'Salmon' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>],</p>
-<p class="p1"><span class="Apple-converted-space">            </span>vegetables: [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Төмс', img: 'https://images.unsplash.com/photo-1518977676601-b53f02bad67b?w=800', desc: 'Potato' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Бөөрөнхий Сонгино', img: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=800', desc: 'Onion' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Лууван', img: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=800', desc: 'Carrot' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Чинжүү', img: 'https://images.unsplash.com/photo-1563565375-f3fdf5d6c4a3?w=800', desc: 'Bell Pepper' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Брокколи', img: 'https://images.unsplash.com/photo-1459411621453-7edd0c4b7f48?w=800', desc: 'Broccoli' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Мөөг', img: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800', desc: 'Mushroom' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>],</p>
-<p class="p1"><span class="Apple-converted-space">            </span>carbs: [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Цагаан будаа', img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800', desc: 'White Rice' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Гоймон', img: 'https://images.unsplash.com/photo-1612929633738-8fe44f7ec841?w=800', desc: 'Noodles' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Талх', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800', desc: 'Bread' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>],</p>
-<p class="p1"><span class="Apple-converted-space">            </span>sauces: [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Ургамлын тос', img: 'https://images.unsplash.com/photo-1474631245212-32dc3c8310c6?w=800', desc: 'Veg Oil' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Соя соус', img: 'https://images.unsplash.com/photo-1594970428590-77a83d7353f4?w=800', desc: 'Soy Sauce' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Цөцгийн тос', img: 'https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=800', desc: 'Butter' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>],</p>
-<p class="p1"><span class="Apple-converted-space">            </span>spices: [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Давс', img: 'https://images.unsplash.com/photo-1622621733374-7d0b4c4b94b8?w=800', desc: 'Salt' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Хар перц', img: 'https://images.unsplash.com/photo-1568283086968-3bb8c0576326?w=800', desc: 'Black Pepper' },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ name: 'Сармис', img: 'https://images.unsplash.com/photo-1615477218698-3f5f3e9c5225?w=800', desc: 'Garlic' }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>]</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>let cart = [];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let historyStack = [];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let currentSection = '';</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let tempItems = [];</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function switchPage(pageId) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.page').forEach(p =&gt; p.classList.remove('active-page'));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById(pageId).classList.add('active-page');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById(pageId).scrollTop = 0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function startApp() { showSection('main'); document.getElementById('cart-btn').style.display = 'block'; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showSection(key) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>switchPage('selection'); historyStack.push(key); currentSection = key; renderItems();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function goBack() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (historyStack.length &gt; 1) { historyStack.pop(); currentSection = historyStack[historyStack.length - 1]; renderItems(); }<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>else { startOver(); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- CUSTOM ITEM LOGIC ---</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function addCustomItem() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const input = document.getElementById('custom-input');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const val = input.value.trim();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(val) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>addToCart(val);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>input.value = '';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// Add simple animation feedback</p>
-<p class="p1"><span class="Apple-converted-space">                </span>input.style.borderColor = 'var(--gold)';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>setTimeout(() =&gt; input.style.borderColor = '#333', 300);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function handleEnter(e) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(e.key === 'Enter') addCustomItem();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function renderItems() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const container = document.getElementById('display-area'); container.innerHTML = ''; tempItems = [];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const titles = { 'main': 'ҮНДСЭН ЦЭС', 'meat': 'МАХНЫ ТӨРӨЛ', 'vegetables': 'НОГОО', 'carbs': 'ХАЧИР', 'sauces': 'СОУС', 'spices': 'АМТЛАГЧ' };</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const subs = { 'main': 'COURSE SELECTION', 'meat': 'PROTEIN', 'vegetables': 'VEGETABLES', 'carbs': 'CARBS', 'sauces': 'SAUCE', 'spices': 'SPICES' };</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('title').innerText = titles[currentSection];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('subtitle').innerText = subs[currentSection];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('confirm-btn').style.display = (currentSection === 'main' || currentSection === 'meat') ? 'none' : 'block';</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Show/Hide custom input</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const inputContainer = document.querySelector('.custom-add-box');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (currentSection === 'main') {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>inputContainer.style.display = 'none';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>inputContainer.style.display = 'flex';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>inventory[currentSection].forEach(item =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>const el = document.createElement('div'); el.className = 'card';</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if(cart.includes(item.name)) el.classList.add('selected');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>el.innerHTML = `</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;img src="${item.img}" loading="lazy"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="card-info"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="card-label"&gt;${item.name}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>&lt;span class="card-desc"&gt;${item.desc}&lt;/span&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>el.onclick = () =&gt; handleItemClick(item, el);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>container.appendChild(el);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function handleItemClick(item, element) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (currentSection === 'main') { showSection(item.next); }<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>else if (currentSection === 'meat') { cart = cart.filter(c =&gt; !inventory.meat.some(m =&gt; m.name === c)); addToCart(item.name); goBack(); }<span class="Apple-converted-space"> </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>else { element.classList.toggle('selected'); if (tempItems.includes(item.name)) tempItems = tempItems.filter(i =&gt; i !== item.name); else tempItems.push(item.name); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function addToCart(name) { if (!cart.includes(name)) cart.push(name); updateCartUI(); }</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function confirmSelection() { tempItems.forEach(addToCart); goBack(); }</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function updateCartUI() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const list = document.getElementById('cart-items');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>list.innerHTML = cart.length === 0 ? '&lt;div style="text-align:center; color:#555; margin-top:50px;"&gt;Сагс хоосон&lt;/div&gt;' : cart.map(item =&gt; `</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="cart-item"&gt;&lt;span&gt;${item}&lt;/span&gt;&lt;span style="cursor:pointer; color:#777;" onclick="removeFromCart('${item}')"&gt;✕&lt;/span&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>`).join('');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('cart-count').innerText = cart.length;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function removeFromCart(name) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cart = cart.filter(item =&gt; item !== name);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>updateCartUI();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(document.getElementById('selection').classList.contains('active-page')) renderItems();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function toggleSidebar() { const s = document.getElementById('sidebar'); s.style.right = s.style.right === '0px' ? '-500px' : '0px'; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// --- RECIPE LOGIC ---</p>
-<p class="p1"><span class="Apple-converted-space">        </span>function generateRecipe() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (cart.length === 0) return alert("Орц сонгоно уу!");</p>
-<p class="p1"><span class="Apple-converted-space">            </span>toggleSidebar();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>switchPage('recipe-page');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('res-ingredients-badges').innerText = cart.join('<span class="Apple-converted-space">  </span>•<span class="Apple-converted-space">  </span>');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Find known categories</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const meats = cart.filter(c =&gt; inventory.meat.some(m =&gt; m.name === c));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const veggies = cart.filter(c =&gt; inventory.vegetables.some(v =&gt; v.name === c));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const carbs = cart.filter(c =&gt; inventory.carbs.some(v =&gt; v.name === c));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const sauces = cart.filter(c =&gt; inventory.sauces.some(v =&gt; v.name === c));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const spices = cart.filter(c =&gt; inventory.spices.some(v =&gt; v.name === c));</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Identify Custom Items (Things in cart NOT in any inventory list)</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const allKnown = [...inventory.meat, ...inventory.vegetables, ...inventory.carbs, ...inventory.sauces, ...inventory.spices].map(i =&gt; i.name);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const customItems = cart.filter(c =&gt; !allKnown.includes(c));</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>let steps = [];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let stepCounter = 1;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (meats.length &gt; 0) steps.push(`&lt;b style="color:var(--gold)"&gt;0${stepCounter++}. БЭЛТГЭЛ:&lt;/b&gt; ${meats.join(', ')}-аа цэвэрлэж, дунд зэргийн хэмжээтэй хэрчинэ.`);</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>let fat = sauces.find(s =&gt; s.includes('тос')) || "ургамлын тос";</p>
-<p class="p1"><span class="Apple-converted-space">            </span>let fryStep = `&lt;b style="color:var(--gold)"&gt;0${stepCounter++}. ХУУРАХ:&lt;/b&gt; Халаасан хайруулын тавган дээр ${fat} хийж, `;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (meats.length &gt; 0) fryStep += `${meats.join(', ')}-аа шаргал болтол хуурна. `;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (veggies.length &gt; 0) fryStep += `Дараа нь ${veggies.join(', ')}-аа нэмж зөөлөртөл хуурна.`;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>steps.push(fryStep);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Add Custom Items Step</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (customItems.length &gt; 0) {</p>
-<p class="p1"><span class="Apple-converted-space">                 </span>steps.push(`&lt;b style="color:var(--gold)"&gt;0${stepCounter++}. НЭМЭЛТ:&lt;/b&gt; Таны сонгосон &lt;b&gt;${customItems.join(', ')}&lt;/b&gt;-ыг нэмж, хоолныхоо амтыг улам баяжуулна.`);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (carbs.length &gt; 0) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (carbs.includes('Гоймон')) steps.push(`&lt;b style="color:var(--gold)"&gt;0${stepCounter++}. ХАЧИР:&lt;/b&gt; Гоймонгоо тусад нь чанаж шүүгээд, хуурсан ногоотойгоо холино.`);</p>
-<p class="p1"><span class="Apple-converted-space">                </span>else steps.push(`&lt;b style="color:var(--gold)"&gt;0${stepCounter++}. ХАЧИР:&lt;/b&gt; ${carbs.join(', ')}-аа тусад нь бэлтгэж, хоолтойгоо хамт таваглана.`);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (spices.length &gt; 0 || sauces.length &gt; 0) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>let season = [...sauces.filter(s=&gt;!s.includes('тос')), ...spices].join(', ');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>steps.push(`&lt;b style="color:var(--gold)"&gt;0${stepCounter++}. АМТЛАГАА:&lt;/b&gt; ${season}-аар амт тохируулж, зөөлөн гал дээр 2 минут жигнэнэ.`);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>steps.push(`&lt;b style="color:var(--gold)"&gt;0${stepCounter++}. ТӨГСГӨЛ:&lt;/b&gt; Халуунаар нь таваглан, Монгол Чефийн тусгай жороор зооглоорой.`);</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('res-steps').innerHTML = steps.join('&lt;br&gt;&lt;br&gt;');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function startOver() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cart = []; historyStack = []; currentSection = ''; tempItems = [];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>updateCartUI(); document.getElementById('sidebar').style.right = '-500px';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('cart-btn').style.display = 'none'; switchPage('home');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+    <header>
+        <div class="logo" onclick="startOver()">Mongol<span style="color:var(--nyt-red);">Cooking</span></div>
+        <div class="nav-actions">
+            <button onclick="startApp()">Ingredients</button>
+            <button onclick="toggleSidebar()">
+                Your Pantry <span id="cart-badge" class="cart-badge" style="display:none;">0</span>
+            </button>
+        </div>
+    </header>
+
+    <div id="home" class="page active-page">
+        <div class="hero-content">
+            <div style="margin-top: 10vh;">
+                <p class="daily-pick">Kitchen Intelligence</p>
+                <h1 class="hero-title">Your Personal<br>Culinary Analyst</h1>
+                <p class="hero-desc">
+                    Don't just cook. Understand what you eat. Select your ingredients to get nutritional insights, pairings, and generate a chef-grade recipe using AI.
+                </p>
+                <button class="btn-primary" onclick="startApp()">Analyze Ingredients</button>
+            </div>
+        </div>
+        <div style="width:100%; height:40vh; margin-top:auto; background: url('https://images.unsplash.com/photo-1556910103-1c02745a30bf?q=80&w=2560&auto=format&fit=crop') center/cover;"></div>
+    </div>
+
+    <div id="selection" class="page">
+        <div class="section-header">
+            <p id="subtitle" class="daily-pick"></p>
+            <h2 id="title" class="section-title"></h2>
+            
+            <div class="style-container">
+                <span class="style-label">TARGET STYLE:</span>
+                <select id="cuisine-style" class="style-select">
+                    <option value="generic">✨ Chef's Choice</option>
+                    <option value="asian">🥢 Asian Stir-Fry</option>
+                    <option value="italian">🍝 Italian Rustic</option>
+                    <option value="mongolian">🇲🇳 Mongolian Traditional</option>
+                    <option value="healthy">🥗 Low Calorie</option>
+                </select>
+            </div>
+
+            <div class="search-bar-container">
+                <input type="text" id="custom-input" class="search-input" placeholder="Add custom ingredient (e.g., Avocado)" onkeypress="handleEnter(event)">
+                <button class="add-btn-inline" onclick="addCustomItem()">ADD</button>
+            </div>
+        </div>
+
+        <div id="display-area" class="grid-layout"></div>
+
+        <div class="floating-action" id="confirm-container">
+            <button class="btn-primary" onclick="confirmSelection()" style="box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                Add to Analysis
+            </button>
+        </div>
+    </div>
+
+    <div id="recipe-page" class="page">
+        <div class="analysis-container">
+            <div class="analysis-header">
+                <p class="analysis-label">Analysis Complete</p>
+                <h1 class="analysis-title">Culinary Profile</h1>
+                <p class="analysis-ingredients" id="res-ingredients-display"></p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="info-card">
+                    <h4>Est. Calories</h4>
+                    <div class="big-number" id="cal-count">0</div>
+                    <p class="sub-text">per serving (approx)</p>
+                </div>
+
+                <div class="info-card">
+                    <h4>Health Highlights</h4>
+                    <ul class="benefit-list" id="benefit-list">
+                        </ul>
+                </div>
+
+                <div class="info-card">
+                    <h4>Perfect Pairing</h4>
+                    <div style="font-family:var(--font-serif); font-size:1.5rem; margin-top:10px;" id="pairing-text"></div>
+                    <p class="sub-text" id="pairing-sub"></p>
+                </div>
+            </div>
+
+            <div class="gemini-box">
+                <p class="gemini-text">Ready to cook? Ask our AI Chef to turn this profile into a step-by-step recipe.</p>
+                <button class="btn-gemini-large" onclick="askGemini()">
+                    <span>✨ Generate Full Recipe with Gemini</span>
+                </button>
+                <p style="margin-top:15px; font-size:0.8rem; color:#888;">This will copy the prompt and open Gemini.</p>
+            </div>
+
+            <button onclick="startOver()" style="background:none; border:none; text-decoration:underline; color:#999; cursor:pointer;">Start New Analysis</button>
+        </div>
+    </div>
+
+    <div id="sidebar">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2 class="sidebar-title">Your Pantry</h2>
+            <button onclick="toggleSidebar()" style="background:none; border:none; font-size:2rem; cursor:pointer;">&times;</button>
+        </div>
+        <p style="font-size:0.9rem; color:#666; margin-bottom:20px;">Items selected for analysis.</p>
+        <div id="cart-items" class="pantry-list"></div>
+        <button class="btn-primary" style="width:100%; margin-top:20px;" onclick="generateAnalysis()">Analyze Now</button>
+    </div>
+
+    <script>
+        // Data with Metadata for Analysis
+        const inventory = {
+            main: [
+                { name: 'Proteins', img: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=800&q=80', next: 'meat', desc: 'Meat & Fish' },
+                { name: 'Produce', img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80', next: 'vegetables', desc: 'Fresh Vegetables' },
+                { name: 'Pantry', img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&q=80', next: 'carbs', desc: 'Grains & Pasta' },
+                { name: 'Oils & Dairy', img: 'https://images.unsplash.com/photo-1626132647523-66f5bf380027?w=800&q=80', next: 'sauces', desc: 'Cooking Fats' },
+                { name: 'Seasoning', img: 'https://images.unsplash.com/photo-1532336414038-cf00d4787638?w=800&q=80', next: 'spices', desc: 'Spices & Herbs' }
+            ],
+            meat: [
+                { name: 'Ribeye Steak', img: 'https://images.unsplash.com/photo-1603048297172-c92544798d5e?w=800&q=80', desc: 'Beef', cal: 290, benefit: 'High Protein' },
+                { name: 'Lamb Chops', img: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=800&q=80', desc: 'Lamb', cal: 250, benefit: 'Iron Rich' },
+                { name: 'Chicken Breast', img: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=800&q=80', desc: 'Poultry', cal: 165, benefit: 'Lean Muscle' },
+                { name: 'Salmon Fillet', img: 'https://images.unsplash.com/photo-1599084993091-1e83144d72e6?w=800&q=80', desc: 'Fish', cal: 200, benefit: 'Omega-3' }
+            ],
+            vegetables: [
+                { name: 'Potatoes', img: 'https://images.unsplash.com/photo-1518977676601-b53f02bad67b?w=800&q=80', desc: 'Root Veg', cal: 110, benefit: 'Potassium' },
+                { name: 'Red Onion', img: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=800&q=80', desc: 'Aromatic', cal: 40, benefit: 'Antioxidants' },
+                { name: 'Carrots', img: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=800&q=80', desc: 'Root Veg', cal: 41, benefit: 'Vitamin A' },
+                { name: 'Bell Peppers', img: 'https://images.unsplash.com/photo-1563565375-f3fdf5d6c4a3?w=800&q=80', desc: 'Fresh', cal: 30, benefit: 'Vitamin C' },
+                { name: 'Broccoli', img: 'https://images.unsplash.com/photo-1583663848850-46af132dc08e?w=800&q=80', desc: 'Green', cal: 50, benefit: 'Fiber' }
+            ],
+            carbs: [
+                { name: 'Jasmine Rice', img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&q=80', desc: 'Grain', cal: 200, benefit: 'Energy' },
+                { name: 'Pasta', img: 'https://images.unsplash.com/photo-1598514983318-2f64f8f4796c?w=800&q=80', desc: 'Dry', cal: 220, benefit: 'Satiety' },
+                { name: 'Sourdough', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80', desc: 'Bread', cal: 180, benefit: 'Gut Health' }
+            ],
+            sauces: [
+                { name: 'Olive Oil', img: 'https://images.unsplash.com/photo-1474631245212-32dc3c8310c6?w=800&q=80', desc: 'Fat', cal: 120, benefit: 'Healthy Fats' },
+                { name: 'Soy Sauce', img: 'https://images.unsplash.com/photo-1594970428590-77a83d7353f4?w=800&q=80', desc: 'Condiment', cal: 10, benefit: 'Umami' },
+                { name: 'Butter', img: 'https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=800&q=80', desc: 'Dairy', cal: 100, benefit: 'Flavor' }
+            ],
+            spices: [
+                { name: 'Sea Salt', img: 'https://images.unsplash.com/photo-1622621733374-7d0b4c4b94b8?w=800&q=80', desc: 'Basic', cal: 0, benefit: 'Electrolytes' },
+                { name: 'Peppercorns', img: 'https://images.unsplash.com/photo-1568283086968-3bb8c0576326?w=800&q=80', desc: 'Spice', cal: 0, benefit: 'Digestion' },
+                { name: 'Garlic', img: 'https://images.unsplash.com/photo-1615477218698-3f5f3e9c5225?w=800&q=80', desc: 'Aromatic', cal: 5, benefit: 'Immunity' }
+            ]
+        };
+
+        let cart = []; let historyStack = []; let currentSection = ''; let tempItems = [];
+
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(pageId).classList.add('active-page');
+            document.getElementById(pageId).scrollTop = 0;
+        }
+
+        function startApp() { showSection('main'); }
+        function showSection(key) { switchPage('selection'); historyStack.push(key); currentSection = key; renderItems(); }
+        function addCustomItem() {
+            const input = document.getElementById('custom-input'); const val = input.value.trim();
+            if(val) { addToCart(val); input.value = ''; input.style.borderColor = 'black'; setTimeout(() => input.style.borderColor = '#ccc', 300); }
+        }
+        function handleEnter(e) { if(e.key === 'Enter') addCustomItem(); }
+
+        function renderItems() {
+            const container = document.getElementById('display-area'); container.innerHTML = ''; tempItems = [];
+            const titles = { 'main': 'Ingredients', 'meat': 'Proteins', 'vegetables': 'Produce', 'carbs': 'Pantry', 'sauces': 'Oils', 'spices': 'Seasoning' };
+            const subs = { 'main': 'Browse by category', 'meat': 'Select your main', 'vegetables': 'Add freshness', 'carbs': 'Choose a base', 'sauces': 'Cooking essentials', 'spices': 'Flavor boosters' };
+            document.getElementById('title').innerText = titles[currentSection];
+            document.getElementById('subtitle').innerText = subs[currentSection];
+            const isCategoryView = (currentSection === 'main');
+            document.getElementById('confirm-container').style.display = isCategoryView ? 'none' : 'block';
+
+            inventory[currentSection].forEach(item => {
+                const el = document.createElement('div'); el.className = 'card';
+                if(cart.includes(item.name)) el.classList.add('selected');
+                el.innerHTML = `<div class="card-img-container"><img src="${item.img}" class="card-img" loading="lazy"></div><div class="card-meta"><div><div class="card-title">${item.name}</div><div class="card-desc">${item.desc}</div></div>${!isCategoryView ? '<div class="select-indicator"></div>' : ''}</div>`;
+                el.onclick = () => handleItemClick(item, el);
+                container.appendChild(el);
+            });
+        }
+
+        function handleItemClick(item, element) {
+            if (currentSection === 'main') { showSection(item.next); } 
+            else if (currentSection === 'meat') { 
+                cart = cart.filter(c => !inventory.meat.some(m => m.name === c)); 
+                addToCart(item.name); 
+                document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+                element.classList.add('selected'); 
+                setTimeout(goBack, 300); 
+            } 
+            else { 
+                element.classList.toggle('selected'); 
+                if (tempItems.includes(item.name)) tempItems = tempItems.filter(i => i !== item.name); 
+                else tempItems.push(item.name); 
+            }
+        }
+
+        function goBack() { if (historyStack.length > 1) { historyStack.pop(); currentSection = historyStack[historyStack.length - 1]; renderItems(); } }
+        function addToCart(name) { if (!cart.includes(name)) cart.push(name); updateCartUI(); }
+        function confirmSelection() { tempItems.forEach(addToCart); tempItems = []; goBack(); }
+        function updateCartUI() {
+            const list = document.getElementById('cart-items');
+            list.innerHTML = cart.length === 0 ? '<div style="text-align:center; color:#999; margin-top:20px;">Your pantry is empty.</div>' : cart.map(item => `<div class="pantry-item"><span>${item}</span><span class="remove-btn" onclick="removeFromCart('${item}')">Remove</span></div>`).join('');
+            const badge = document.getElementById('cart-badge'); badge.innerText = cart.length; badge.style.display = cart.length > 0 ? 'inline-block' : 'none';
+        }
+        function removeFromCart(name) { cart = cart.filter(item => item !== name); updateCartUI(); if(document.getElementById('selection').classList.contains('active-page')) renderItems(); }
+        function toggleSidebar() { const s = document.getElementById('sidebar'); s.style.right = s.style.right === '0px' ? '-400px' : '0px'; }
+
+        // --- GEMINI JUMP ---
+        function askGemini() {
+            const style = document.getElementById('cuisine-style').options[document.getElementById('cuisine-style').selectedIndex].text;
+            const ingredients = cart.join(', ');
+            const prompt = `Act as a professional chef. I have these ingredients: ${ingredients}. I want to cook a ${style} dish. Please calculate the approximate macronutrients and calories for this combination, and then provide a full, step-by-step gourmet recipe.`;
+            
+            navigator.clipboard.writeText(prompt).then(() => {
+                alert("Prompt copied to clipboard! Opening Gemini...");
+                window.open('https://gemini.google.com/app', '_blank');
+            });
+        }
+
+        // --- ANALYSIS LOGIC (NO RECIPE, JUST STATS) ---
+        function generateAnalysis() {
+            if (cart.length === 0) return alert("Please select at least one ingredient.");
+            toggleSidebar(); switchPage('recipe-page');
+
+            document.getElementById('res-ingredients-display').innerText = cart.join('  •  ');
+
+            // 1. Calculate Stats
+            let totalCal = 0;
+            let benefits = [];
+            let proteins = [];
+
+            // Find data in inventory
+            const allItems = [...inventory.meat, ...inventory.vegetables, ...inventory.carbs, ...inventory.sauces, ...inventory.spices];
+            
+            cart.forEach(item => {
+                const data = allItems.find(i => i.name === item);
+                if (data) {
+                    if (data.cal) totalCal += data.cal;
+                    if (data.benefit) benefits.push(data.benefit);
+                    // Check if protein
+                    if (inventory.meat.some(m => m.name === item)) proteins.push(item);
+                } else {
+                    // Estimate for custom items
+                    totalCal += 50; 
+                }
+            });
+
+            // 2. Display Stats
+            document.getElementById('cal-count').innerText = totalCal > 0 ? totalCal : "N/A";
+            
+            // 3. Display Benefits (Unique)
+            const uniqueBenefits = [...new Set(benefits)];
+            document.getElementById('benefit-list').innerHTML = uniqueBenefits.length > 0 
+                ? uniqueBenefits.map(b => `<li>${b}</li>`).join('') 
+                : "<li>Balanced Nutrition</li><li>Chef's Selection</li>";
+
+            // 4. Determine Pairing
+            const style = document.getElementById('cuisine-style').value;
+            let pairingTitle = "Sparkling Water";
+            let pairingDesc = "Refreshes the palate.";
+
+            if (proteins.some(p => p.includes('Steak') || p.includes('Lamb'))) {
+                pairingTitle = "Cabernet Sauvignon";
+                pairingDesc = "A bold red wine to cut through the richness of the red meat.";
+            } else if (proteins.some(p => p.includes('Salmon') || p.includes('Chicken'))) {
+                pairingTitle = "Chardonnay or Pinot Grigio";
+                pairingDesc = "A crisp white wine complements lighter proteins perfectly.";
+            }
+
+            if (style === 'asian') {
+                pairingTitle = "Jasmine Tea or Lager";
+                pairingDesc = "Cleanses the palate and balances savory soy flavors.";
+            }
+
+            document.getElementById('pairing-text').innerText = pairingTitle;
+            document.getElementById('pairing-sub').innerText = pairingDesc;
+        }
+
+        function startOver() {
+            cart = []; historyStack = []; currentSection = ''; tempItems = [];
+            updateCartUI(); document.getElementById('sidebar').style.right = '-400px'; switchPage('home');
+        }
+    </script>
 </body>
 </html>
