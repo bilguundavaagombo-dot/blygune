@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Монгол Чеф - Mobile</title>
+    <title>Монгол Чеф - Гараар Бүтээх</title>
     <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Public+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -23,121 +23,141 @@
             height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column;
         }
 
-        /* --- Header --- */
+        /* --- HEADER --- */
         header {
             height: 60px; border-bottom: 1px solid var(--border-color);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 20px; background: white; z-index: 1000; position: fixed; top: 0; width: 100%;
         }
-        .logo { font-family: var(--font-serif); font-weight: 700; font-size: 1.5rem; letter-spacing: -0.5px; text-transform: uppercase; color: black; cursor: pointer; }
-        
-        .nav-actions { display: flex; align-items: center; }
-        .nav-actions button { background: none; border: none; font-family: var(--font-sans); font-weight: 600; font-size: 0.85rem; cursor: pointer; margin-left: 15px; color: #333; text-transform: uppercase; }
-        .cart-badge { background: var(--nyt-red); color: white; padding: 2px 6px; border-radius: 50%; font-size: 0.75rem; font-weight: bold; margin-left: 4px; vertical-align: top; }
+        .logo { font-family: var(--font-serif); font-weight: 700; font-size: 1.4rem; letter-spacing: -0.5px; text-transform: uppercase; color: black; cursor: pointer; }
+        .cart-count { background: var(--nyt-red); color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; margin-left: 5px; }
 
-        /* --- Layout --- */
-        .page { position: absolute; top: 60px; left: 0; width: 100%; height: calc(100% - 60px); display: none; flex-direction: column; align-items: center; overflow-y: auto; padding-bottom: 80px; }
+        /* --- LAYOUT & RESPONSIVENESS --- */
+        .page { 
+            position: absolute; top: 60px; left: 0; width: 100%; height: calc(100% - 60px); 
+            display: none; flex-direction: column; align-items: center; 
+            overflow-y: auto; padding-bottom: 80px;
+        }
         .active-page { display: flex !important; animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- Home Page --- */
-        #home { justify-content: flex-start; text-align: center; background: var(--nyt-gray); }
-        .hero-content { width: 100%; padding: 40px 20px; background: white; padding-bottom: 60px; }
-        .daily-pick { font-weight: 700; font-size: 0.75rem; letter-spacing: 1px; color: var(--nyt-red); text-transform: uppercase; margin-bottom: 10px; }
-        .hero-title { font-family: var(--font-serif); font-size: 2.8rem; line-height: 1.1; margin-bottom: 20px; color: var(--nyt-black); }
-        .hero-desc { font-size: 1.1rem; line-height: 1.5; color: #555; margin-bottom: 30px; }
-        .btn-primary { background-color: var(--nyt-red); color: white; border: none; padding: 15px 30px; font-size: 1rem; font-weight: 700; border-radius: 4px; cursor: pointer; text-transform: uppercase; width: 100%; max-width: 300px; }
-        
-        /* Mobile Hero Image */
-        .hero-image { width: 100%; flex-grow: 1; background: url('https://images.unsplash.com/photo-1556910103-1c02745a30bf?q=80&w=800&auto=format&fit=crop') center/cover; min-height: 300px; }
+        /* Container for Desktop Centering */
+        .container {
+            width: 100%; max-width: 800px; padding: 20px; display: flex; flex-direction: column; align-items: center;
+        }
 
-        /* --- Selection Page --- */
-        #selection { background: white; padding-top: 20px; }
-        .section-header { text-align: center; margin-bottom: 20px; width: 100%; padding: 0 20px; }
-        .section-title { font-family: var(--font-serif); font-size: 2rem; margin-bottom: 20px; }
+        /* --- HOME PAGE --- */
+        #home { justify-content: center; text-align: center; background: var(--nyt-gray); }
+        .hero-content { margin-top: 5vh; }
+        .daily-pick { font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; color: var(--nyt-red); text-transform: uppercase; margin-bottom: 15px; }
+        .hero-title { font-family: var(--font-serif); font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 20px; color: var(--nyt-black); }
+        .hero-desc { font-size: 1.1rem; line-height: 1.6; color: #555; margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .btn-primary { 
+            background-color: var(--nyt-red); color: white; border: none; 
+            padding: 15px 40px; font-size: 1rem; font-weight: 700; border-radius: 4px; 
+            cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; 
+            width: 100%; max-width: 300px;
+        }
+        .btn-primary:hover { background-color: #b01b00; }
+
+        /* --- SELECTION / INPUT PAGE --- */
+        #selection { background: white; }
         
         .controls-wrapper {
-            display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; width: 100%;
+            display: flex; flex-wrap: wrap; gap: 15px; width: 100%; margin-bottom: 30px; justify-content: center;
         }
 
-        .style-container, .serving-container { 
-            display: flex; align-items: center; justify-content: space-between;
-            background: #f9f9f9; padding: 12px 20px; border-radius: 8px; border: 1px solid #eee; width: 100%;
+        /* Dropdown & Counter Styles */
+        .control-box {
+            display: flex; align-items: center; justify-content: space-between; gap: 10px;
+            background: #f9f9f9; padding: 12px 20px; border-radius: 8px; border: 1px solid #eee;
+            width: 100%; /* Mobile full width */
         }
+        /* Desktop Adjustment */
+        @media (min-width: 768px) {
+            .control-box { width: auto; min-width: 200px; }
+        }
+
+        .control-label { font-size: 0.75rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .style-select { border: none; background: transparent; font-family: var(--font-serif); font-size: 1.1rem; font-weight: bold; outline: none; text-align: right; flex-grow: 1; cursor: pointer; }
         
-        .control-label { font-size: 0.8rem; font-weight: 700; color: #888; text-transform: uppercase; }
-        .style-select { border: none; background: transparent; font-family: var(--font-serif); font-size: 1.1rem; font-weight: bold; color: var(--nyt-black); outline: none; text-align: right; }
+        .serving-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ccc; background: white; cursor: pointer; font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
+        .serving-count { font-family: var(--font-serif); font-size: 1.3rem; font-weight: bold; padding: 0 15px; }
 
-        .serving-btn { background: white; border: 1px solid #ddd; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
-        .serving-count { font-family: var(--font-serif); font-size: 1.3rem; font-weight: bold; min-width: 30px; text-align: center; }
-
-        .search-bar-container { width: 100%; position: relative; margin-bottom: 20px; }
-        .search-input { width: 100%; padding: 15px 20px; border: 1px solid #ccc; font-family: var(--font-sans); font-size: 1rem; border-radius: 8px; -webkit-appearance: none; }
-        .add-btn-inline { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: black; color: white; border: none; padding: 8px 15px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; }
-
-        /* Mobile Grid */
-        .grid-layout { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* 2 columns on most phones */
-            gap: 15px; width: 100%; padding: 0 15px; 
+        /* Big Input Field */
+        .input-wrapper { width: 100%; position: relative; margin-bottom: 20px; }
+        .big-input {
+            width: 100%; padding: 20px; border: 2px solid #eee; border-radius: 12px;
+            font-family: var(--font-serif); font-size: 1.2rem; outline: none; transition: 0.3s;
         }
+        .big-input:focus { border-color: var(--nyt-black); box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .enter-hint { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #aaa; font-size: 0.8rem; pointer-events: none; display: none; }
+        @media (min-width: 768px) { .enter-hint { display: block; } }
+
+        /* Added Ingredients List (Chips) */
+        .ingredients-display {
+            display: flex; flex-wrap: wrap; gap: 10px; width: 100%; margin-top: 10px;
+        }
+        .ingredient-chip {
+            background: #fff; border: 1px solid #ddd; padding: 8px 15px; border-radius: 50px;
+            font-size: 1rem; display: flex; align-items: center; gap: 8px; animation: popIn 0.3s;
+            font-family: var(--font-serif); box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .chip-remove { cursor: pointer; color: #999; font-weight: bold; font-size: 1.2rem; line-height: 1; }
+        .chip-remove:hover { color: var(--nyt-red); }
+
+        .empty-state { text-align: center; color: #aaa; width: 100%; margin-top: 40px; font-style: italic; }
+
+        /* Action Bar (Fixed Bottom) */
+        .action-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; 
+            background: white; border-top: 1px solid #eee; padding: 15px 20px;
+            display: flex; justify-content: center; z-index: 1000;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+        }
+        .btn-analyze {
+            background: var(--nyt-black); color: white; width: 100%; max-width: 600px;
+            padding: 15px; border-radius: 50px; font-weight: bold; font-size: 1rem; border: none; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center; padding: 15px 30px;
+        }
+        .btn-analyze:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* --- RESULT / ANALYSIS PAGE --- */
+        #result-page { background: white; }
         
-        .card { background: white; border: 1px solid #eee; border-radius: 8px; overflow: hidden; position: relative; }
-        .card-img-container { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #eee; }
-        .card-img { width: 100%; height: 100%; object-fit: cover; }
+        .result-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; width: 100%; }
+        .result-sub { color: var(--nyt-red); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 10px; }
+        .result-title { font-family: var(--font-serif); font-size: 2rem; margin-bottom: 10px; }
         
-        .card-meta { padding: 12px; }
-        .card-title { font-family: var(--font-serif); font-weight: 700; font-size: 1rem; line-height: 1.2; margin-bottom: 4px; color: var(--nyt-black); }
-        .card-desc { font-size: 0.75rem; color: #666; text-transform: uppercase; }
-        
-        /* Mobile Selection Indicator */
-        .card.selected { border: 2px solid var(--nyt-red); }
-        .card.selected::after {
-            content: '✓'; position: absolute; top: 8px; right: 8px;
-            background: var(--nyt-red); color: white; width: 24px; height: 24px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 0.8rem; font-weight: bold;
+        .info-grid { 
+            display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; margin-bottom: 40px; 
         }
+        @media (min-width: 768px) { .info-grid { grid-template-columns: 1fr 1fr; } }
 
-        .floating-action {
-            position: fixed; bottom: 20px; left: 0; width: 100%; padding: 0 20px; z-index: 900;
-            display: none; animation: slideUp 0.3s;
+        .info-card { 
+            background: #fafafa; padding: 25px; border-radius: 12px; border: 1px solid #eee; 
         }
-        .floating-action button { width: 100%; box-shadow: 0 5px 20px rgba(0,0,0,0.3); border-radius: 50px; padding: 18px; font-size: 1.1rem; }
-        @keyframes slideUp { from { transform: translateY(100px); } to { transform: translateY(0); } }
+        .info-label { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+        .info-content { font-family: var(--font-serif); font-size: 1.2rem; color: #333; }
+        .ai-badge { display: inline-block; background: #e0f0ff; color: var(--gemini-blue); font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; vertical-align: middle; margin-left: 5px; font-family: var(--font-sans); }
 
-        /* --- Analysis Page --- */
-        #recipe-page { background: white; padding-top: 30px; }
-        .analysis-container { width: 100%; padding: 0 20px; text-align: center; }
-        .analysis-header { margin-bottom: 30px; }
-        .analysis-title { font-family: var(--font-serif); font-size: 2.2rem; margin-bottom: 10px; line-height: 1.1; }
-        
-        .dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 15px; width: 100%; margin-bottom: 40px; text-align: left; }
-        .info-card { border: 1px solid #eee; padding: 20px; border-radius: 12px; background: #fafafa; }
-        .big-number { font-size: 2.5rem; }
+        .gemini-box {
+            background: linear-gradient(135deg, #f0f7ff, #ffffff);
+            border: 2px solid var(--gemini-blue); border-radius: 16px; padding: 30px;
+            text-align: center; width: 100%; margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(78, 134, 245, 0.15);
+        }
+        .gemini-text { font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 20px; line-height: 1.4; }
+        .btn-gemini {
+            background: var(--gemini-blue); color: white; border: none;
+            padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 10px; transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(78, 134, 245, 0.3); width: 100%; justify-content: center;
+        }
+        .btn-gemini:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(78, 134, 245, 0.4); }
 
-        /* Gemini Box Mobile */
-        .gemini-box { 
-            background: #f0f7ff; border: 1px solid var(--gemini-blue); 
-            border-radius: 12px; padding: 25px; text-align: center; margin-bottom: 100px; /* Space for scroll */
-        }
-        .gemini-text { font-family: var(--font-serif); font-size: 1.2rem; margin-bottom: 15px; line-height: 1.4; }
-        .btn-gemini-large { 
-            width: 100%; justify-content: center; padding: 15px; font-size: 1rem;
-            background: var(--gemini-blue); color: white; border-radius: 50px; border:none; font-weight:bold;
-        }
-
-        /* --- Sidebar (Mobile Full Screen) --- */
-        #sidebar { 
-            position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; 
-            background: white; z-index: 2000; padding: 80px 20px 30px 20px; 
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            display: flex; flex-direction: column;
-        }
-        .sidebar-title { font-family: var(--font-serif); font-size: 2rem; margin-bottom: 10px; }
-        .pantry-list { flex-grow: 1; overflow-y: auto; padding-bottom: 20px; }
-        .pantry-item { padding: 15px 0; border-bottom: 1px solid #eee; font-size: 1rem; align-items: center; }
-        .remove-btn { padding: 5px 10px; background: #eee; border-radius: 4px; font-size: 0.75rem; color: #333; }
+        .start-over { color: #999; text-decoration: underline; background: none; border: none; cursor: pointer; margin-bottom: 50px; }
 
     </style>
 </head>
@@ -145,292 +165,220 @@
 
     <header>
         <div class="logo" onclick="startOver()">МОНГОЛ<span style="color:var(--nyt-red);">ЧЕФ</span></div>
-        <div class="nav-actions">
-            <button onclick="toggleSidebar()">
-                САГС <span id="cart-badge" class="cart-badge" style="display:none;">0</span>
-            </button>
-        </div>
+        <div style="font-size:0.9rem; font-weight:600;">ГАР УТАС & ВЭБ</div>
     </header>
 
     <div id="home" class="page active-page">
-        <div class="hero-content">
-            <p class="daily-pick">Ухаалаг Гал Тогоо</p>
-            <h1 class="hero-title">Төгс Жороо <br>Бүтээгээрэй</h1>
-            <p class="hero-desc">
-                Гэртээ байгаа орцоо сонго. Бид шим тэжээлийг нь тооцоолж, Gemini AI-аар жор гаргаж өгнө.
-            </p>
-            <button class="btn-primary" onclick="startApp()">Эхлүүлэх</button>
+        <div class="container">
+            <div class="hero-content">
+                <p class="daily-pick">Бүтээлч Гал Тогоо</p>
+                <h1 class="hero-title">Танд юу байна, <br>Түүгээр жор бүтээе</h1>
+                <p class="hero-desc">
+                    Бэлэн цэс сонгох шаардлагагүй. Зөвхөн гэртээ байгаа орцуудаа бичээд, AI тогоочоос төгс жорыг асуугаарай.
+                </p>
+                <button class="btn-primary" onclick="startApp()">Эхлүүлэх</button>
+            </div>
         </div>
-        <div class="hero-image"></div>
     </div>
 
     <div id="selection" class="page">
-        <div class="section-header">
-            <h2 id="title" class="section-title"></h2>
-            
+        <div class="container">
             <div class="controls-wrapper">
-                <div class="style-container">
-                    <span class="control-label">ТӨРӨЛ</span>
+                <div class="control-box">
+                    <span class="control-label">ХООЛНЫ ТӨРӨЛ</span>
                     <select id="cuisine-style" class="style-select">
                         <option value="generic">Тогоочийн сонголт</option>
                         <option value="mongolian">Монгол уламжлалт</option>
                         <option value="asian">Ази хуурга</option>
-                        <option value="italian">Итали гоймон</option>
+                        <option value="italian">Итали / Европ</option>
+                        <option value="soup">Шөл / Зутан</option>
                         <option value="healthy">Эрүүл / Хөнгөн</option>
                     </select>
                 </div>
 
-                <div class="serving-container">
-                    <span class="control-label">ХҮН</span>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div class="serving-btn" onclick="updateServings(-1)">-</div>
+                <div class="control-box">
+                    <span class="control-label">ХҮНИЙ ТОО</span>
+                    <div style="display:flex; align-items:center;">
+                        <button class="serving-btn" onclick="updateServings(-1)">-</button>
                         <span id="serving-display" class="serving-count">2</span>
-                        <div class="serving-btn" onclick="updateServings(1)">+</div>
+                        <button class="serving-btn" onclick="updateServings(1)">+</button>
                     </div>
                 </div>
             </div>
 
-            <div class="search-bar-container">
-                <input type="text" id="custom-input" class="search-input" placeholder="Бусад орц нэмэх (Жишээ: Хиам)" onkeypress="handleEnter(event)">
-                <button class="add-btn-inline" onclick="addCustomItem()">НЭМЭХ</button>
+            <div class="input-wrapper">
+                <input type="text" id="custom-input" class="big-input" placeholder="Орцоо бичээд Enter дар..." onkeypress="handleEnter(event)">
+                <span class="enter-hint">ENTER дарж нэмэх</span>
             </div>
+
+            <div id="ingredients-area" class="ingredients-display">
+                </div>
+            
+            <div id="empty-msg" class="empty-state">Одоогоор орц сонгогдоогүй байна.</div>
         </div>
 
-        <div id="display-area" class="grid-layout"></div>
-
-        <div class="floating-action" id="confirm-container">
-            <button class="btn-primary" onclick="confirmSelection()">
-                Сагсанд хийх (<span id="btn-count">0</span>)
+        <div class="action-bar">
+            <button id="analyze-btn" class="btn-analyze" onclick="generateAnalysis()" disabled>
+                <span>ЖОР БОЛОВСРУУЛАХ</span>
+                <span>→</span>
             </button>
         </div>
     </div>
 
-    <div id="recipe-page" class="page">
-        <div class="analysis-container">
-            <div class="analysis-header">
-                <p class="analysis-label">Шинжилгээ Бэлэн</p>
-                <h1 class="analysis-title">Хоолны Профайл</h1>
-                <p class="analysis-ingredients" id="res-metadata" style="color:var(--nyt-red); font-size:0.9rem; margin-bottom:5px; text-transform:uppercase;"></p>
-                <p class="analysis-ingredients" id="res-ingredients-display" style="font-size:1rem;"></p>
+    <div id="result-page" class="page">
+        <div class="container">
+            <div class="result-header">
+                <p class="result-sub">AI ANALYSIS</p>
+                <h1 class="result-title">Таны Жорны Профайл</h1>
+                <p style="color:#666; font-style:italic;" id="result-summary"></p>
             </div>
 
-            <div class="dashboard-grid">
+            <div class="info-grid">
                 <div class="info-card">
-                    <h4>Илчлэг (Тооцоолсон)</h4>
-                    <div class="big-number" id="cal-count">0</div>
-                    <p class="sub-text">ккал / нэг хүнд</p>
+                    <span class="info-label">Илчлэг & Шим Тэжээл</span>
+                    <div class="info-content">
+                        Gemini AI тооцоолно <span class="ai-badge">AI</span>
+                    </div>
+                    <p style="font-size:0.9rem; color:#666; margin-top:5px;">
+                        Таны оруулсан орц болон хүний тоонд үндэслэн нарийн тооцооллыг гаргана.
+                    </p>
                 </div>
 
                 <div class="info-card">
-                    <h4>Ач Тус</h4>
-                    <ul class="benefit-list" id="benefit-list"></ul>
-                </div>
-
-                <div class="info-card">
-                    <h4>Зохимжит Ундаа</h4>
-                    <div style="font-family:var(--font-serif); font-size:1.3rem; margin-top:10px; font-weight:bold;" id="pairing-text"></div>
-                    <p class="sub-text" id="pairing-sub"></p>
+                    <span class="info-label">Зөвлөмж & Зохимж</span>
+                    <div class="info-content" id="pairing-text"></div>
                 </div>
             </div>
 
             <div class="gemini-box">
-                <p class="gemini-text"><span id="gemini-serving-count" style="font-weight:bold;">2</span> хүнд зориулсан жорыг хармаар байна уу?</p>
-                <button class="btn-gemini-large" onclick="askGemini()">
+                <p class="gemini-text">
+                    <span id="gemini-count" style="font-weight:bold;"></span> хүнд зориулсан, <span id="gemini-style" style="font-weight:bold;"></span> хэв маягийн жорыг бүрэн эхээр нь авмаар байна уу?
+                </p>
+                <button class="btn-gemini" onclick="askGemini()">
                     <span>✨ Gemini AI-аас Жор Асуух</span>
                 </button>
-                <p style="margin-top:15px; font-size:0.75rem; color:#666;">Товч дарснаар таны сонголтыг хуулж, Gemini чатыг нээнэ.</p>
+                <p style="margin-top:15px; font-size:0.8rem; color:#666;">
+                    Товч дарснаар таны бүх тохиргоог хуулж, Gemini чатыг автоматаар нээнэ.
+                </p>
             </div>
 
-            <button onclick="startOver()" style="background:none; border:none; text-decoration:underline; color:#999; margin-bottom: 50px; font-size:1rem;">Шинээр эхлэх</button>
+            <button class="start-over" onclick="startOver()">Шинээр эхлэх</button>
         </div>
-    </div>
-
-    <div id="sidebar">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h2 class="sidebar-title">Таны Сагс</h2>
-            <button onclick="toggleSidebar()" style="background:none; border:none; font-size:2.5rem; cursor:pointer; line-height:1;">&times;</button>
-        </div>
-        <p style="font-size:0.9rem; color:#666; margin-bottom:20px;">Сонгогдсон орцууд:</p>
-        <div id="cart-items" class="pantry-list"></div>
-        <button class="btn-primary" style="width:100%; margin-top:auto;" onclick="generateAnalysis()">Шинжлэх</button>
     </div>
 
     <script>
-        // Mongolian Data
-        const inventory = {
-            main: [
-                { name: 'Мах', img: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=800&q=80', next: 'meat', desc: 'Уургийн эх үүсвэр' },
-                { name: 'Ногоо', img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80', next: 'vegetables', desc: 'Амин дэм' },
-                { name: 'Хачир', img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&q=80', next: 'carbs', desc: 'Будаа, Гурил' },
-                { name: 'Соус', img: 'https://images.unsplash.com/photo-1626132647523-66f5bf380027?w=800&q=80', next: 'sauces', desc: 'Амт оруулагч' },
-                { name: 'Амтлагч', img: 'https://images.unsplash.com/photo-1532336414038-cf00d4787638?w=800&q=80', next: 'spices', desc: 'Халуун ногоо' }
-            ],
-            meat: [
-                { name: 'Үхрийн мах', img: 'https://images.unsplash.com/photo-1603048297172-c92544798d5e?w=800&q=80', desc: 'Уураг ихтэй', cal: 290, benefit: 'Төмрөөр баялаг' },
-                { name: 'Хонины мах', img: 'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=800&q=80', desc: 'Илчлэг сайтай', cal: 294, benefit: 'Ядаргаанд сайн' },
-                { name: 'Тахианы цээж', img: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=800&q=80', desc: 'Зөөлөн', cal: 165, benefit: 'Булчин дэмжинэ' },
-                { name: 'Салмон загас', img: 'https://images.unsplash.com/photo-1599084993091-1e83144d72e6?w=800&q=80', desc: 'Загас', cal: 200, benefit: 'Омега-3' }
-            ],
-            vegetables: [
-                { name: 'Төмс', img: 'https://images.unsplash.com/photo-1518977676601-b53f02bad67b?w=800&q=80', desc: 'Үндэст ногоо', cal: 110, benefit: 'Калигаар баялаг' },
-                { name: 'Сонгино', img: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=800&q=80', desc: 'Амтлагч', cal: 40, benefit: 'Дархлаа дэмжинэ' },
-                { name: 'Лууван', img: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=800&q=80', desc: 'Үндэст ногоо', cal: 41, benefit: 'Нүдний хараанд сайн' },
-                { name: 'Чинжүү', img: 'https://images.unsplash.com/photo-1563565375-f3fdf5d6c4a3?w=800&q=80', desc: 'Шинэхэн', cal: 30, benefit: 'Аминдэм С' },
-                { name: 'Брокколи', img: 'https://images.unsplash.com/photo-1583663848850-46af132dc08e?w=800&q=80', desc: 'Ногоон', cal: 50, benefit: 'Эслэг ихтэй' },
-                { name: 'Мөөг', img: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80', desc: 'Ойн', cal: 22, benefit: 'Уураг орлоно' }
-            ],
-            carbs: [
-                { name: 'Цагаан будаа', img: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=800&q=80', desc: 'Үр тариа', cal: 200, benefit: 'Эрч хүч өгнө' },
-                { name: 'Гоймон', img: 'https://images.unsplash.com/photo-1598514983318-2f64f8f4796c?w=800&q=80', desc: 'Хуурай', cal: 220, benefit: 'Цадгалан мэдрэмж' },
-                { name: 'Талх', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&q=80', desc: 'Гурилан', cal: 180, benefit: 'Өдөр тутмын хэрэглээ' }
-            ],
-            sauces: [
-                { name: 'Ургамлын тос', img: 'https://images.unsplash.com/photo-1474631245212-32dc3c8310c6?w=800&q=80', desc: 'Тос', cal: 120, benefit: 'Хэрэгцээт тос' },
-                { name: 'Соя соус', img: 'https://images.unsplash.com/photo-1594970428590-77a83d7353f4?w=800&q=80', desc: 'Шингэн', cal: 10, benefit: 'Давслаг амт' },
-                { name: 'Цөцгийн тос', img: 'https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=800&q=80', desc: 'Сүү', cal: 100, benefit: 'Зөөлөн амт' }
-            ],
-            spices: [
-                { name: 'Давс', img: 'https://images.unsplash.com/photo-1622621733374-7d0b4c4b94b8?w=800&q=80', desc: 'Үндсэн', cal: 0, benefit: 'Эрдэс бодис' },
-                { name: 'Хар перц', img: 'https://images.unsplash.com/photo-1568283086968-3bb8c0576326?w=800&q=80', desc: 'Халуун', cal: 0, benefit: 'Хоол шингээлт' },
-                { name: 'Сармис', img: 'https://images.unsplash.com/photo-1615477218698-3f5f3e9c5225?w=800&q=80', desc: 'Хурц', cal: 5, benefit: 'Байгалийн антибиотик' }
-            ]
-        };
+        let ingredients = [];
+        let servings = 2;
 
-        let cart = []; let historyStack = []; let currentSection = ''; let tempItems = [];
-        let servings = 2; // Default
-
+        // --- Navigation ---
         function switchPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(pageId).classList.add('active-page');
             document.getElementById(pageId).scrollTop = 0;
         }
 
-        function startApp() { showSection('main'); }
-        function showSection(key) { switchPage('selection'); historyStack.push(key); currentSection = key; renderItems(); }
-        
-        function addCustomItem() {
-            const input = document.getElementById('custom-input'); const val = input.value.trim();
-            if(val) { addToCart(val); input.value = ''; input.style.borderColor = 'black'; setTimeout(() => input.style.borderColor = '#ccc', 300); }
+        function startApp() { switchPage('selection'); setTimeout(() => document.getElementById('custom-input').focus(), 300); }
+        function startOver() { 
+            ingredients = []; 
+            servings = 2; 
+            updateUI(); 
+            switchPage('home'); 
         }
-        function handleEnter(e) { if(e.key === 'Enter') addCustomItem(); }
 
-        // --- SERVING LOGIC ---
+        // --- Logic: Servings ---
         function updateServings(change) {
             servings += change;
             if(servings < 1) servings = 1;
             document.getElementById('serving-display').innerText = servings;
         }
 
-        function renderItems() {
-            const container = document.getElementById('display-area'); container.innerHTML = ''; tempItems = [];
-            const titles = { 'main': 'ҮНДСЭН ЦЭС', 'meat': 'Мах', 'vegetables': 'Ногоо', 'carbs': 'Хачир', 'sauces': 'Соус', 'spices': 'Амтлагч' };
-            document.getElementById('title').innerText = titles[currentSection];
-            
-            const isCategoryView = (currentSection === 'main');
-            document.getElementById('confirm-container').style.display = isCategoryView ? 'none' : 'block';
-
-            inventory[currentSection].forEach(item => {
-                const el = document.createElement('div'); el.className = 'card';
-                if(cart.includes(item.name)) el.classList.add('selected');
-                el.innerHTML = `<div class="card-img-container"><img src="${item.img}" class="card-img" loading="lazy"></div><div class="card-meta"><div><div class="card-title">${item.name}</div><div class="card-desc">${item.desc}</div></div></div>`;
-                el.onclick = () => handleItemClick(item, el);
-                container.appendChild(el);
-            });
-        }
-
-        function handleItemClick(item, element) {
-            if (currentSection === 'main') { showSection(item.next); } 
-            else if (currentSection === 'meat') { 
-                cart = cart.filter(c => !inventory.meat.some(m => m.name === c)); 
-                addToCart(item.name); 
-                setTimeout(goBack, 300); 
-            } 
-            else { 
-                element.classList.toggle('selected'); 
-                if (tempItems.includes(item.name)) tempItems = tempItems.filter(i => i !== item.name); 
-                else tempItems.push(item.name); 
+        // --- Logic: Ingredients Input ---
+        function handleEnter(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('custom-input');
+                const val = input.value.trim();
+                if (val) {
+                    addIngredient(val);
+                    input.value = '';
+                }
             }
         }
 
-        function goBack() { if (historyStack.length > 1) { historyStack.pop(); currentSection = historyStack[historyStack.length - 1]; renderItems(); } }
-        function addToCart(name) { if (!cart.includes(name)) cart.push(name); updateCartUI(); }
-        function confirmSelection() { tempItems.forEach(addToCart); tempItems = []; goBack(); }
-        function updateCartUI() {
-            const list = document.getElementById('cart-items');
-            list.innerHTML = cart.length === 0 ? '<div style="text-align:center; color:#999; margin-top:20px;">Хоосон байна</div>' : cart.map(item => `<div class="pantry-item"><span>${item}</span><span class="remove-btn" onclick="removeFromCart('${item}')">Хасах</span></div>`).join('');
-            const badge = document.getElementById('cart-badge'); badge.innerText = cart.length; badge.style.display = cart.length > 0 ? 'inline-block' : 'none';
-            document.getElementById('btn-count').innerText = tempItems.length;
+        function addIngredient(name) {
+            // Capitalize first letter
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+            if (!ingredients.includes(name)) {
+                ingredients.push(name);
+                updateUI();
+            }
         }
-        function removeFromCart(name) { cart = cart.filter(item => item !== name); updateCartUI(); if(document.getElementById('selection').classList.contains('active-page')) renderItems(); }
-        function toggleSidebar() { const s = document.getElementById('sidebar'); s.style.right = s.style.right === '0px' ? '-100%' : '0px'; }
 
-        // --- GEMINI PROMPT ---
+        function removeIngredient(name) {
+            ingredients = ingredients.filter(i => i !== name);
+            updateUI();
+        }
+
+        function updateUI() {
+            const container = document.getElementById('ingredients-area');
+            const emptyMsg = document.getElementById('empty-msg');
+            const btn = document.getElementById('analyze-btn');
+
+            container.innerHTML = ingredients.map(ing => `
+                <div class="ingredient-chip">
+                    ${ing}
+                    <span class="chip-remove" onclick="removeIngredient('${ing}')">&times;</span>
+                </div>
+            `).join('');
+
+            if (ingredients.length > 0) {
+                emptyMsg.style.display = 'none';
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.innerHTML = `<span>ЖОР БОЛОВСРУУЛАХ (${ingredients.length})</span> <span>→</span>`;
+            } else {
+                emptyMsg.style.display = 'block';
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.innerHTML = `<span>ЖОР БОЛОВСРУУЛАХ</span> <span>→</span>`;
+            }
+        }
+
+        // --- Analysis Logic ---
+        function generateAnalysis() {
+            switchPage('result-page');
+            
+            const styleSelect = document.getElementById('cuisine-style');
+            const styleName = styleSelect.options[styleSelect.selectedIndex].text;
+            const styleVal = styleSelect.value;
+
+            // Update Text
+            document.getElementById('result-summary').innerText = ingredients.join(' • ');
+            document.getElementById('gemini-count').innerText = servings;
+            document.getElementById('gemini-style').innerText = styleName;
+
+            // Smart Pairing Logic (Basic)
+            let pairing = "Ус, Нимбэгтэй ус";
+            
+            if (styleVal === 'mongolian') pairing = "Сүүтэй цай, Аарц, Хярам";
+            else if (styleVal === 'italian') pairing = "Улаан дарс, Газтай ус";
+            else if (styleVal === 'asian') pairing = "Ногоон цай, Шар айраг";
+            else if (styleVal === 'healthy') pairing = "Шинэхэн жүүс, Детокс ус";
+            else if (styleVal === 'soup') pairing = "Хар талх, Сармистай талх";
+
+            document.getElementById('pairing-text').innerText = pairing;
+        }
+
+        // --- Gemini Jump ---
         function askGemini() {
             const style = document.getElementById('cuisine-style').options[document.getElementById('cuisine-style').selectedIndex].text;
-            const ingredients = cart.join(', ');
+            const ingList = ingredients.join(', ');
             
-            const prompt = `Та бол мэргэжлийн тогооч. Надад дараах орцууд байна: ${ingredients}. Би ${style} хэв маягаар, ${servings} хүнд зориулж хоол хиймээр байна. Эхлээд энэ хоолны шим тэжээл болон илчлэгийг тооцоолж хэл. Дараа нь алхам алхмаар хийх зааврыг нарийн хэмжээтэй нь бичиж өг.`;
+            const prompt = `Та бол мэргэжлийн тогооч. Надад дараах орцууд байна: ${ingList}. Би ${style} хэв маягаар, ${servings} хүнд зориулж хоол хиймээр байна. 1. Эхлээд энэ хоолны нэг хүнд ногдох илчлэг болон шим тэжээлийг тооцоол. 2. Дараа нь алхам алхмаар хийх зааврыг орцны нарийн хэмжээтэй нь (грамм/халбага) бичиж өг.`;
             
             navigator.clipboard.writeText(prompt).then(() => {
                 alert("Асуултыг хуулж авлаа! Gemini нээгдэх үед Paste (Ctrl+V) хийгээрэй.");
                 window.open('https://gemini.google.com/app', '_blank');
             });
-        }
-
-        // --- ANALYSIS ---
-        function generateAnalysis() {
-            if (cart.length === 0) return alert("Ядаж нэг орц сонгоно уу.");
-            toggleSidebar(); switchPage('recipe-page');
-
-            document.getElementById('res-ingredients-display').innerText = cart.join('  •  ');
-            document.getElementById('res-metadata').innerText = `ХҮНИЙ ТОО: ${servings}`;
-            document.getElementById('gemini-serving-count').innerText = servings;
-
-            let totalCal = 0; let benefits = []; let proteins = [];
-            const allItems = [...inventory.meat, ...inventory.vegetables, ...inventory.carbs, ...inventory.sauces, ...inventory.spices];
-            
-            cart.forEach(item => {
-                const data = allItems.find(i => i.name === item);
-                if (data) {
-                    if (data.cal) totalCal += data.cal;
-                    if (data.benefit) benefits.push(data.benefit);
-                    if (inventory.meat.some(m => m.name === item)) proteins.push(item);
-                } else { totalCal += 50; }
-            });
-
-            document.getElementById('cal-count').innerText = totalCal > 0 ? totalCal : "N/A";
-            
-            const uniqueBenefits = [...new Set(benefits)];
-            document.getElementById('benefit-list').innerHTML = uniqueBenefits.length > 0 
-                ? uniqueBenefits.map(b => `<li>${b}</li>`).join('') 
-                : "<li>Шим тэжээлээр баялаг</li><li>Тогоочийн сонголт</li>";
-
-            const style = document.getElementById('cuisine-style').value;
-            let pairingTitle = "Хүйтэн ус / Газтай ус";
-            let pairingDesc = "Амтыг тэнцвэржүүлнэ.";
-
-            if (proteins.some(p => p.includes('Үхрийн') || p.includes('Хонины'))) {
-                pairingTitle = "Улаан дарс / Сүүтэй цай";
-                pairingDesc = "Махны хурц амтыг зөөлрүүлнэ.";
-            } else if (proteins.some(p => p.includes('Салмон') || p.includes('Тахиа'))) {
-                pairingTitle = "Цагаан дарс / Нимбэгтэй ус";
-                pairingDesc = "Хөнгөн хоолонд төгс тохирно.";
-            }
-            if (style === 'mongolian') {
-                pairingTitle = "Сүүтэй цай / Аарц";
-                pairingDesc = "Уламжлалт монгол хоолны төгс зохицол.";
-            }
-
-            document.getElementById('pairing-text').innerText = pairingTitle;
-            document.getElementById('pairing-sub').innerText = pairingDesc;
-        }
-
-        function startOver() {
-            cart = []; historyStack = []; currentSection = ''; tempItems = []; servings = 2;
-            updateCartUI(); 
-            document.getElementById('serving-display').innerText = 2;
-            document.getElementById('sidebar').style.right = '-100%'; 
-            switchPage('home');
         }
     </script>
 </body>
