@@ -3,427 +3,499 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Монгол Чеф - Pro Voice</title>
-    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Public+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>AMT - Intelligent Kitchen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --nyt-red: #E32400;
-            --nyt-black: #121212;
-            --nyt-gray: #f7f7f7;
-            --gemini-blue: #4E86F5;
-            --easy-green: #2D8B57;
-            --border-color: #ddd;
-            --font-serif: 'Frank Ruhl Libre', serif;
-            --font-sans: 'Public Sans', sans-serif;
+            /* COLOR PALETTE */
+            --bg: #ffffff;
+            --text: #111111;
+            --sub-text: #666666;
+            --accent: #E32400;
+            --border: #e5e5e5;
+            --input-bg: #f9f9f9;
+            --surface: #ffffff;
+            --radius: 16px;
+            --font: 'Inter', sans-serif;
+            --shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0a0a0a;
+            --text: #ededed;
+            --sub-text: #888888;
+            --accent: #ff4d4d;
+            --border: #333333;
+            --input-bg: #161616;
+            --surface: #111111;
+            --shadow: none;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body { 
-            background-color: #fff; color: var(--nyt-black); font-family: var(--font-sans);
-            height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column;
+            background-color: var(--bg); color: var(--text); font-family: var(--font);
+            height: 100vh; display: flex; flex-direction: column; transition: background 0.3s, color 0.3s;
+            overflow: hidden; /* Prevent body scroll, handle in main */
         }
 
-        /* HEADER */
+        /* --- HEADER --- */
         header {
-            height: 60px; border-bottom: 1px solid var(--border-color);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 20px; background: white; z-index: 1000; position: fixed; top: 0; width: 100%;
+            padding: 15px 20px; display: flex; justify-content: space-between; align-items: center;
+            position: fixed; top: 0; width: 100%; z-index: 100; background: var(--bg);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
         }
-        .logo { font-family: var(--font-serif); font-weight: 700; font-size: 1.4rem; letter-spacing: -0.5px; text-transform: uppercase; color: black; cursor: pointer; }
+        .logo { font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; cursor: pointer; user-select: none; }
+        .logo span { color: var(--accent); }
+        .theme-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text); padding: 5px; }
 
-        /* LAYOUT */
-        .page { 
-            position: absolute; top: 60px; left: 0; width: 100%; height: calc(100% - 60px); 
-            display: none; flex-direction: column; align-items: center; 
-            overflow-y: auto; padding-bottom: 100px; 
+        /* --- MAIN SCROLL AREA --- */
+        main { 
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: start;
+            padding: 80px 20px 140px 20px; width: 100%; max-width: 600px; margin: 0 auto;
+            overflow-y: auto; scrollbar-width: none;
         }
-        .active-page { display: flex !important; animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        main::-webkit-scrollbar { display: none; }
 
-        .container { width: 100%; max-width: 800px; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .hero { text-align: center; margin-bottom: 30px; animation: fadeIn 0.5s ease; width: 100%; }
+        .hero h1 { font-size: 2.2rem; line-height: 1.1; margin-bottom: 8px; font-weight: 800; letter-spacing: -1px; }
+        .hero p { color: var(--sub-text); font-size: 1rem; }
 
-        /* HOME */
-        #home { justify-content: center; text-align: center; background: var(--nyt-gray); }
-        .hero-content { margin-top: 5vh; }
-        .daily-pick { font-weight: 700; font-size: 0.8rem; letter-spacing: 1px; color: var(--nyt-red); text-transform: uppercase; margin-bottom: 15px; }
-        .hero-title { font-family: var(--font-serif); font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 20px; color: var(--nyt-black); }
-        .hero-desc { font-size: 1.1rem; line-height: 1.6; color: #555; margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto; }
-        .btn-primary { 
-            background-color: var(--nyt-red); color: white; border: none; 
-            padding: 15px 40px; font-size: 1rem; font-weight: 700; border-radius: 4px; 
-            cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; 
-            width: 100%; max-width: 300px;
+        /* --- INPUT --- */
+        .input-group { width: 100%; position: relative; margin-bottom: 20px; }
+        .main-input {
+            width: 100%; padding: 20px; padding-right: 60px;
+            background: var(--input-bg); border: 1px solid var(--border); border-radius: var(--radius);
+            font-family: var(--font); font-size: 1.1rem; color: var(--text); outline: none; transition: 0.3s;
         }
-        
-        /* SELECTION */
-        #selection { background: white; }
-        .controls-wrapper { display: flex; flex-wrap: wrap; gap: 15px; width: 100%; margin-bottom: 20px; justify-content: center; }
-
-        .control-box {
-            display: flex; align-items: center; justify-content: space-between; gap: 10px;
-            background: #f9f9f9; padding: 12px 20px; border-radius: 8px; border: 1px solid #eee; width: 100%; 
-        }
-        @media (min-width: 768px) { .control-box { width: auto; min-width: 200px; } }
-
-        .control-label { font-size: 0.75rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0; }
-        .style-select { border: none; background: transparent; font-family: var(--font-serif); font-size: 1.1rem; font-weight: bold; outline: none; text-align: right; flex-grow: 1; cursor: pointer; width: 100%; }
-        
-        .serving-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #ccc; background: white; cursor: pointer; font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
-        .serving-count { font-family: var(--font-serif); font-size: 1.3rem; font-weight: bold; padding: 0 15px; }
-
-        /* INPUT & MICROPHONE FIX */
-        .input-wrapper { width: 100%; position: relative; margin-bottom: 10px; }
-        .big-input { width: 100%; padding: 20px; padding-right: 50px; border: 2px solid #eee; border-radius: 12px; font-family: var(--font-serif); font-size: 1.2rem; outline: none; transition: 0.3s; }
-        .big-input:focus { border-color: var(--nyt-black); box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .main-input:focus { border-color: var(--text); box-shadow: var(--shadow); }
         
         .mic-btn {
-            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-            width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent;
-            font-size: 1.5rem; cursor: pointer; color: #ccc; transition: 0.2s;
-            display: flex; align-items: center; justify-content: center;
+            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; font-size: 1.5rem; color: var(--sub-text); cursor: pointer; transition: 0.2s;
+            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%;
         }
-        .mic-btn:active { background: #eee; }
-        /* Pulsing animation when listening */
-        .mic-btn.listening { 
-            color: white; background: var(--nyt-red); 
-            animation: pulse 1.5s infinite; 
+        .mic-btn.active { color: white; background: var(--accent); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(227, 36, 0, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(227, 36, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(227, 36, 0, 0); } }
+
+        /* --- TOGGLE ROW --- */
+        .toggle-row { 
+            display: flex; justify-content: space-between; width: 100%; align-items: center; 
+            margin-bottom: 10px; 
         }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(227, 36, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(227, 36, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(227, 36, 0, 0); } }
+        .text-btn { background: none; border: none; color: var(--accent); font-weight: 700; font-size: 0.95rem; cursor: pointer; padding: 5px; }
+
+        /* --- HORIZONTAL TAGS (SPACIOUS) --- */
+        .tags-wrapper {
+            width: 100%; overflow-x: auto; 
+            padding: 5px 5px 20px 5px; /* Vertical space for shadows */
+            margin-bottom: 20px;
+            scrollbar-width: none; scroll-behavior: smooth;
+        }
+        .tags-wrapper::-webkit-scrollbar { display: none; }
+
+        .tags-container { 
+            display: flex; gap: 12px; width: max-content; padding-right: 20px; align-items: center;
+        }
+        .tag {
+            background: var(--surface); border: 1px solid var(--border); color: var(--text);
+            padding: 10px 20px; border-radius: 50px; font-size: 1rem; font-weight: 600;
+            display: flex; align-items: center; gap: 10px; cursor: default; 
+            white-space: nowrap; box-shadow: var(--shadow);
+            animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .tag span { cursor: pointer; color: var(--sub-text); font-weight: bold; font-size: 1.2rem; padding-left: 10px; border-left: 1px solid var(--border); line-height: 0.8; }
+        .tag span:hover { color: var(--accent); }
+        @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* --- CONFIG GRID --- */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; margin-bottom: 30px; }
+        .option-item { display: flex; flex-direction: column; gap: 8px; }
+        .label { font-size: 0.75rem; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: 1px; display: block;}
+        
+        .select-minimal {
+            width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--border);
+            font-family: var(--font); font-size: 1rem; font-weight: 600; color: var(--text);
+            padding: 10px 0; border-radius: 0; outline: none; cursor: pointer;
+        }
+        .select-minimal option { background: var(--bg); color: var(--text); }
+
+        .counter { display: flex; align-items: center; gap: 15px; font-weight: 600; font-size: 1.3rem; }
+        .count-btn { background: var(--input-bg); width: 35px; height: 35px; border-radius: 50%; border: 1px solid var(--border); cursor: pointer; color: var(--text); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s; }
+        .count-btn:active { transform: scale(0.9); }
+
+        /* --- DIETARY & PANTRY --- */
+        .dietary-section { width: 100%; margin-bottom: 30px; }
+        .filters { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; margin-top: 8px; }
+        .filter-chip {
+            padding: 10px 16px; border-radius: 12px; background: var(--input-bg); 
+            color: var(--sub-text); font-size: 0.9rem; cursor: pointer; border: 1px solid transparent;
+            transition: 0.2s; user-select: none; font-weight: 500;
+        }
+        .filter-chip:hover { border-color: var(--border); }
+        .filter-chip.selected { background: var(--text); color: var(--bg); border-color: var(--text); }
+        
+        .custom-diet-input {
+            border: 1px dashed var(--sub-text); background: transparent; color: var(--text);
+            padding: 10px 16px; border-radius: 12px; font-family: var(--font); font-size: 0.9rem;
+            outline: none; width: 100px; transition: 0.3s;
+        }
+        .custom-diet-input:focus { width: 140px; border-color: var(--accent); border-style: solid; }
 
         .pantry-toggle {
-            display: flex; align-items: center; gap: 10px; width: 100%; 
-            background: #fff8f6; padding: 10px 15px; border-radius: 8px; border: 1px solid #ffebe6;
-            margin-bottom: 20px; font-size: 0.9rem; color: #555;
+            width: 100%; cursor: pointer; background: var(--input-bg); padding: 18px; 
+            border-radius: 16px; margin-bottom: 20px; border: 1px solid transparent; transition: 0.2s;
         }
-        .pantry-checkbox { width: 18px; height: 18px; accent-color: var(--nyt-red); }
+        .pantry-toggle:hover { border-color: var(--border); }
+        .pantry-header { display: flex; align-items: center; gap: 12px; font-weight: 700; color: var(--text); font-size: 0.95rem; }
+        .pantry-check { accent-color: var(--text); width: 20px; height: 20px; }
+        .pantry-list { font-size: 0.8rem; color: var(--sub-text); margin-left: 32px; margin-top: 6px; line-height: 1.5; }
 
-        .ingredients-display { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; margin-top: 10px; }
-        .ingredient-chip { background: #fff; border: 1px solid #ddd; padding: 8px 15px; border-radius: 50px; font-size: 1rem; display: flex; align-items: center; gap: 8px; animation: popIn 0.3s; font-family: var(--font-serif); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .chip-remove { cursor: pointer; color: #999; font-weight: bold; font-size: 1.2rem; line-height: 1; }
-        .chip-remove:hover { color: var(--nyt-red); }
+        /* --- BOTTOM BAR --- */
+        .bottom-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            padding: 20px 20px 35px 20px; background: var(--bg); border-top: 1px solid var(--border);
+            display: flex; justify-content: center; z-index: 90;
+        }
+        .btn-main {
+            width: 100%; max-width: 600px; padding: 18px; border-radius: 50px;
+            background: var(--text); color: var(--bg); border: none;
+            font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s;
+            display: flex; justify-content: space-between; align-items: center; padding-left: 30px; padding-right: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .btn-main:disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; }
 
-        .empty-state { text-align: center; color: #aaa; width: 100%; margin-top: 40px; font-style: italic; }
-
-        .action-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #eee; padding: 15px 20px; display: flex; justify-content: center; z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
-        .btn-analyze { background: var(--nyt-black); color: white; width: 100%; max-width: 600px; padding: 15px; border-radius: 50px; font-weight: bold; font-size: 1rem; border: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; }
-        .btn-analyze:disabled { background: #ccc; cursor: not-allowed; }
-
-        /* RESULT PAGE */
-        #result-page { background: white; }
-        .result-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; width: 100%; }
-        .result-sub { color: var(--nyt-red); font-weight: bold; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 10px; }
-        .result-title { font-family: var(--font-serif); font-size: 2rem; margin-bottom: 10px; }
+        /* --- MODAL --- */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 200; transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex; flex-direction: column; padding: 30px 25px; overflow-y: auto;
+        }
+        .modal.open { transform: translateY(0); }
         
-        .info-grid { display: grid; grid-template-columns: 1fr; gap: 20px; width: 100%; margin-bottom: 40px; }
-        @media (min-width: 768px) { .info-grid { grid-template-columns: 1fr 1fr; } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .close-btn { background: var(--input-bg); border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 1.8rem; cursor: pointer; color: var(--text); display:flex; align-items:center; justify-content:center; }
 
-        .info-card { background: #fafafa; padding: 25px; border-radius: 12px; border: 1px solid #eee; }
-        .info-label { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; display: block; }
-        .info-content { font-family: var(--font-serif); font-size: 1.2rem; color: #333; }
-        .ai-badge { display: inline-block; background: #e0f0ff; color: var(--gemini-blue); font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; vertical-align: middle; margin-left: 5px; font-family: var(--font-sans); }
+        .pref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; margin-bottom: 40px; }
+        .pref-card { 
+            background: var(--input-bg); border-radius: 16px; padding: 20px; 
+            border: 1px solid var(--border); display: flex; flex-direction: column; gap: 5px;
+        }
+        .pref-label { font-size: 0.75rem; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: 1px; }
+        .pref-select { 
+            background: transparent; border: none; width: 100%; font-family: var(--font);
+            font-size: 1rem; font-weight: 700; color: var(--text); outline: none; cursor: pointer; margin-top: 5px;
+        }
 
-        .gemini-box { background: linear-gradient(135deg, #f0f7ff, #ffffff); border: 2px solid var(--gemini-blue); border-radius: 16px; padding: 30px; text-align: center; width: 100%; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(78, 134, 245, 0.15); }
-        .gemini-text { font-family: var(--font-serif); font-size: 1.3rem; margin-bottom: 20px; line-height: 1.4; }
-        .gemini-buttons { display: flex; flex-direction: column; gap: 15px; }
-        @media (min-width: 768px) { .gemini-buttons { flex-direction: row; } }
+        .modal-summary { font-size: 1.1rem; color: var(--sub-text); margin-bottom: 30px; line-height: 1.5; }
+        .modal-summary strong { color: var(--text); }
 
-        .btn-gemini { background: var(--gemini-blue); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; box-shadow: 0 5px 15px rgba(78, 134, 245, 0.3); width: 100%; }
-        .btn-gemini-easy { background: var(--easy-green); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; box-shadow: 0 5px 15px rgba(45, 139, 87, 0.3); width: 100%; }
-        
-        .start-over { color: #999; text-decoration: underline; background: none; border: none; cursor: pointer; margin-bottom: 50px; }
+        .btn-ai-big {
+            width: 100%; padding: 20px; border-radius: 20px; border: none; margin-bottom: 15px;
+            font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px;
+            transition: 0.2s;
+        }
+        .btn-gourmet { background: var(--accent); color: white; box-shadow: 0 10px 30px rgba(227, 36, 0, 0.3); }
+        .btn-easy { background: var(--input-bg); color: var(--text); border: 1px solid var(--border); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo" onclick="startOver()">МОНГОЛ<span style="color:var(--nyt-red);">ЧЕФ</span></div>
-        <div style="font-size:0.9rem; font-weight:600;">PRO</div>
+        <div class="logo" onclick="location.reload()">AMT<span>.</span></div>
+        <button class="theme-btn" onclick="toggleTheme()">◑</button>
     </header>
 
-    <div id="home" class="page active-page">
-        <div class="container">
-            <div class="hero-content">
-                <p class="daily-pick">Ухаалаг Гал Тогоо</p>
-                <h1 class="hero-title">Танд юу байна, <br>Түүгээр жор бүтээе</h1>
-                <p class="hero-desc">
-                    Бэлэн цэс сонгох шаардлагагүй. Орцоо бичээд (эсвэл хэлээд), AI тогоочоос өөрт тохирсон жорыг асуугаарай.
-                </p>
-                <button class="btn-primary" onclick="startApp()">Эхлүүлэх</button>
+    <main>
+        <div class="hero">
+            <h1>Танд юу байна?</h1>
+            <p>Гэрт байгаа орцоо оруулаарай.</p>
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="main-input" class="main-input" placeholder="Бичих / Хэлэх..." onkeypress="handleEnter(event)">
+            <button class="mic-btn" onclick="toggleDictation()">🎙️</button>
+        </div>
+
+        <div class="toggle-row">
+            <span style="font-size:0.9rem; color:var(--sub-text); font-weight:500;" id="count-label">0 орц сонгосон</span>
+            <button class="text-btn" onclick="addRandomSmart()">🎲 Random</button>
+        </div>
+
+        <div class="tags-wrapper">
+            <div id="tags-area" class="tags-container"></div>
+        </div>
+
+        <div class="options-grid">
+            <div class="option-item">
+                <span class="label">Төрөл</span>
+                <select id="style-select" class="select-minimal">
+                    <option value="generic">✨ Тогоочийн сонголт</option>
+                    <option value="mongolian">🇲🇳 Монгол</option>
+                    <option value="asian">🥢 Ази / Хуурга</option>
+                    <option value="italian">🍝 Итали / Европ</option>
+                    <option value="french">🇫🇷 Франц / Тансаг</option>
+                    <option value="indian">🇮🇳 Энэтхэг / Халуун</option>
+                    <option value="mexican">🇲🇽 Мексик / Тако</option>
+                    <option value="russian">🇷🇺 Орос / Славян</option>
+                    <option value="soup">🍲 Шөл / Зутан</option>
+                    <option value="fastfood">🍔 Түргэн хоол</option>
+                    <option value="breakfast">🍳 Өглөөний цай</option>
+                    <option value="dinner">🌙 Оройн хоол</option>
+                    <option value="snack">🍿 Хөнгөн зууш</option>
+                    <option value="healthy">🥗 Эрүүл</option>
+                    <option value="vegan">🥬 Цагаан хоол</option>
+                    <option value="dessert">🍰 Амттан</option>
+                </select>
+            </div>
+            <div class="option-item">
+                <span class="label">Хүний тоо</span>
+                <div class="counter">
+                    <button class="count-btn" onclick="updateServings(-1)">−</button>
+                    <span id="serving-val">2</span>
+                    <button class="count-btn" onclick="updateServings(1)">+</button>
+                </div>
             </div>
         </div>
+
+        <div class="dietary-section">
+            <span class="label">Харшил</span>
+            <div class="filters" id="dietary-filters">
+                <div class="filter-chip" onclick="toggleFilter(this, 'Самар ороогүй')">🥜 Самар</div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'Цавуулаггүй')">🍞 Цавуулаг</div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'Гахайн махгүй')">🐷 Гахайн мах</div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'Сүүгүй')">🥛 Сүү</div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'Сахаргүй')">🍬 Сахар</div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'Өндөггүй')">🥚 Өндөг</div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'Халуун ногоогүй')">🌶️ Халуун ногоо</div>
+                <input type="text" class="custom-diet-input" placeholder="+ Бусад" onkeypress="handleCustomDiet(event)">
+            </div>
+        </div>
+
+        <label class="pantry-toggle">
+            <div class="pantry-header">
+                <input type="checkbox" id="pantry-check" class="pantry-check" checked>
+                Гэрт үндсэн амтлагч байгаа
+            </div>
+            <div class="pantry-list">
+                Давс, Хар перц, Ургамлын тос, Сонгино, Сармис, Элсэн чихэр, Соя соус, Уксус, Гурил
+            </div>
+        </label>
+
+    </main>
+
+    <div class="bottom-bar">
+        <button id="analyze-btn" class="btn-main" onclick="openResults()" disabled>
+            <span>ҮРГЭЛЖЛҮҮЛЭХ</span>
+            <span>→</span>
+        </button>
     </div>
 
-    <div id="selection" class="page">
-        <div class="container">
-            <div class="controls-wrapper">
-                <div class="control-box">
-                    <span class="control-label">ТӨРӨЛ</span>
-                    <select id="cuisine-style" class="style-select">
-                        <option value="generic">✨ Тогоочийн сонголт</option>
-                        <option value="mongolian">🇲🇳 Монгол уламжлалт</option>
-                        <option value="korean">🇰🇷 Солонгос амт</option>
-                        <option value="asian">🥢 Ази хуурга</option>
-                        <option value="italian">🍝 Итали / Европ</option>
-                        <option value="russian">🇷🇺 Орос / Славян</option>
-                        <option value="soup">🍲 Шөл / Зутан</option>
-                        <option value="healthy">🥗 Эрүүл / Хөнгөн</option>
-                        <option value="vegan">🥬 Цагаан хоол</option>
-                        <option value="breakfast">🍳 Өглөөний цай</option>
-                        <option value="dessert">🍰 Амттан / Бэйкери</option>
-                    </select>
-                </div>
-
-                <div class="control-box">
-                    <span class="control-label">ХҮН</span>
-                    <div style="display:flex; align-items:center;">
-                        <button class="serving-btn" onclick="updateServings(-1)">-</button>
-                        <span id="serving-display" class="serving-count">2</span>
-                        <button class="serving-btn" onclick="updateServings(1)">+</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="input-wrapper">
-                <input type="text" id="custom-input" class="big-input" placeholder="Орцоо бичээд (эсвэл яриад) Enter дар..." onkeypress="handleEnter(event)">
-                <button class="mic-btn" onclick="startDictation()" title="Микрофон ашиглах">🎙️</button>
-            </div>
-
-            <div class="pantry-toggle">
-                <input type="checkbox" id="pantry-check" class="pantry-checkbox" checked>
-                <label for="pantry-check">Гэрт үндсэн амтлагч байгаа (Давс, Тос, Сонгино)</label>
-            </div>
-
-            <div id="ingredients-area" class="ingredients-display"></div>
-            
-            <div id="empty-msg" class="empty-state">Одоогоор орц сонгогдоогүй байна.</div>
+    <div id="result-modal" class="modal">
+        <div class="modal-header">
+            <h2 style="font-size:1.8rem; font-weight:800;">Тохиргоо</h2>
+            <button class="close-btn" onclick="closeResults()">&times;</button>
         </div>
 
-        <div class="action-bar">
-            <button id="analyze-btn" class="btn-analyze" onclick="generateAnalysis()" disabled>
-                <span>ЖОР БОЛОВСРУУЛАХ</span>
-                <span>→</span>
+        <div class="modal-summary">
+            Та <strong><span id="modal-ing-count">0</span> орц</strong> ашиглаж, <strong><span id="modal-servings">2</span> хүнд</strong> зориулсан хоол хийх гэж байна. Сүүлийн тохиргоог хийнэ үү.
+        </div>
+
+        <div class="pref-grid">
+            <div class="pref-card">
+                <span class="pref-label">Төхөөрөмж</span>
+                <select id="appliance-select" class="pref-select">
+                    <option value="stove">Плетка / Газ</option>
+                    <option value="oven">Шарах шүүгээ</option>
+                    <option value="airfryer">Air Fryer</option>
+                    <option value="pressure">Битүү чанагч</option>
+                    <option value="ricecooker">Будаа агшаагч</option>
+                </select>
+            </div>
+            <div class="pref-card">
+                <span class="pref-label">Амт</span>
+                <select id="spice-select" class="pref-select">
+                    <option value="normal">Хэвийн</option>
+                    <option value="mild">Зөөлөн / Хүүхдэд</option>
+                    <option value="spicy">Халуун ногоотой</option>
+                    <option value="extra_spicy">Маш халуун</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="margin-top:auto; padding-bottom:40px;">
+            <p style="color:var(--sub-text); margin-bottom:15px; font-size:0.9rem; text-align:center;">Gemini AI-аас ямар жор авмаар байна?</p>
+            
+            <button class="btn-ai-big btn-gourmet" onclick="askGeminiFinal('gourmet')">
+                <span>✨ Мэргэжлийн Тансаг Жор</span>
+            </button>
+            
+            <button class="btn-ai-big btn-easy" onclick="askGeminiFinal('easy')">
+                <span>⚡ Хурдан бөгөөд Хялбар (20мин)</span>
             </button>
         </div>
     </div>
 
-    <div id="result-page" class="page">
-        <div class="container">
-            <div class="result-header">
-                <p class="result-sub">AI ANALYSIS</p>
-                <h1 class="result-title">Таны Жорны Профайл</h1>
-                <p style="color:#666; font-style:italic;" id="result-summary"></p>
-            </div>
-
-            <div class="info-grid">
-                <div class="info-card">
-                    <span class="info-label">Илчлэг & Шим Тэжээл</span>
-                    <div class="info-content">
-                        Gemini AI тооцоолно <span class="ai-badge">AI</span>
-                    </div>
-                    <p style="font-size:0.9rem; color:#666; margin-top:5px;">
-                        Таны оруулсан орц болон хүний тоонд үндэслэн нарийн тооцооллыг гаргана.
-                    </p>
-                </div>
-
-                <div class="info-card">
-                    <span class="info-label">Зөвлөмж & Зохимж</span>
-                    <div class="info-content" id="pairing-text"></div>
-                </div>
-            </div>
-
-            <div class="gemini-box">
-                <p class="gemini-text">
-                    <span id="gemini-count" style="font-weight:bold;"></span> хүнд зориулсан жорыг ямар хувилбараар авмаар байна?
-                </p>
-                
-                <div class="gemini-buttons">
-                    <button class="btn-gemini" onclick="askGemini('gourmet')">
-                        <span>✨ Мэргэжлийн Жор</span>
-                    </button>
-                    <button class="btn-gemini-easy" onclick="askGemini('easy')">
-                        <span>⚡ Хурдан & Хялбар Жор</span>
-                    </button>
-                </div>
-
-                <p style="margin-top:15px; font-size:0.8rem; color:#666;">
-                    Товч дарснаар таны бүх тохиргоог хуулж, Gemini чатыг автоматаар нээнэ.
-                </p>
-            </div>
-
-            <button class="start-over" onclick="startOver()">Шинээр эхлэх</button>
-        </div>
-    </div>
-
     <script>
-        let ingredients = [];
-        let servings = 2;
+        let state = { ingredients: [], dietary: [], servings: 2, isListening: false };
+        let recognition;
+        const ingredientPool = ["Өндөг", "Төмс", "Лууван", "Үхрийн мах", "Гоймон", "Бяслаг", "Тахиа", "Сонгино", "Сармис", "Цагаан будаа", "Улаан лооль", "Брокколи", "Мөөг", "Чинжүү", "Байцаа", "Загас", "Хиам", "Талх", "Зайдас", "Баяжуулсан гурил", "Сүү", "Тараг"];
 
-        window.onload = function() {
-            const saved = localStorage.getItem('mongolChefIngredients');
-            if(saved) {
-                try {
-                    const parsed = JSON.parse(saved);
-                    if(parsed.length > 0) ingredients = parsed;
-                } catch(e) {}
-            }
+        window.onload = () => {
+            const saved = localStorage.getItem('amtData');
+            if(saved) { state.ingredients = JSON.parse(saved) || []; renderTags(); }
+            if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
         };
 
-        function switchPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.getElementById(pageId).classList.add('active-page');
-            document.getElementById(pageId).scrollTop = 0;
-        }
-
-        function startApp() { 
-            switchPage('selection'); 
-            updateUI();
-            setTimeout(() => document.getElementById('custom-input').focus(), 300); 
-        }
-        
-        function startOver() { 
-            ingredients = []; servings = 2; 
-            localStorage.removeItem('mongolChefIngredients');
-            updateUI(); switchPage('home'); 
-        }
-
-        function updateServings(change) {
-            servings += change;
-            if(servings < 1) servings = 1;
-            document.getElementById('serving-display').innerText = servings;
-        }
+        function save() { localStorage.setItem('amtData', JSON.stringify(state.ingredients)); renderTags(); }
 
         function handleEnter(e) {
-            if (e.key === 'Enter') {
-                const input = document.getElementById('custom-input');
-                const val = input.value.trim();
-                if (val) { addIngredient(val); input.value = ''; }
+            if(e.key === 'Enter') {
+                const val = e.target.value.trim();
+                if(val) { addIngredient(val); e.target.value = ''; }
             }
         }
 
-        function addIngredient(name) {
-            const items = name.split(/[,\s]+/).filter(i => i.length > 0);
-            items.forEach(item => {
-                let cleanName = item.charAt(0).toUpperCase() + item.slice(1);
-                if (!ingredients.includes(cleanName)) ingredients.push(cleanName);
+        function addIngredient(text) {
+            const items = text.split(/[,\s\.]+/).filter(i => i.length > 0);
+            items.forEach(i => {
+                let clean = i.charAt(0).toUpperCase() + i.slice(1);
+                if(!state.ingredients.includes(clean)) state.ingredients.push(clean);
             });
-            saveToStorage(); updateUI();
+            save();
         }
 
-        function removeIngredient(name) {
-            ingredients = ingredients.filter(i => i !== name);
-            saveToStorage(); updateUI();
+        function removeIngredient(item) {
+            state.ingredients = state.ingredients.filter(i => i !== item);
+            save();
         }
 
-        function saveToStorage() { localStorage.setItem('mongolChefIngredients', JSON.stringify(ingredients)); }
+        function addRandomSmart() {
+            const available = ingredientPool.filter(item => !state.ingredients.includes(item));
+            if (available.length === 0) return alert("Бүх орцыг сонгосон байна!");
+            const randomItem = available[Math.floor(Math.random() * available.length)];
+            addIngredient(randomItem);
+            
+            // Scroll to the new tag
+            setTimeout(() => {
+                const wrap = document.querySelector('.tags-wrapper');
+                wrap.scrollTo({ left: wrap.scrollWidth, behavior: 'smooth' });
+            }, 100);
+        }
 
-        function updateUI() {
-            const container = document.getElementById('ingredients-area');
-            const emptyMsg = document.getElementById('empty-msg');
+        function renderTags() {
+            const container = document.getElementById('tags-area');
             const btn = document.getElementById('analyze-btn');
-
-            container.innerHTML = ingredients.map(ing => `
-                <div class="ingredient-chip">${ing}<span class="chip-remove" onclick="removeIngredient('${ing}')">&times;</span></div>
+            const label = document.getElementById('count-label');
+            
+            container.innerHTML = state.ingredients.map(ing => `
+                <div class="tag">${ing}<span onclick="removeIngredient('${ing}')">&times;</span></div>
             `).join('');
 
-            if (ingredients.length > 0) {
-                emptyMsg.style.display = 'none';
-                btn.disabled = false;
-                btn.style.opacity = '1';
-                btn.innerHTML = `<span>ЖОР БОЛОВСРУУЛАХ (${ingredients.length})</span> <span>→</span>`;
+            label.innerText = `${state.ingredients.length} орц сонгосон`;
+            btn.disabled = state.ingredients.length === 0;
+            btn.style.opacity = state.ingredients.length === 0 ? '0.3' : '1';
+        }
+
+        function toggleFilter(el, type) {
+            if(state.dietary.includes(type)) {
+                state.dietary = state.dietary.filter(d => d !== type);
+                el.classList.remove('selected');
             } else {
-                emptyMsg.style.display = 'block';
-                btn.disabled = true;
-                btn.style.opacity = '0.5';
-                btn.innerHTML = `<span>ЖОР БОЛОВСРУУЛАХ</span> <span>→</span>`;
+                state.dietary.push(type);
+                el.classList.add('selected');
             }
         }
 
-        // --- MICROPHONE FIX ---
-        function startDictation() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            
-            if (!SpeechRecognition) {
-                alert("Уучлаарай, таны хөтөч дээр микрофон ашиглах боломжгүй байна. Chrome эсвэл Safari ашиглана уу.");
-                return;
-            }
-
-            // Check if protocol is secure (HTTPS or localhost)
-            if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-                alert("Анхаар: Микрофон ашиглахын тулд вэбсайт HTTPS холболттой байх ёстой.");
-                return;
-            }
-
-            const recognition = new SpeechRecognition();
-            const micBtn = document.querySelector('.mic-btn');
-
-            recognition.continuous = false;
-            recognition.interimResults = false;
-            recognition.lang = "mn-MN"; // Монгол хэл
-
-            recognition.onstart = function() {
-                micBtn.classList.add('listening');
-            };
-
-            recognition.onresult = function(e) {
-                const transcript = e.results[0][0].transcript;
-                addIngredient(transcript);
-                micBtn.classList.remove('listening');
-            };
-
-            recognition.onerror = function(e) {
-                micBtn.classList.remove('listening');
-                console.error(e.error);
-                if (e.error === 'not-allowed') {
-                    alert("Микрофоны зөвшөөрөл олгогдоогүй байна.");
-                } else {
-                    alert("Дуу таних алдаа гарлаа. Дахин оролдоно уу.");
+        function handleCustomDiet(e) {
+            if (e.key === 'Enter') {
+                const val = e.target.value.trim();
+                if (val) {
+                    const chipsContainer = document.getElementById('dietary-filters');
+                    const input = e.target;
+                    const newChip = document.createElement('div');
+                    newChip.className = 'filter-chip selected';
+                    newChip.innerText = `🚫 ${val}`;
+                    newChip.onclick = function() { this.remove(); state.dietary = state.dietary.filter(d => d !== val); };
+                    state.dietary.push(val);
+                    chipsContainer.insertBefore(newChip, input);
+                    e.target.value = '';
                 }
-            };
+            }
+        }
 
-            recognition.onend = function() {
-                micBtn.classList.remove('listening');
-            };
+        function updateServings(n) {
+            state.servings += n;
+            if(state.servings < 1) state.servings = 1;
+            document.getElementById('serving-val').innerText = state.servings;
+        }
 
+        function toggleTheme() {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            localStorage.setItem('theme', isDark ? 'light' : 'dark');
+        }
+
+        function toggleDictation() {
+            const btn = document.querySelector('.mic-btn');
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return alert("Микрофон дэмжихгүй байна.");
+
+            if (state.isListening) { recognition.stop(); return; }
+
+            recognition = new SpeechRecognition();
+            recognition.continuous = true; recognition.lang = "mn-MN";
+
+            recognition.onstart = () => { state.isListening = true; btn.classList.add('active'); };
+            recognition.onend = () => { state.isListening = false; btn.classList.remove('active'); };
+            recognition.onresult = (e) => addIngredient(e.results[e.results.length-1][0].transcript);
             recognition.start();
         }
 
-        function generateAnalysis() {
-            switchPage('result-page');
-            const styleSelect = document.getElementById('cuisine-style');
-            const styleName = styleSelect.options[styleSelect.selectedIndex].text;
-            const styleVal = styleSelect.value;
-
-            document.getElementById('result-summary').innerText = ingredients.join(' • ');
-            document.getElementById('gemini-count').innerText = servings;
-            
-            let pairing = "Ус, Нимбэгтэй ус";
-            if (styleVal === 'mongolian') pairing = "Сүүтэй цай, Аарц";
-            else if (styleVal === 'italian') pairing = "Улаан дарс";
-            else if (styleVal === 'asian') pairing = "Ногоон цай";
-            else if (styleVal === 'breakfast') pairing = "Кофе, Жүржийн шүүс";
-            
-            document.getElementById('pairing-text').innerText = pairing;
+        function openResults() {
+            document.getElementById('modal-ing-count').innerText = state.ingredients.length;
+            document.getElementById('modal-servings').innerText = state.servings;
+            document.getElementById('result-modal').classList.add('open');
         }
 
-        function askGemini(mode) {
-            const style = document.getElementById('cuisine-style').options[document.getElementById('cuisine-style').selectedIndex].text;
+        function closeResults() { document.getElementById('result-modal').classList.remove('open'); }
+
+        function askGeminiFinal(mode) {
+            const style = document.getElementById('style-select').options[document.getElementById('style-select').selectedIndex].text;
+            const appliance = document.getElementById('appliance-select').options[document.getElementById('appliance-select').selectedIndex].text;
+            const spice = document.getElementById('spice-select').options[document.getElementById('spice-select').selectedIndex].text;
             const hasPantry = document.getElementById('pantry-check').checked;
             
-            let ingList = ingredients.join(', ');
-            let pantryNote = hasPantry ? " (Мөн надад давс, перц, тос, сонгино, сармис гэх мэт үндсэн амтлагчид байгаа)" : "";
+            let pantryStr = hasPantry ? " (Надад давс, хар перц, ургамлын тос, сонгино, сармис, сахар, соя соус, уксус, гурил гэх мэт үндсэн амтлагчид бүгд байгаа)" : "";
+            let dietStr = state.dietary.length > 0 ? ` АНХААР! Дараах зүйлийг хоолонд огт хийж болохгүй: ${state.dietary.join(', ')}.` : "";
             
-            let prompt = "";
+            let coreReq = mode === 'easy' 
+                ? "Би МАШ ХУРДАН (20 минутад багтах), ХЯЛБАР аргаар, цөөн үе шаттай хоол хиймээр байна." 
+                : "Би МЭРГЭЖЛИЙН, ТАНСАГ зэрэглэлийн амттай хоол хиймээр байна.";
 
-            if (mode === 'easy') {
-                prompt = `Та бол найрсаг тогооч. Надад эдгээр орцууд байна: ${ingList}${pantryNote}. Би ${servings} хүнд зориулж, МАШ ХУРДАН, ХЯЛБАР аргаар хоол хиймээр байна. 20 минутад багтах энгийн жор санал болго.`;
-            } else {
-                prompt = `Та бол мэргэжлийн тогооч. Надад дараах орцууд байна: ${ingList}${pantryNote}. Би ${style} хэв маягаар, ${servings} хүнд зориулж хоол хиймээр байна. 1. Эхлээд энэ хоолны нэг хүнд ногдох илчлэг болон шим тэжээлийг тооцоол. 2. Дараа нь алхам алхмаар хийх зааврыг нарийн бичиж өг.`;
-            }
+            const prompt = `Та бол мэргэжлийн тогооч. 
             
+            Миний нөхцөл байдал:
+            - Орцууд: ${state.ingredients.join(', ')}${pantryStr}
+            - Хоолны төрөл: ${style}
+            - Хүний тоо: ${state.servings}
+            - Төхөөрөмж: ${appliance}
+            - Амт: ${spice}
+            ${dietStr}
+            
+            Хүсэлт: ${coreReq}
+
+            Дараах зүйлсийг хийж өгнө үү:
+            1. Энэ хоолны нэг хүнд ногдох илчлэг (Calorie) болон шим тэжээлийг ХҮСНЭГТЭЭР гарга.
+            2. Орцны нарийн хэмжээтэй жагсаалт (Грамм/Халбагаар).
+            3. Алхам алхмаар хийх дэлгэрэнгүй заавар.`;
+
             navigator.clipboard.writeText(prompt).then(() => {
-                alert("Асуултыг хуулж авлаа! Gemini нээгдэх үед Paste (Ctrl+V) хийгээрэй.");
+                alert("Хууллаа! Gemini дээр Paste (Ctrl+V) хийнэ үү.");
                 window.open('https://gemini.google.com/app', '_blank');
             });
         }
