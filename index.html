@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AMT - Intelligent Kitchen</title>
+    <title>AMT - Ухаалаг Гал Тогоо</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* COLOR PALETTE */
+            /* Өнгөний тохиргоо */
             --bg: #ffffff;
             --text: #111111;
             --sub-text: #666666;
@@ -58,7 +58,7 @@
         .hero h1 { font-size: 2.4rem; line-height: 1.1; margin-bottom: 8px; font-weight: 800; letter-spacing: -1px; }
         .hero p { color: var(--sub-text); font-size: 1.1rem; }
 
-        /* BIG INPUT */
+        /* INPUT STYLE */
         .input-group { 
             width: 100%; position: relative; margin-bottom: 15px; 
             height: 80px; 
@@ -165,7 +165,7 @@
             cursor: pointer; transition: 0.2s;
         }
         .level-step .emoji { font-size: 1.2rem; display: block; margin-bottom: 4px; }
-        .level-step .lvl-name { font-size: 0.7rem; font-weight: 700; color: var(--sub-text); text-transform: uppercase; letter-spacing: 0.5px; }
+        .level-step .lvl-name { font-size: 0.65rem; font-weight: 700; color: var(--sub-text); text-transform: uppercase; letter-spacing: 0.5px; }
         
         .level-step.active {
             background: var(--text); border-color: var(--text); transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -286,7 +286,7 @@
             <button class="mic-btn" type="button" onclick="toggleDictation()">🎙️</button>
         </div>
 
-        <div class="section-label">Минималист Багц (Click to Add)</div>
+        <div class="section-label">Бэлэн Багцууд (Сонгоод нэмэх)</div>
         <div class="packs-wrapper">
             <div class="pack-card" onclick="applyPack('breakfast')">
                 <div class="pack-title">🍳 Өглөөний Цай</div>
@@ -297,11 +297,11 @@
                 <div class="pack-desc">Гоймон, Бяслаг, Улаан лооль</div>
             </div>
             <div class="pack-card" onclick="applyPack('gym')">
-                <div class="pack-title">💪 Gym Rat</div>
+                <div class="pack-title">💪 Эрүүл / Фитнесс</div>
                 <div class="pack-desc">Цагаан будаа, Тахианы цээж, Брокколи</div>
             </div>
             <div class="pack-card" onclick="applyPack('mongol')">
-                <div class="pack-title">🇲🇳 Оюутан Цуйван</div>
+                <div class="pack-title">🇲🇳 Цуйван / Хуурга</div>
                 <div class="pack-desc">Гурил, Мах, Сонгино, Төмс</div>
             </div>
             <div class="pack-card" onclick="applyPack('soup')">
@@ -355,7 +355,7 @@
         </div>
 
         <div class="dietary-section">
-            <span class="label">Харшил</span>
+            <span class="label">Харшил / Цээр</span>
             <div class="filters" id="dietary-filters">
                 <div class="filter-chip" onclick="toggleFilter(this, 'Самар ороогүй')">🥜 Самар</div>
                 <div class="filter-chip" onclick="toggleFilter(this, 'Цавуулаггүй')">🍞 Цавуулаг</div>
@@ -405,27 +405,27 @@
                 <div class="app-chip" onclick="toggleAppliance(this, 'Air Fryer')">Air Fryer</div>
                 <div class="app-chip" onclick="toggleAppliance(this, 'Битүү чанагч')">Битүү чанагч</div>
                 <div class="app-chip" onclick="toggleAppliance(this, 'Будаа агшаагч')">Агшаагч</div>
-                <div class="app-chip" onclick="toggleAppliance(this, 'Microwave')">Бичил долгион</div>
+                <div class="app-chip" onclick="toggleAppliance(this, 'Бичил долгион')">Бичил долгион</div>
                 <div class="app-chip" onclick="toggleAppliance(this, 'Жигнүүр')">Жигнүүр</div>
                 <div class="app-chip" onclick="toggleAppliance(this, 'Блендер')">Блендер</div>
                 <div class="app-chip" onclick="toggleAppliance(this, 'Грил')">Грил/Шорлог</div>
-                <div class="app-chip" onclick="toggleAppliance(this, 'Тостер')">Тостер</div>
+                <div class="app-chip" onclick="toggleAppliance(this, 'Талх шарагч')">Талх шарагч</div>
             </div>
         </div>
 
         <div class="pref-card">
             <span class="pref-label">Амт</span>
             <select id="spice-select" class="pref-select">
-                <option value="normal">Хэвийн</option>
-                <option value="mild">Зөөлөн / Хүүхдэд</option>
-                <option value="spicy">Халуун ногоотой</option>
-                <option value="extra_spicy">Маш халуун</option>
-                <option value="rich">Баялаг / Шүүслэг (Umami)</option>
-                <option value="sweet">Чихэрлэг (Амттан)</option>
-                <option value="sour">Исгэлэн</option>
-                <option value="creamy">Цөцгийтэй / Зөөлөн</option>
-                <option value="garlic">Сармистай / Хурц</option>
-                <option value="fresh">Шинэхэн / Хөнгөн</option>
+                <option value="Хэвийн">Хэвийн</option>
+                <option value="Зөөлөн">Зөөлөн / Хүүхдэд</option>
+                <option value="Халуун ногоотой">Халуун ногоотой</option>
+                <option value="Маш халуун">Маш халуун</option>
+                <option value="Баялаг/Шүүслэг">Баялаг / Шүүслэг</option>
+                <option value="Чихэрлэг">Чихэрлэг (Амттан)</option>
+                <option value="Исгэлэн">Исгэлэн</option>
+                <option value="Цөцгийтэй">Цөцгийтэй / Зөөлөн</option>
+                <option value="Сармистай">Сармистай / Хурц</option>
+                <option value="Шинэхэн">Шинэхэн / Хөнгөн</option>
             </select>
         </div>
 
@@ -437,7 +437,7 @@
             </button>
             
             <button class="btn-ai-big btn-easy" onclick="askGeminiFinal('easy')">
-                <span>⚡ 5 Минималист Цэс Санал Болгох</span>
+                <span>⚡ 5 Хурдан Цэс Санал Болгох</span>
             </button>
         </div>
     </div>
@@ -445,7 +445,7 @@
     <script>
         let state = { ingredients: [], dietary: [], appliances: [], styles: ['Тогоочийн сонголт'], servings: 2, level: 3, isListening: false };
         let recognition;
-        const ingredientPool = ["Өндөг", "Төмс", "Лууван", "Үхрийн мах", "Гоймон", "Бяслаг", "Тахиа", "Сонгино", "Сармис", "Цагаан будаа", "Улаан лооль", "Брокколи", "Мөөг", "Чинжүү", "Байцаа", "Загас", "Хиам", "Талх", "Зайдас", "Баяжуулсан гурил", "Сүү", "Тараг", "Эрдэнэшиш"];
+        const ingredientPool = ["Өндөг", "Төмс", "Лууван", "Үхрийн мах", "Гоймон", "Бяслаг", "Тахиа", "Сонгино", "Сармис", "Цагаан будаа", "Улаан лооль", "Брокколи", "Мөөг", "Чинжүү", "Байцаа", "Загас", "Хиам", "Талх", "Зайдас", "Баяжуулсан гурил", "Сүү", "Тараг", "Эрдэнэшиш", "Хонины мах", "Гахайн мах", "Татсан мах", "Хүрэн манжин", "Цагаан лууван", "Хулуу", "Ногоон сонгино", "Яншуй", "Минт", "Бууцай", "Хаш", "Ногоон вандуй", "Шош", "Цагаан гаа", "Нимбэг", "Алим", "Гадил", "Майонез", "Кетчуп", "Соя соус", "Ургамлын тос", "Цөцгийн тос", "Цөцгий", "Гурвалжин будаа", "Шар будаа", "Овъёос", "Лаазалсан туна", "Даршилсан өргөст хэмх", "Шинэ өргөст хэмх", "Хатаасан мөөг", "Дүфү", "Кимчи", "Зөгийн бал", "Гич"];
 
         const packs = {
             'breakfast': { ings: ['Өндөг', 'Талх', 'Зайдас', 'Сүү'], style: 'Өглөөний цай' },
@@ -647,7 +647,7 @@
 
         function askGeminiFinal(mode) {
             const styleStr = state.styles.join(', ');
-            const spice = document.getElementById('spice-select').options[document.getElementById('spice-select').selectedIndex].text;
+            const spice = document.getElementById('spice-select').value; // Using value not text
             const hasPantry = document.getElementById('pantry-check').checked;
             
             let appliancesStr = state.appliances.length > 0 ? state.appliances.join(', ') : "Плетка / Газ (Default)";
@@ -686,7 +686,7 @@
             2. Товч тайлбар
             3. Гол амт (Жишээ нь: Халуун ногоотой, Зөөлөн, Шорвог, Баялаг)
             
-            Анхаар: Бүх санал нь миний сонгосон "${skillText}" түвшинд тохирсон байх ёстой.`;
+            Анхаар: Бүх санал нь миний сонгосон "${skillText}" түвшинд тохирсон байх ёстой. Хүндрэлийн түвшинг (хэцүү/амархан) гэж тусгайлан бичих шаардлагагүй, зөвхөн миний чадварт тааруулж жор санал болго.`;
 
             navigator.clipboard.writeText(prompt).then(() => {
                 alert("Хууллаа! Gemini дээр Paste (Ctrl+V) хийнэ үү.");
