@@ -92,7 +92,7 @@
         /* PACKS SCROLL */
         .section-label { 
             width: 100%; font-size: 0.8rem; font-weight: 800; color: var(--sub-text); 
-            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 10px;
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; margin-top: 15px;
         }
 
         .packs-wrapper {
@@ -133,20 +133,53 @@
         .tag span:hover { color: var(--accent); }
         @keyframes pop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* OPTIONS GRID */
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; margin-bottom: 40px; }
-        .option-item { display: flex; flex-direction: column; gap: 8px; }
-        .label { font-size: 0.8rem; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: 1px; display: block;}
-        
-        .select-minimal {
-            width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--border);
-            font-family: var(--font); font-size: 1.1rem; font-weight: 600; color: var(--text);
-            padding: 12px 0; border-radius: 0; outline: none; cursor: pointer;
+        /* STYLE CHIPS */
+        .style-scroll-wrapper {
+            width: calc(100% + 40px); margin-left: -20px; margin-right: -20px;
+            overflow-x: auto; overflow-y: hidden; white-space: nowrap; -webkit-overflow-scrolling: touch; 
+            padding: 5px 20px 10px 20px; margin-bottom: 10px;
         }
-        .select-minimal option { background: var(--bg); color: var(--text); }
+        .style-scroll-wrapper::-webkit-scrollbar { display: none; }
 
+        .style-chip {
+            display: inline-block; padding: 12px 20px; border-radius: 50px;
+            background: var(--input-bg); color: var(--sub-text); border: 1px solid transparent;
+            font-size: 0.95rem; font-weight: 600; cursor: pointer; margin-right: 10px;
+            transition: 0.2s; user-select: none;
+        }
+        .style-chip.selected {
+            background: var(--text); color: var(--bg); border-color: var(--text);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* COOKING LEVEL BAR */
+        .level-container {
+            width: 100%; display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px;
+        }
+        .level-bar {
+            display: flex; justify-content: space-between; gap: 5px;
+        }
+        .level-step {
+            flex: 1; text-align: center; padding: 12px 5px; border-radius: 12px;
+            background: var(--input-bg); border: 1px solid var(--border);
+            cursor: pointer; transition: 0.2s;
+        }
+        .level-step .emoji { font-size: 1.2rem; display: block; margin-bottom: 4px; }
+        .level-step .lvl-name { font-size: 0.7rem; font-weight: 700; color: var(--sub-text); text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .level-step.active {
+            background: var(--text); border-color: var(--text); transform: scale(1.05); box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .level-step.active .lvl-name { color: var(--bg); }
+
+        /* SERVINGS */
+        .servings-row {
+            display: flex; justify-content: space-between; align-items: center;
+            width: 100%; margin-bottom: 20px; background: var(--surface);
+            padding: 15px 20px; border-radius: 16px; border: 1px solid var(--border);
+        }
         .counter { display: flex; align-items: center; gap: 15px; font-weight: 600; font-size: 1.4rem; }
-        .count-btn { background: var(--input-bg); width: 45px; height: 45px; border-radius: 50%; border: 1px solid var(--border); cursor: pointer; color: var(--text); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s; }
+        .count-btn { background: var(--input-bg); width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); cursor: pointer; color: var(--text); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: 0.2s; }
         .count-btn:active { transform: scale(0.9); }
 
         /* DIETARY */
@@ -286,36 +319,38 @@
             <div id="tags-area" class="tags-container"></div>
         </div>
 
-        <div class="options-grid">
-            <div class="option-item">
-                <span class="label">Төрөл</span>
-                <select id="style-select" class="select-minimal">
-                    <option value="generic">✨ Тогоочийн сонголт</option>
-                    <option value="minimal">🍃 Минималист (Цөөхөн орц)</option>
-                    <option value="mongolian">🇲🇳 Монгол уламжлалт</option>
-                    <option value="asian">🥢 Ази / Хуурга</option>
-                    <option value="italian">🍝 Итали / Европ</option>
-                    <option value="french">🇫🇷 Франц / Тансаг</option>
-                    <option value="indian">🇮🇳 Энэтхэг / Халуун</option>
-                    <option value="mexican">🇲🇽 Мексик / Тако</option>
-                    <option value="russian">🇷🇺 Орос / Славян</option>
-                    <option value="soup">🍲 Шөл / Зутан</option>
-                    <option value="fastfood">🍔 Түргэн хоол</option>
-                    <option value="breakfast">🍳 Өглөөний цай</option>
-                    <option value="dinner">🌙 Оройн хоол</option>
-                    <option value="snack">🍿 Хөнгөн зууш</option>
-                    <option value="healthy">🥗 Эрүүл</option>
-                    <option value="vegan">🥬 Цагаан хоол</option>
-                    <option value="dessert">🍰 Амттан / Бэйкери</option>
-                </select>
-            </div>
-            <div class="option-item">
-                <span class="label">Хүний тоо</span>
-                <div class="counter">
-                    <button class="count-btn" onclick="updateServings(-1)">−</button>
-                    <span id="serving-val">2</span>
-                    <button class="count-btn" onclick="updateServings(1)">+</button>
+        <div class="section-label" style="margin-top:0;">Хоолны төрөл (Дээд тал нь 3)</div>
+        <div class="style-scroll-wrapper">
+            <div id="style-container" style="display:inline-flex;"></div>
+        </div>
+
+        <div class="section-label">Хоол хийх чадвар (AI танд тохируулна)</div>
+        <div class="level-container">
+            <div class="level-bar">
+                <div class="level-step" onclick="setLevel(1)" id="lvl-1">
+                    <span class="emoji">🐣</span><span class="lvl-name">Анхан</span>
                 </div>
+                <div class="level-step" onclick="setLevel(2)" id="lvl-2">
+                    <span class="emoji">🍳</span><span class="lvl-name">Сурагч</span>
+                </div>
+                <div class="level-step active" onclick="setLevel(3)" id="lvl-3">
+                    <span class="emoji">🍲</span><span class="lvl-name">Дундаж</span>
+                </div>
+                <div class="level-step" onclick="setLevel(4)" id="lvl-4">
+                    <span class="emoji">🔪</span><span class="lvl-name">Сайн</span>
+                </div>
+                <div class="level-step" onclick="setLevel(5)" id="lvl-5">
+                    <span class="emoji">👨‍🍳</span><span class="lvl-name">Pro</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="servings-row">
+            <span class="label" style="font-size:0.95rem; margin-bottom:0;">Хүний тоо</span>
+            <div class="counter">
+                <button class="count-btn" onclick="updateServings(-1)">−</button>
+                <span id="serving-val">2</span>
+                <button class="count-btn" onclick="updateServings(1)">+</button>
             </div>
         </div>
 
@@ -408,22 +443,30 @@
     </div>
 
     <script>
-        let state = { ingredients: [], dietary: [], appliances: [], servings: 2, isListening: false };
+        let state = { ingredients: [], dietary: [], appliances: [], styles: ['Тогоочийн сонголт'], servings: 2, level: 3, isListening: false };
         let recognition;
         const ingredientPool = ["Өндөг", "Төмс", "Лууван", "Үхрийн мах", "Гоймон", "Бяслаг", "Тахиа", "Сонгино", "Сармис", "Цагаан будаа", "Улаан лооль", "Брокколи", "Мөөг", "Чинжүү", "Байцаа", "Загас", "Хиам", "Талх", "Зайдас", "Баяжуулсан гурил", "Сүү", "Тараг", "Эрдэнэшиш"];
 
         const packs = {
-            'breakfast': ['Өндөг', 'Талх', 'Зайдас', 'Сүү'],
-            'pasta': ['Гоймон', 'Бяслаг', 'Улаан лооль', 'Сармис'],
-            'gym': ['Цагаан будаа', 'Тахианы цээж', 'Брокколи'],
-            'mongol': ['Гурил', 'Үхрийн мах', 'Сонгино', 'Төмс'],
-            'soup': ['Үхрийн мах', 'Лууван', 'Төмс', 'Гоймон']
+            'breakfast': { ings: ['Өндөг', 'Талх', 'Зайдас', 'Сүү'], style: 'Өглөөний цай' },
+            'pasta': { ings: ['Гоймон', 'Бяслаг', 'Улаан лооль', 'Сармис'], style: 'Итали / Европ' },
+            'gym': { ings: ['Цагаан будаа', 'Тахианы цээж', 'Брокколи'], style: 'Эрүүл' },
+            'mongol': { ings: ['Гурил', 'Үхрийн мах', 'Сонгино', 'Төмс'], style: 'Монгол' },
+            'soup': { ings: ['Үхрийн мах', 'Лууван', 'Төмс', 'Гоймон'], style: 'Шөл / Зутан' }
         };
+
+        const cuisineTypes = [
+            "Тогоочийн сонголт", "Минималист", "Монгол", "Ази / Хуурга", "Итали / Европ", 
+            "Франц / Тансаг", "Энэтхэг / Халуун", "Мексик / Тако", "Орос / Славян", 
+            "Шөл / Зутан", "Түргэн хоол", "Өглөөний цай", "Оройн хоол", "Хөнгөн зууш", 
+            "Эрүүл", "Цагаан хоол", "Амттан / Бэйкери"
+        ];
 
         window.onload = () => {
             const saved = localStorage.getItem('amtData');
             if(saved) { state.ingredients = JSON.parse(saved) || []; renderTags(); }
             if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
+            renderStyleChips();
         };
 
         function save() { localStorage.setItem('amtData', JSON.stringify(state.ingredients)); renderTags(); }
@@ -435,22 +478,46 @@
             }
         }
 
-        // Apply Pack & Auto-Switch Style
+        function setLevel(lvl) {
+            state.level = lvl;
+            for(let i=1; i<=5; i++) {
+                const el = document.getElementById(`lvl-${i}`);
+                if(i === lvl) el.classList.add('active');
+                else el.classList.remove('active');
+            }
+        }
+
+        function renderStyleChips() {
+            const container = document.getElementById('style-container');
+            container.innerHTML = cuisineTypes.map(type => {
+                const isSelected = state.styles.includes(type);
+                return `<div class="style-chip ${isSelected ? 'selected' : ''}" onclick="toggleStyle(this, '${type}')">${type}</div>`;
+            }).join('');
+        }
+
+        function toggleStyle(el, type) {
+            if (state.styles.includes(type)) {
+                state.styles = state.styles.filter(s => s !== type);
+                if (state.styles.length === 0) state.styles = ['Тогоочийн сонголт'];
+            } else {
+                if (state.styles.length === 1 && state.styles[0] === 'Тогоочийн сонголт') {
+                    state.styles = [];
+                }
+                if (state.styles.length < 3) state.styles.push(type);
+                else return;
+            }
+            renderStyleChips();
+        }
+
         function applyPack(key) {
-            const newIngredients = packs[key];
-            if (newIngredients) {
-                newIngredients.forEach(item => {
+            const pack = packs[key];
+            if (pack) {
+                pack.ings.forEach(item => {
                     if (!state.ingredients.includes(item)) state.ingredients.push(item);
                 });
                 save();
-
-                const styleSelect = document.getElementById('style-select');
-                if (key === 'breakfast') styleSelect.value = 'breakfast';
-                else if (key === 'pasta') styleSelect.value = 'italian';
-                else if (key === 'gym') styleSelect.value = 'healthy';
-                else if (key === 'mongol') styleSelect.value = 'mongolian';
-                else if (key === 'soup') styleSelect.value = 'soup';
-
+                state.styles = [pack.style];
+                renderStyleChips();
                 renderTags();
                 setTimeout(() => {
                     const wrap = document.querySelector('.tags-wrapper');
@@ -579,7 +646,7 @@
         function closeResults() { document.getElementById('result-modal').classList.remove('open'); }
 
         function askGeminiFinal(mode) {
-            const style = document.getElementById('style-select').options[document.getElementById('style-select').selectedIndex].text;
+            const styleStr = state.styles.join(', ');
             const spice = document.getElementById('spice-select').options[document.getElementById('spice-select').selectedIndex].text;
             const hasPantry = document.getElementById('pantry-check').checked;
             
@@ -587,6 +654,15 @@
             let pantryStr = hasPantry ? " (Надад давс, хар перц, ургамлын тос, сонгино, сармис, гурил, будаа гэх мэт үндсэн зүйлс байгаа)" : "";
             let dietStr = state.dietary.length > 0 ? ` АНХААР! Дараах зүйлийг хоолонд огт хийж болохгүй: ${state.dietary.join(', ')}.` : "";
             
+            let skillText = "";
+            switch(state.level) {
+                case 1: skillText = "Анхан шат (Би хоол хийж чадахгүй, маш дэлгэрэнгүй заавар хэрэгтэй)"; break;
+                case 2: skillText = "Суралцагч (Би энгийн хоол хийж чадна)"; break;
+                case 3: skillText = "Дундаж (Би гэрийн хоол сайн хийдэг)"; break;
+                case 4: skillText = "Сайн (Би нарийн хоол хийж чадна)"; break;
+                case 5: skillText = "Мэргэжлийн (Надад товч, мэргэжлийн заавар өг)"; break;
+            }
+
             let coreReq = mode === 'easy' 
                 ? "Би ЦӨӨН ОРЦТОЙ, ХУРДАН (20 минутад багтах), МИНИМАЛИСТ аргаар хоол хиймээр байна." 
                 : "Би МЭРГЭЖЛИЙН, ТАНСАГ зэрэглэлийн амттай хоол хиймээр байна.";
@@ -595,10 +671,11 @@
             
             Миний нөхцөл байдал:
             - Орцууд: ${state.ingredients.join(', ')}${pantryStr}
-            - Хоолны төрөл: ${style}
+            - Хоолны төрөл: ${styleStr}
             - Хүний тоо: ${state.servings}
             - Ашиглах төхөөрөмжүүд: ${appliancesStr}
             - Амт: ${spice}
+            - Хоол хийх чадвар: ${skillText}
             ${dietStr}
             
             Хүсэлт: ${coreReq}
@@ -607,10 +684,9 @@
             Санал болгонд:
             1. Хоолны нэр
             2. Товч тайлбар
-            3. Хүндрэлийн түвшин (Амархан/Дунд/Хэцүү)
-            4. Гол амт (Жишээ нь: Халуун ногоотой, Зөөлөн, Шорвог, Баялаг)
+            3. Гол амт (Жишээ нь: Халуун ногоотой, Зөөлөн, Шорвог, Баялаг)
             
-            Би аль нэгийг нь сонгосны дараа та дэлгэрэнгүй жор болон илчлэгийн тооцооллыг өгөөрэй. Одоо зөвхөн 5 сонголтыг л харуул.`;
+            Анхаар: Бүх санал нь миний сонгосон "${skillText}" түвшинд тохирсон байх ёстой.`;
 
             navigator.clipboard.writeText(prompt).then(() => {
                 alert("Хууллаа! Gemini дээр Paste (Ctrl+V) хийнэ үү.");
