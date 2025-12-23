@@ -30,7 +30,11 @@
         .logo-sub { font-family: var(--font); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; opacity: 0.8; }
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
         
-        main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; }
+        main { 
+    display: flex; flex-direction: column; align-items: center; 
+    width: 100%; max-width: 700px; margin: 100px auto 0 auto; 
+    padding: 0 20px 120px 20px; /* Added 120px bottom padding */
+}
         .hero { text-align: center; margin-bottom: 35px; width: 100%; }
         .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
         .input-wrapper { position: relative; margin-bottom: 20px; width: 100%; }
@@ -94,7 +98,13 @@
 
         /* --- RESULTS VIEW STYLES --- */
         #view-results, #view-details {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    position: fixed; top: 0; left: 0; width: 100%; 
+    height: 100dvh; /* Changed from 100% to 100dvh for mobile browsers */
+    background: var(--bg); z-index: 2000; padding: 20px;
+    padding-bottom: 100px; /* Added space so content isn't hidden behind the button */
+    overflow-y: auto; display: none; flex-direction: column; align-items: center;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
             background: var(--bg); z-index: 2000; padding: 80px 20px 20px 20px;
             overflow-y: auto; display: none; flex-direction: column; align-items: center;
         }
@@ -131,6 +141,38 @@
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+      /* --- MOBILE OPTIMIZATIONS --- */
+@media (max-width: 600px) {
+    /* 1. Make Modal a "Bottom Sheet" (Slides up from bottom) */
+    .modal-overlay { align-items: flex-end; } /* Align to bottom */
+    
+    .modal-card {
+        width: 100%; 
+        max-width: 100%; 
+        border-radius: 30px 30px 0 0; /* Round top corners only */
+        padding: 30px 25px 50px 25px; /* Extra padding at bottom for iPhone home bar */
+        transform: translateY(100%); /* Start hidden below screen */
+        border-bottom: none;
+    }
+
+    .modal-overlay.active .modal-card { 
+        transform: translateY(0); /* Slide up animation */
+    }
+
+    /* 2. Bigger Touch Targets for Fingers */
+    .style-chip, .p-chip, .app-chip, .tag {
+        padding: 12px 18px; /* Larger hit area */
+        font-size: 0.95rem;
+    }
+
+    .style-grid {
+        grid-template-columns: repeat(auto-fill, minmax(30%, 1fr)); /* Bigger items */
+    }
+
+    /* 3. Adjust Typography */
+    .hero h1 { font-size: 2rem; }
+    .result-title { font-size: 1.8rem; margin-top: 10px; }
+}
     </style>
 </head>
 <body>
@@ -186,7 +228,7 @@
             </div>
         </div>
         <div class="dietary-section">
-            <span class="section-label">Харшил</span>
+            <span class="section-label">Харшил / Цээр</span>
             <div class="filters" id="dietary-filters">
                 <div class="filter-chip" onclick="toggleFilter(this, 'Самар ороогүй')">🥜 Самар</div>
                 <div class="filter-chip" onclick="toggleFilter(this, 'Цавуулаггүй')">🍞 Цавуулаг</div>
