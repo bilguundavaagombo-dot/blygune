@@ -409,6 +409,23 @@
         FORMAT: HTML structure with <div class="recipe-card">...</div>. No markdown.`;
 
         try {
+    const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt: prompt })
+    });
+
+    // ШИНЭЧЛЭЛ: Хариулт JSON мөн эсэхийг шалгах
+    const contentType = response.headers.get("content-type");
+    if (!response.ok || !contentType || !contentType.includes("application/json")) {
+        const errorText = await response.text();
+        console.error("Backend Error Response:", errorText);
+        throw new Error("Backend дээр алдаа гарлаа (JSON биш хариу ирлээ).");
+    }
+    
+    const data = await response.json();
+    // ... бусад код хэвээрээ
+}
             // ШИНЭ: Backend руу хүсэлт илгээж байна
             const response = await fetch('/api/generate', {
                 method: 'POST',
