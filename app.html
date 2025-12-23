@@ -321,7 +321,22 @@
         }
 
         // --- API LOGIC ---
-        const PUBLIC_API_KEY = "AIzaSyD7sgwR6wZ7YZwiUonWWxgb9gazlMC6igI"; 
+        // 1. Түлхүүрүүдээ жагсаалт болгож хадгалах
+const API_KEYS = [
+    "AIzaSyD7sgwR6wZ7YZwiUonWWxgb9gazlMC6igI", // Таны 1 дэх түлхүүр
+    "AIzaSyB-ӨӨР-ТҮЛХҮҮР-ЭНД-ОРУУЛАХ-2",       // Таны 2 дахь түлхүүр
+    "AIzaSyC-ӨӨР-ТҮЛХҮҮР-ЭНД-ОРУУЛАХ-3"        // Таны 3 дахь түлхүүр
+];
+
+// 2. Хүсэлт бүрт санамсаргүй нэг түлхүүр сонгох функц
+function getActiveKey() {
+    const randomIndex = Math.floor(Math.random() * API_KEYS.length);
+    return API_KEYS[randomIndex];
+}
+
+// 3. API дуудахдаа PUBLIC_API_KEY-ийн оронд getActiveKey() ашиглах
+// Жишээ нь:
+// const response = await fetch(`...key=${getActiveKey()}`, { ... });
 
         async function callGeminiAPI(mode) {
             document.getElementById('modal-overlay').classList.remove('active');
