@@ -28,7 +28,7 @@ export default async function handler(req) {
     const randomKey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
 
     // gemini-1.5-flash модель ашиглана (Хамгийн тогтвортой, хурдан)
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${randomKey}`;
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${randomKey}`;
 
     const response = await fetch(geminiUrl, {
       method: 'POST',
