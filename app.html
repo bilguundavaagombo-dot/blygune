@@ -47,10 +47,35 @@
         .style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; width: 100%; }
         .style-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 5px; align-items: center; }
         .style-chip.selected { background: var(--text); color: var(--bg); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-        .level-bar { display: flex; background: var(--surface); padding: 6px; border-radius: 20px; border: 1px solid var(--border); width: 100%; }
-        .lvl-step { flex: 1; text-align: center; padding: 12px; border-radius: 14px; cursor: pointer; transition: 0.3s; color: var(--sub-text); display: flex; flex-direction: column; gap: 4px; user-select: none; }
-        .lvl-step.active { background: var(--text); color: var(--bg); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
-        .level-desc { text-align: center; font-size: 0.9rem; color: var(--accent); margin-top: 10px; font-weight: 600; font-style: italic; min-height: 24px; width: 100%; }
+        .level-bar { 
+    display: grid; /* Uses Grid for perfect alignment */
+    grid-template-columns: repeat(5, 1fr); /* Creates 5 equal columns */
+    gap: 4px; /* Small gap between items */
+    background: var(--surface); 
+    padding: 6px; 
+    border-radius: 20px; 
+    border: 1px solid var(--border); 
+    width: 100%; 
+}
+.lvl-step { 
+    text-align: center; 
+    padding: 10px 4px; /* Adjusted padding */
+    border-radius: 14px; 
+    cursor: pointer; 
+    transition: 0.3s; 
+    color: var(--sub-text); 
+    display: flex; 
+    flex-direction: column; /* Stack emoji and text */
+    align-items: center; 
+    justify-content: center;
+    user-select: none;        
+    .lvl-step.active { background: var(--text); color: var(--bg); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+    .lvl-step.active { 
+    background: var(--text); 
+    color: var(--bg); 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15); 
+}   
+    .level-desc { text-align: center; font-size: 0.9rem; color: var(--accent); margin-top: 10px; font-weight: 600; font-style: italic; min-height: 24px; width: 100%; }
         .pantry-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-top: 15px; width: 100%; }
         .pantry-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .pantry-title { font-weight: 700; font-size: 1rem; }
