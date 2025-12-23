@@ -311,7 +311,7 @@
             TASK: Generate ${mode==='easy'?'5 Quick':'5 Gourmet'} recipes. Format: Use <h3> for titles, <p> for descriptions. No markdown.`;
             
             try {
-                const response = await fetch('/api/getRecipe', {
+                const response = await fetch('/api/generate', {
                     method: 'POST', 
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: prompt })
