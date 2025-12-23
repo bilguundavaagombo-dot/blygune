@@ -20,6 +20,10 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-x: hidden; transition: background 0.3s, color 0.3s; padding-bottom: 140px; }
+        
+        /* Utility */
+        .hidden { display: none !important; }
+
         header { padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 100; background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass); border-bottom: 1px solid var(--border); }
         [data-theme="dark"] header { background: rgba(15, 17, 21, 0.7); }
         .logo-group { cursor: pointer; display: flex; flex-direction: column; text-decoration: none; color: inherit; line-height: 1; }
@@ -27,6 +31,7 @@
         .logo-sub { font-family: var(--font); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; opacity: 0.8; }
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
         .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+        
         main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; }
         .hero { text-align: center; margin-bottom: 35px; width: 100%; }
         .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
@@ -87,6 +92,30 @@
         .btn-generate { width: 100%; padding: 22px; border-radius: 18px; border: none; margin-bottom: 12px; font-size: 1.1rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
         .btn-gen-gourmet { background: var(--accent); color: white; box-shadow: 0 10px 25px rgba(255, 69, 0, 0.25); }
         .btn-gen-easy { background: var(--surface); color: var(--text); border: 2px solid var(--border); }
+
+        /* NEW: Results View Styles */
+        #view-results {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 2000; padding: 80px 20px 20px 20px;
+            overflow-y: auto; display: flex; flex-direction: column; align-items: center;
+        }
+        .results-container { max-width: 700px; width: 100%; }
+        .result-title { font-family: var(--font-head); font-size: 2rem; margin-bottom: 30px; text-align: center; color: var(--text); }
+        
+        .recipe-content h3 { font-size: 1.4rem; color: var(--accent); margin-top: 25px; margin-bottom: 10px; font-weight: 800; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        .recipe-content p { font-size: 1rem; line-height: 1.6; color: var(--text); margin-bottom: 10px; }
+        .recipe-content strong { color: var(--text); font-weight: 700; }
+        
+        #ai-loading-full { text-align: center; margin-top: 100px; }
+        .loader { font-size: 3rem; animation: spin 2s infinite linear; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .btn-back {
+            position: fixed; top: 20px; left: 20px; padding: 10px 20px;
+            background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+            cursor: pointer; font-weight: 700; color: var(--text); z-index: 2100;
+        }
+
         @keyframes pop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
     </style>
 </head>
@@ -100,7 +129,8 @@
             <button class="icon-btn" onclick="toggleTheme()">◑</button>
         </div>
     </header>
-    <main>
+
+    <main id="main-content">
         <div class="hero">
             <h1>Танд юу байна?</h1>
             <p>Хөргөгчинд байгаа орцоо оруулаад, мэргэжлийн жор аваарай.</p>
@@ -164,12 +194,26 @@
         </div>
         <div class="tips-box" id="daily-tip">Зөвлөгөө уншиж байна...</div>
     </main>
+
+    <div id="view-results" class="hidden">
+        <button class="btn-back" onclick="closeResultsView()">← Буцах</button>
+        <div class="results-container">
+            <h2 class="result-title">Таны Жор 👨‍🍳</h2>
+            <div id="ai-loading-full">
+                <div class="loader">🍳</div>
+                <p style="color:var(--sub-text); margin-top:15px;">Тогооч жорыг боловсруулж байна...</p>
+            </div>
+            <div id="ai-result-full" class="recipe-content"></div>
+        </div>
+    </div>
+
     <div class="bottom-nav">
         <button id="analyze-btn" class="btn-continue" onclick="openSettings()" disabled>
             <span>ҮРГЭЛЖЛҮҮЛЭХ</span>
             <span>→</span>
         </button>
     </div>
+
     <div class="modal-overlay" id="modal-overlay" onclick="closeSettings(event)">
         <div class="modal-card" id="settings-modal" onclick="event.stopPropagation()">
             <div class="modal-header">
@@ -184,12 +228,9 @@
                 <button class="btn-generate btn-gen-gourmet" onclick="callGeminiAPI('gourmet')"><span>✨ 5 Тансаг Цэс</span></button>
                 <button class="btn-generate btn-gen-easy" onclick="callGeminiAPI('easy')"><span>⚡ 5 Хурдан Цэс</span></button>
             </div>
-            <div id="ai-loading" style="display:none; text-align:center; margin-top:20px;">
-                <span style="font-size:2rem;">🍳</span><p style="color:var(--sub-text);">Тогооч бодож байна...</p>
-            </div>
-            <div id="ai-result" style="display:none; margin-top:20px; background:var(--surface); padding:20px; border-radius:16px; border:1px solid var(--border); line-height:1.6; font-size:0.95rem; white-space: pre-wrap;"></div>
         </div>
     </div>
+
     <script>
         const pantryData = [
             ["Давс", "Хар перц", "Ургамлын тос"], 
@@ -242,15 +283,32 @@
         function openSettings() { document.getElementById('modal-overlay').classList.add('active'); document.getElementById('settings-modal').classList.add('active'); }
         function closeSettings(e) { if (e && e.target !== e.currentTarget) return; document.getElementById('modal-overlay').classList.remove('active'); document.getElementById('settings-modal').classList.remove('active'); }
 
+        // NEW: Logic to close result view
+        function closeResultsView() {
+            document.getElementById('view-results').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+            document.querySelector('.bottom-nav').classList.remove('hidden');
+        }
+
         async function callGeminiAPI(mode) {
-            document.getElementById('ai-loading').style.display = 'block';
-            document.getElementById('ai-result').style.display = 'none';
-            document.getElementById('ai-result').innerHTML = '';
+            // 1. Close Modal
+            document.getElementById('modal-overlay').classList.remove('active');
+            document.getElementById('settings-modal').classList.remove('active');
+
+            // 2. Open Full Screen Result View
+            document.getElementById('main-content').classList.add('hidden');
+            document.querySelector('.bottom-nav').classList.add('hidden');
+            document.getElementById('view-results').classList.remove('hidden');
+            
+            // 3. Reset Loading State
+            document.getElementById('ai-loading-full').style.display = 'block';
+            document.getElementById('ai-result-full').innerHTML = '';
+
             let activePantry = [];
             if(document.getElementById('pantry-switch').checked) { document.querySelectorAll('.p-chip.active').forEach(c => activePantry.push(c.innerText)); }
             const prompt = `Role: Pro Chef (AMT). Language: MONGOLIAN.
             INPUT: Main:${state.ings.join(', ')} Pantry:${activePantry.join(', ')} Cuisine:${state.styles.join(', ')} Skill:${lvlNames[state.skill-1]} Apps:${state.apps.join(', ')} Taste:${state.selectedTastes.join(', ')} Diet:${state.diet.join(', ')}
-            TASK: Generate ${mode==='easy'?'5 Quick':'5 Gourmet'} recipes. Format: Simple HTML.`;
+            TASK: Generate ${mode==='easy'?'5 Quick':'5 Gourmet'} recipes. Format: Use <h3> for titles, <p> for descriptions. No markdown.`;
             
             try {
                 const response = await fetch('/.netlify/functions/getRecipe', {
@@ -260,11 +318,10 @@
                 const data = await response.json();
                 if (data.candidates && data.candidates[0].content) {
                     const txt = data.candidates[0].content.parts[0].text.replace(/```html/g, '').replace(/```/g, '');
-                    document.getElementById('ai-result').innerHTML = txt;
-                    document.getElementById('ai-result').style.display = 'block';
+                    document.getElementById('ai-result-full').innerHTML = txt;
                 }
             } catch (err) { alert("Сервертэй холбогдож чадсангүй."); } 
-            finally { document.getElementById('ai-loading').style.display = 'none'; }
+            finally { document.getElementById('ai-loading-full').style.display = 'none'; }
         }
     </script>
 </body>
