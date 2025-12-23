@@ -306,52 +306,61 @@ async function runGeminiDirect(apiKey, mode) {
     let pantry = [];
     document.querySelectorAll('.p-chip.active').forEach(c => pantry.push(c.innerText));
     
-    const prompt = `Чи бол мэргэжлийн тогооч. Дараах орцуудыг ашиглан ${mode === 'easy' ? 'маш хурдан хийж болох 5 энгийн' : '5 тансаг зэрэглэлийн'} хоолны жор зохиож өг. 
-    Орцууд: ${state.ings.join(', ')}. Гэрт байгаа амтлагч: ${pantry.join(', ')}. 
-    Хоолны төрөл: ${state.styles.join(', ')}. Хийх чадвар: ${lvlNames[state.skill-1]}. Хүний тоо: ${state.servings}. 
-    Хариултыг зөвхөн HTML форматаар (<h3> гарчиг, <p> заавар) өгнө үү. Markdown (***) бүү ашигла.`;
+    // Prompt-ыг илүү тодорхой болгож, хариултыг HTML-ээр ирүүлэхийг шаардав
+    const prompt = `Чи бол мэргэжлийн тогооч. Дараах орцуудыг ашиглан ${mode === 'easy' ? 'хурдан хийх 5 энгийн' : '5 тансаг зэрэглэлийн'} хоолны жор зохио. 
+    Орцууд: ${state.ings.join(', ')}. 
+    Гэрт байгаа амтлагч: ${pantry.join(', ')}. 
+    Төрөл: ${state.styles.join(', ')}. 
+    Төхөөрөмж: ${state.apps.join(', ')}.
+    Чадвар: ${lvlNames[state.skill-1]}. 
+    Хүний тоо: ${state.servings}. 
+    Хариултыг зөвхөн цэвэр HTML форматаар (<h3>Жорын нэр</h3>, <p>Заавар</p>) ирүүл. Markdown буюу *** ашиглаж болохгүй.`;
 
-    // Туршиж үзэх моделиудын жагсаалт
-    const models = ['gemini-1.5-flash', 'gemini-pro'];
-    let success = false;
+    // Free Tier түлхүүрт хамгийн сайн тохирох v1 хаягийг ашиглав
+    const modelEndpoint = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
-    for (let modelName of models) {
-        if (success) break;
-        
-        try {
-            console.log(`Trying model: ${modelName}...`);
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-            });
+    try {
+        const response = await fetch(modelEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{
+                    parts: [{ text: prompt }]
+                }]
+            })
+        });
 
-            const data = await response.json();
+        const data = await response.json();
 
-            if (data.error) {
-                console.warn(`${modelName} failed: ${data.error.message}`);
-                continue; // Дараагийн модель руу шилжих
-            }
-
-            if (data.candidates && data.candidates[0].content) {
-                const txt = data.candidates[0].content.parts[0].text;
-                document.getElementById('ai-result-full').innerHTML = txt.replace(/```html/g, '').replace(/```/g, '');
-                success = true;
-            }
-        } catch (err) {
-            console.error(`Error with ${modelName}:`, err);
+        if (data.error) {
+            throw new Error(data.error.message);
         }
-    }
 
-    if (!success) {
+        if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts) {
+            let txt = data.candidates[0].content.parts[0].text;
+            
+            // AI-аас ирсэн илүүдэл Markdown тэмдэглэгээг цэвэрлэх
+            txt = txt.replace(/```html/g, '').replace(/```/g, '').trim();
+            
+            document.getElementById('ai-result-full').innerHTML = txt;
+        } else {
+            throw new Error("AI хариу илгээсэнгүй. Дахин оролдоно уу.");
+        }
+    } catch (err) {
+        console.error("Gemini Error:", err);
         document.getElementById('ai-result-full').innerHTML = `
-            <p style="color:red; text-align:center;">Уучлаарай, AI модельтой холбогдож чадсангүй.</p>
-            <p style="font-size:0.8rem; color:var(--sub-text); text-align:center;">Шалтгаан: Таны API Key-д энэ модель зөвшөөрөгдөөгүй эсвэл бүс нутгийн хязгаарлалттай байна.</p>
-            <button onclick="localStorage.removeItem('user_gemini_key'); location.reload();" style="margin:20px auto; display:block; padding:12px 25px; border-radius:15px; border:none; background:var(--text); color:var(--bg); cursor:pointer; font-weight:700;">🔑 Түлхүүр шинэчлэх</button>
+            <div style="text-align:center; padding:20px;">
+                <p style="color:red; font-weight:bold;">Алдаа гарлаа!</p>
+                <p style="font-size:0.9rem; color:var(--sub-text); margin:10px 0;">${err.message}</p>
+                <button onclick="localStorage.removeItem('user_gemini_key'); location.reload();" 
+                        style="padding:10px 20px; border-radius:15px; border:none; background:var(--text); color:var(--bg); cursor:pointer;">
+                    🔑 Түлхүүр шинэчлэх
+                </button>
+            </div>
         `;
+    } finally {
+        document.getElementById('ai-loading-full').style.display = 'none';
     }
-    
-    document.getElementById('ai-loading-full').style.display = 'none';
 }
     </script>
 </body>
