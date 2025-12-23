@@ -310,20 +310,25 @@
             INPUT: Main:${state.ings.join(', ')} Pantry:${activePantry.join(', ')} Cuisine:${state.styles.join(', ')} Skill:${lvlNames[state.skill-1]} Apps:${state.apps.join(', ')} Taste:${state.selectedTastes.join(', ')} Diet:${state.diet.join(', ')}
             TASK: Generate ${mode==='easy'?'5 Quick':'5 Gourmet'} recipes. Format: Use <h3> for titles, <p> for descriptions. No markdown.`;
             
-            try {
-                const response = await fetch('/api/generate', {
+           try {
+                const response = await fetch('/api/generate', { // Файлын нэртэйгээ ижил эсэхийг шалгаарай
                     method: 'POST', 
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: prompt })
                 });
-                const data = await response.json();
-                if (data.candidates && data.candidates[0].content) {
-                    const txt = data.candidates[0].content.parts[0].text.replace(/```html/g, '').replace(/```/g, '');
-                    document.getElementById('ai-result-full').innerHTML = txt;
+
+                // Хэрэв сервер 200-аас өөр код өгвөл (жишээ нь 404, 500)
+                if (!response.ok) {
+                    const errorMsg = await response.text();
+                    throw new Error(`Сервер алдаа өглөө: ${response.status}`);
                 }
-            } catch (err) { alert("Сервертэй холбогдож чадсангүй."); } 
-            finally { document.getElementById('ai-loading-full').style.display = 'none'; }
-        }
+
+                const data = await response.json();
+                // ... үргэлжлэл ...
+            } catch (err) { 
+                console.error("DEBUG:", err); // Энд яг ямар алдаа байгааг Browser Console дээр харуулна
+                alert("Алдаа гарлаа: " + err.message); 
+            }
     </script>
 </body>
 </html>
