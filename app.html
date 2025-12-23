@@ -376,129 +376,101 @@
             return PUBLIC_API_KEYS[Math.floor(Math.random() * PUBLIC_API_KEYS.length)];
         }
 
-        async function callGeminiAPI(mode) {
-            document.getElementById('modal-overlay').classList.remove('active');
-            document.getElementById('settings-modal').classList.remove('active');
-            document.getElementById('main-content').classList.add('hidden');
-            document.querySelector('.bottom-nav').classList.add('hidden');
-            
-            const resView = document.getElementById('view-results');
-            resView.classList.remove('hidden');
-            resView.style.display = 'flex';
-            
-            document.getElementById('ai-loading-full').style.display = 'block';
-            document.getElementById('ai-result-list').innerHTML = '';
+        // Хуучин API_KEYS болон getActiveKey хэсгийг устгана уу.
+    // Тэд одоо сервер дээр (api/generate.js) байгаа.
 
-            let activePantry = [];
-            if(document.getElementById('pantry-switch').checked) { document.querySelectorAll('.p-chip.active').forEach(c => activePantry.push(c.innerText)); }
-            
-            // --- STRICT PROMPT FIX ---
-            const prompt = `Role: Pro Chef (AMT). Language: MONGOLIAN.
-            INPUT: Main Ingredients:${state.ings.join(', ')} 
-            Pantry Ingredients:${activePantry.join(', ')} 
-            Cuisine:${state.styles.join(', ')} 
-            Skill:${lvlNames[state.skill-1]} 
-            Apps:${state.apps.join(', ')} 
-            Taste:${state.selectedTastes.join(', ')} 
-            Diet:${state.diet.join(', ')}
-            
-            STRICT RULE: You must Generate ${mode==='easy'?'5 Quick':'5 Gourmet'} recipes using ONLY the provided "Main Ingredients" and "Pantry Ingredients". 
-            DO NOT ADD ANY EXTRA INGREDIENTS. If a recipe typically requires an ingredient not listed here (e.g. Milk, Eggs), DO NOT suggest that recipe. Only water can be assumed.
-            
-            FORMAT: For each recipe, output this specific HTML structure:
-            <div class="recipe-card">
-               <h3>Recipe Name</h3>
-               <p>Short tasty description based only on available ingredients.</p>
-               <button class="btn-select" onclick="selectRecipe('Recipe Name')">Дэлгэрэнгүй үзэх</button>
-            </div>
-            Do NOT use markdown.`;
-            
-            const currentKey = getActiveKey();
+    // 1. callGeminiAPI функцийг ингэж өөрчилнө:
+    async function callGeminiAPI(mode) {
+        // ... (UI бэлдэх хэсэг хэвээрээ) ...
+        document.getElementById('modal-overlay').classList.remove('active');
+        document.getElementById('settings-modal').classList.remove('active');
+        document.getElementById('main-content').classList.add('hidden');
+        document.querySelector('.bottom-nav').classList.add('hidden');
+        const resView = document.getElementById('view-results');
+        resView.classList.remove('hidden');
+        resView.style.display = 'flex';
+        document.getElementById('ai-loading-full').style.display = 'block';
+        document.getElementById('ai-result-list').innerHTML = '';
 
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${currentKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-                });
-                
-                const data = await response.json();
-                if (data.candidates && data.candidates[0].content) {
-                    const txt = data.candidates[0].content.parts[0].text.replace(/```html/g, '').replace(/```/g, '');
-                    document.getElementById('ai-result-list').innerHTML = txt;
-                } else {
-                    document.getElementById('ai-result-list').innerHTML = `<p style='color:red'>Алдаа гарлаа. Дахин оролдоно уу.</p>`;
-                }
-            } catch (err) { 
-                document.getElementById('ai-result-list').innerHTML = `<p style='color:red'>Алдаа: ${err.message}</p>`;
-            } 
-            finally { document.getElementById('ai-loading-full').style.display = 'none'; }
-        }
+        let activePantry = [];
+        if(document.getElementById('pantry-switch').checked) { document.querySelectorAll('.p-chip.active').forEach(c => activePantry.push(c.innerText)); }
 
-        async function selectRecipe(recipeName) {
-            document.getElementById('view-results').classList.add('hidden');
-            document.getElementById('view-results').style.display = 'none';
+        const prompt = `Role: Pro Chef (AMT). Language: MONGOLIAN.
+        INPUT: Main Ingredients:${state.ings.join(', ')} 
+        Pantry Ingredients:${activePantry.join(', ')} 
+        Cuisine:${state.styles.join(', ')} 
+        Skill:${lvlNames[state.skill-1]} 
+        Apps:${state.apps.join(', ')} 
+        Taste:${state.selectedTastes.join(', ')} 
+        Diet:${state.diet.join(', ')}
+        
+        TASK: Generate ${mode==='easy'?'5 Quick':'5 Gourmet'} recipes. 
+        STRICT RULE: Use ONLY provided ingredients.
+        FORMAT: HTML structure with <div class="recipe-card">...</div>. No markdown.`;
+
+        try {
+            // ШИНЭ: Backend руу хүсэлт илгээж байна
+            const response = await fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: prompt })
+            });
             
-            const detView = document.getElementById('view-details');
-            detView.classList.remove('hidden');
-            detView.style.display = 'flex';
+            const data = await response.json();
             
-            const contentDiv = document.getElementById('details-content');
-            contentDiv.innerHTML = `<div id="ai-loading-details" style="display:block;"><div class="loader">🍳</div><p>${recipeName} жорыг бэлдэж байна...</p></div>`;
+            if(data.error) throw new Error(data.error);
 
-            // GET INGREDIENTS AGAIN FOR CONTEXT
-            let activePantry = [];
-            if(document.getElementById('pantry-switch').checked) { document.querySelectorAll('.p-chip.active').forEach(c => activePantry.push(c.innerText)); }
-            const allIngredients = state.ings.join(', ') + ", " + activePantry.join(', ');
-
-            // --- STRICT PROMPT FIX ---
-            const prompt = `Чи бол мэргэжлийн тогооч. "${recipeName}" нэртэй хоолны маш дэлгэрэнгүй жорыг MONGOLIAN хэлээр бич.
-            
-            АШИГЛАХ ОРЦ: ${allIngredients}.
-            
-            ХАТУУ АНХААРУУЛГА: 
-            1. Зөвхөн дээрх "АШИГЛАХ ОРЦ"-д байгаа зүйлсийг ашигла.
-            2. Шинэ орц (сүү, өндөг, ногоо гэх мэт) огт нэмж болохгүй. Ус л нэмж болно.
-            3. Хэрэв үндсэн жорд дутуу зүйл байвал, байгаа зүйлсээрээ яаж орлуулж хийхийг зааж өг.
-
-            БҮТЭЦ:
-            <h2>${recipeName}</h2>
-            <p>Хоолны түүх эсвэл онцлог.</p>
-            <h4>Орц (Зөвхөн байгаа зүйлс)(Хэр их ямар хэмжээтэй орох талаар дэлгэрэнгүй бич):</h4>
-            <ul>...</ul>
-            <h4>Хийх заавар:</h4>
-            <ol>... (Алхам бүрийг тодорхой бич)</ol>
-            <h4>Тогоочийн зөвлөгөө:</h4>
-            <p>...</p>
-            Зөвхөн HTML ашигла. Markdown бүү ашигла.`;
-
-            const currentKey = getActiveKey(); 
-
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${currentKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-                });
-                const data = await response.json();
-                
-                if (data.error) throw new Error(data.error.message);
-
-                if (data.candidates && data.candidates[0].content) {
-                    const txt = data.candidates[0].content.parts[0].text.replace(/```html/g, '').replace(/```/g, '');
-                    contentDiv.innerHTML = txt;
-                } else {
-                    throw new Error("AI хариу ирүүлсэнгүй.");
-                }
-            } catch (err) {
-                contentDiv.innerHTML = `
-                    <div style="text-align:center; padding:20px;">
-                        <p style="color:red; font-weight:bold;">Уучлаарай, мэдээлэл авахад алдаа гарлаа.</p>
-                        <p style="font-size:0.8rem; color:var(--sub-text); margin-top:10px;">Шалтгаан: ${err.message}</p>
-                        <button onclick="closeDetailsView()" style="margin-top:15px; padding:10px 20px; border-radius:10px; border:none; background:var(--text); color:var(--bg); cursor:pointer;">Буцах</button>
-                    </div>`;
+            if (data.candidates && data.candidates[0].content) {
+                const txt = data.candidates[0].content.parts[0].text.replace(/```html/g, '').replace(/```/g, '');
+                document.getElementById('ai-result-list').innerHTML = txt;
             }
+        } catch (err) { 
+            document.getElementById('ai-result-list').innerHTML = `<p style='color:red'>Алдаа: ${err.message}</p>`;
+        } 
+        finally { document.getElementById('ai-loading-full').style.display = 'none'; }
+    }
+
+    // 2. selectRecipe функцийг ингэж өөрчилнө:
+    async function selectRecipe(recipeName) {
+        // ... (UI бэлдэх хэсэг хэвээрээ) ...
+        document.getElementById('view-results').classList.add('hidden');
+        document.getElementById('view-results').style.display = 'none';
+        const detView = document.getElementById('view-details');
+        detView.classList.remove('hidden');
+        detView.style.display = 'flex';
+        const contentDiv = document.getElementById('details-content');
+        contentDiv.innerHTML = `<div id="ai-loading-details" style="display:block;"><div class="loader">🍳</div><p>${recipeName} жорыг бэлдэж байна...</p></div>`;
+
+        // Орц дахин цуглуулах
+        let activePantry = [];
+        if(document.getElementById('pantry-switch').checked) { document.querySelectorAll('.p-chip.active').forEach(c => activePantry.push(c.innerText)); }
+        const allIngredients = state.ings.join(', ') + ", " + activePantry.join(', ');
+
+        const prompt = `Чи бол мэргэжлийн тогооч. "${recipeName}" нэртэй хоолны дэлгэрэнгүй жорыг MONGOLIAN хэлээр бич.
+        АШИГЛАХ ОРЦ: ${allIngredients}.
+        ЗААВАР: Зөвхөн байгаа орцоо ашигла.
+        БҮТЭЦ: HTML ашигла. <h2>, <h4>, <ul>, <ol> тагууд. Markdown ашиглахгүй.`;
+
+        try {
+            // ШИНЭ: Backend руу хүсэлт илгээж байна
+            const response = await fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: prompt })
+            });
+            
+            const data = await response.json();
+
+            if(data.error) throw new Error(data.error);
+
+            if (data.candidates && data.candidates[0].content) {
+                const txt = data.candidates[0].content.parts[0].text.replace(/```html/g, '').replace(/```/g, '');
+                contentDiv.innerHTML = txt;
+            }
+        } catch (err) {
+            contentDiv.innerHTML = `<p style="color:red;">Алдаа гарлаа: ${err.message}</p>`;
         }
+    }
     </script>
 </body>
 </html>
