@@ -455,7 +455,8 @@
 
             try {
                 // Call Vercel Backend
-                const response = await fetch('/api/generate', {
+                // Жишээ нь: https://amt-dev.vercel.app/api/generate
+const response = await fetch('https://amt-dev.vercel.app/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: prompt })
