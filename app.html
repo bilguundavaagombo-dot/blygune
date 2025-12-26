@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AMT - Хоолны Жор</title>
+    <title>AMT - Ухаалаг Жор</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -42,6 +42,7 @@
         .tags-area { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; min-height: 40px; width: 100%; }
         .tag { background: var(--surface); border: 1px solid var(--border); padding: 10px 20px; border-radius: 50px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
         .section-label { font-size: 0.8rem; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: 1px; margin: 30px 0 12px 0; display: block; width: 100%; }
+        
         .style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; width: 100%; }
         .style-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 5px; align-items: center; }
         .style-chip.selected { background: var(--text); color: var(--bg); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
@@ -260,6 +261,7 @@
     </div>
 
     <script>
+        // APP DATA
         const pantryData = [
             ["Давс", "Хар перц", "Ургамлын тос"], 
             ["Сонгино", "Сармис", "Гурил", "Цагаан будаа", "Соя соус"],
@@ -274,16 +276,19 @@
         
         let state = { ings: [], styles: [], skill: 3, pantryLvl: 2, pantryActiveItems: [], apps: [], diet: [], servings: 2, selectedTastes: ['Хэвийн'] };
 
+        // INITIALIZATION
         window.onload = () => {
             if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
             loadPantry(2); renderUI(); randomTip();
         };
 
+        // UI RENDERING
         function renderUI() {
             document.getElementById('style-grid').innerHTML = styles.map(s => `<div class="style-chip ${state.styles.includes(s.n) ? 'selected' : ''}" onclick="toggleStyle('${s.n}')"><span style="font-size:1.5rem">${s.e}</span><span>${s.n}</span></div>`).join('');
             document.getElementById('taste-grid').innerHTML = tastes.map(v => `<div class="taste-chip ${state.selectedTastes.includes(v) ? 'selected' : ''}" onclick="setTaste('${v}')">${v}</div>`).join('');
             document.getElementById('appliance-area').innerHTML = appliances.map(a => `<div class="app-chip ${state.apps.includes(a) ? 'selected' : ''}" onclick="toggleApp('${a}')">${a}</div>`).join('');
             
+            // Level bar (Grid Fix)
             document.getElementById('lvl-bar').innerHTML = lvlNames.map((n, i) => {
                 const emojis = ["🐣","🍳","🍲","🔪","👨‍🍳"];
                 return `<div class="lvl-step ${i+1===state.skill ? 'active' : ''}" onclick="setLevel(${i+1})">
@@ -293,6 +298,7 @@
             }).join('');
         }
 
+        // PANTRY LOGIC
         function loadPantry(lvl) { 
             let items = []; 
             for(let i=0; i<lvl; i++) items = items.concat(pantryData[i]); 
@@ -312,6 +318,7 @@
         }
         function togglePantry() { const on = document.getElementById('pantry-switch').checked; document.getElementById('pantry-content').classList.toggle('disabled', !on); }
 
+        // INPUT & STATE MANAGEMENT
         function handleEnter(e) { if(e.key === 'Enter' && e.target.value) { addIng(e.target.value); e.target.value=''; } }
         function addIng(val) { val = val.charAt(0).toUpperCase() + val.slice(1); if(!state.ings.includes(val)) state.ings.push(val); renderTags(); }
         function removeIng(val) { state.ings = state.ings.filter(x => x !== val); renderTags(); }
@@ -329,11 +336,13 @@
         function toggleFilter(el, type) { if(state.diet.includes(type)) { state.diet = state.diet.filter(d => d !== type); el.classList.remove('selected'); } else { state.diet.push(type); el.classList.add('selected'); } }
         function handleCustomDiet(e) { if (e.key === 'Enter' && e.target.value.trim()) { const val = e.target.value.trim(); state.diet.push(val); e.target.value = ''; alert(val + " нэмэгдлээ"); } }
         
+        // UTILS
         function randomTip() { const tips = ["Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал шүүслэг болдог.", "Гоймон чанахдаа усандаа давс хангалттай хийвэл амт нь илүү тодорно."]; document.getElementById('daily-tip').innerText = "💡 " + tips[Math.floor(Math.random()*tips.length)]; }
         function toggleTheme() { const d = document.body.getAttribute('data-theme') === 'dark'; document.body.setAttribute('data-theme', d ? 'light' : 'dark'); localStorage.setItem('theme', d ? 'light' : 'dark'); }
         function openSettings() { document.getElementById('modal-overlay').classList.add('active'); }
         function closeSettings(e) { if (!e || e.target === e.currentTarget || e.target.classList.contains('btn-close')) document.getElementById('modal-overlay').classList.remove('active'); }
 
+        // VIEW LOGIC
         function closeResultsView() {
             document.getElementById('view-results').classList.add('hidden');
             document.getElementById('main-content').classList.remove('hidden');
@@ -348,7 +357,7 @@
             document.getElementById('view-results').style.display = 'flex';
         }
 
-        // --- FETCH FUNCTION ---
+        // --- BACKEND API LOGIC (For Website) ---
         async function callGeminiAPI(mode) {
             document.getElementById('modal-overlay').classList.remove('active');
             document.getElementById('main-content').classList.add('hidden');
@@ -374,18 +383,22 @@
             Diet:${state.diet.join(', ')}
             
             STRICT RULE: Generate ${mode==='easy'?'5 Quick':'5 Gourmet'} recipes using ONLY the provided "Main Ingredients" and "Pantry Ingredients". 
-            DO NOT ADD EXTRA INGREDIENTS.
+            DO NOT ADD EXTRA INGREDIENTS (like Milk, Eggs, Veggies) unless they are in the INPUT list.
             FORMAT: HTML structure: <div class="recipe-card"><h3>Name</h3><p>Description</p><button class="btn-select" onclick="selectRecipe('Name')">Дэлгэрэнгүй үзэх</button></div>. No markdown.`;
 
             try {
-                // ANHAAR: iOS APP boloh tul buten URL ashiglana.
-                // VERCEL LINK-EE ZAAVAL ZOV ESEHIIG SHALGAA.
-                const response = await fetch('https://amt-dev.vercel.app/api/generate', {
+                // Вэбсайт учраас зүгээр л /api/generate гэхэд болно
+                const response = await fetch('/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: prompt })
                 });
                 
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Server Error: ${response.status} - ${errorText}`);
+                }
+
                 const data = await response.json();
                 
                 if (data.error) throw new Error(data.error);
@@ -395,7 +408,8 @@
                     document.getElementById('ai-result-list').innerHTML = txt;
                 }
             } catch (err) { 
-                document.getElementById('ai-result-list').innerHTML = `<p style='color:red'>Алдаа: ${err.message}</p>`;
+                console.error(err);
+                document.getElementById('ai-result-list').innerHTML = `<p style='color:red; text-align:center;'>Алдаа гарлаа: ${err.message}<br>Дахин оролдоно уу.</p>`;
             } 
             finally { document.getElementById('ai-loading-full').style.display = 'none'; }
         }
@@ -416,18 +430,22 @@
 
             const prompt = `Чи бол мэргэжлийн тогооч. "${recipeName}" нэртэй хоолны дэлгэрэнгүй жорыг MONGOLIAN хэлээр бич.
             АШИГЛАХ ОРЦ: ${allIngredients}.
-            ХАТУУ АНХААРУУЛГА: Зөвхөн дээрх орцуудыг ашигла.
-            БҮТЭЦ: <h2>${recipeName}</h2> <p>Түүх/Онцлог</p> <h4>Орц:</h4> <ul>...</ul> <h4>Заавар:</h4> <ol>...</ol> <h4>Зөвлөгөө:</h4> <p>...</p>
+            ХАТУУ АНХААРУУЛГА: Зөвхөн дээрх орцуудыг ашигла. Шинэ орц нэмж болохгүй (ус, давс, перецээс бусад).
+            БҮТЭЦ: <h2>${recipeName}</h2> <p>Түүх/Онцлог</p> <h4>Орц (Байгаа зүйлс):</h4> <ul>...</ul> <h4>Заавар:</h4> <ol>...</ol> <h4>Зөвлөгөө:</h4> <p>...</p>
             Зөвхөн HTML ашигла.`;
 
             try {
-                // ANHAAR: iOS APP boloh tul buten URL ashiglana.
-                const response = await fetch('https://amt-dev.vercel.app/api/generate', {
+                const response = await fetch('/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ prompt: prompt })
                 });
                 
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Server Error: ${response.status} - ${errorText}`);
+                }
+
                 const data = await response.json();
 
                 if (data.error) throw new Error(data.error);
@@ -437,7 +455,8 @@
                     contentDiv.innerHTML = txt;
                 }
             } catch (err) {
-                contentDiv.innerHTML = `<p style="color:red;">Алдаа гарлаа: ${err.message}</p>`;
+                console.error(err);
+                contentDiv.innerHTML = `<p style="color:red; text-align:center;">Алдаа гарлаа: ${err.message}</p>`;
             }
         }
     </script>
