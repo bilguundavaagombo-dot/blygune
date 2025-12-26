@@ -191,18 +191,18 @@
         </div>
         <div class="tags-area" id="tags-area"></div>
 
-        <span class="section-label">🍽️ Хоолны төрөл (Max 3)</span>
+        <span class="section-label">🍽️ Хоолны төрөл (ДЭЭД ТАЛ НЬ 3)</span>
         <div class="style-grid" id="style-grid"></div>
 
-        <span class="section-label">👨‍🍳 Хоол хийх чадвар</span>
+         <span class="section-label">👨‍🍳 Хоол хийх чадвар</span>
         <div class="level-bar">
             <div class="lvl-step" onclick="setLevel(1)" id="lvl-1"><span class="lvl-emoji">🐣</span><span class="lvl-label">Анхан</span></div>
             <div class="lvl-step" onclick="setLevel(2)" id="lvl-2"><span class="lvl-emoji">🍳</span><span class="lvl-label">Сурагч</span></div>
             <div class="lvl-step active" onclick="setLevel(3)" id="lvl-3"><span class="lvl-emoji">🍲</span><span class="lvl-label">Дундаж</span></div>
             <div class="lvl-step" onclick="setLevel(4)" id="lvl-4"><span class="lvl-emoji">🔪</span><span class="lvl-label">Сайн</span></div>
-            <div class="lvl-step" onclick="setLevel(5)" id="lvl-5"><span class="lvl-emoji">👨‍🍳</span><span class="lvl-label">Pro</span></div>
+            <div class="lvl-step" onclick="setLevel(5)" id="lvl-5"><span class="lvl-emoji">👨‍🍳</span><span class="lvl-label">Мэргэжлийн</span></div>
         </div>
-
+        <div class="level-desc" id="level-desc">Өдөр тутмын хоолыг сайн хийдэг.</div>
         <span class="section-label">🥫 Гэрийн нөөц</span>
         <div class="level-bar" style="margin-bottom:10px;">
             <div class="lvl-step" onclick="setPantryLvl(1)" id="pl-1"><span class="lvl-emoji">🧂</span><span class="lvl-label">Цөөн</span></div>
@@ -225,13 +225,18 @@
             </div>
         </div>
 
-        <div class="filters" id="dietary-filters">
-            <div class="filter-chip" onclick="toggleFilter(this, 'Самар ороогүй')">🥜 Самар</div>
-            <div class="filter-chip" onclick="toggleFilter(this, 'Гахайн махгүй')">🐷 Гахайн мах</div>
-            <div class="filter-chip" onclick="toggleFilter(this, 'Сүүгүй')">🥛 Сүү</div>
-            <div class="filter-chip" onclick="toggleFilter(this, 'Сахаргүй')">🍬 Сахар</div>
-            <div class="filter-chip" onclick="toggleFilter(this, 'Халуун ногоогүй')">🌶️ Халуун ногоо</div>
-            <input type="text" class="custom-diet-input" placeholder="+ Бусад" onkeypress="handleCustomDiet(event)">
+       <div class="dietary-section">
+            <span class="section-label">Харшил / Цээр</span>
+            <div class="filters" id="dietary-filters">
+                <div class="filter-chip" onclick="toggleFilter(this, 'Самар ороогүй')">🥜 Самар</div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'Цавуулаггүй')">🍞 Цавуулаг</div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'Гахайн махгүй')">🐷 Гахайн мах</div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'Сүүгүй')">🥛 Сүү</div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'Сахаргүй')">🍬 Сахар</div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'Өндөггүй')">🥚 Өндөг</div>
+                <div class="filter-chip" onclick="toggleFilter(this, 'Халуун ногоогүй')">🌶️ Халуун ногоо</div>
+                <input type="text" class="custom-diet-input" placeholder="+ Бусад" onkeypress="handleCustomDiet(event)">
+            </div>
         </div>
 
         <div class="calc-box">
@@ -300,6 +305,7 @@
         const styles = [ {n:"Тогооч", e:"👨‍🍳"}, {n:"Монгол", e:"🇲🇳"}, {n:"Ази", e:"🥢"}, {n:"Итали", e:"🍝"}, {n:"Франц", e:"🥐"}, {n:"Шөл", e:"🍲"}, {n:"Өглөөний", e:"🍳"}, {n:"Эрүүл", e:"🥗"}, {n:"Түргэн", e:"🍔"}, {n:"Цагаан хоол", e:"🥬"}];
         const tastes = ["Хэвийн", "Зөөлөн", "Халуун ногоотой", "Баялаг/Umami", "Чихэрлэг", "Исгэлэн"];
         const appliances = ["Плетка", "Шарах шүүгээ", "Air Fryer", "Битүү чанагч", "Агшаагч", "Блендер"];
+        const lvlDescs = ["Дэлгэрэнгүй заавар хэрэгтэй.", "Энгийн хоол хийж чаддаг.", "Өдөр тутмын хоол сайн хийдэг.", "Нарийн ажиллагаатай хоол.", "Мэргэжлийн түвшний мэдлэгтэй."];
         
         let state = { ings: [], styles: [], skill: 3, pantryLvl: 2, pantryActiveItems: [], apps: [], diet: [], servings: 2, selectedTastes: ['Хэвийн'] };
 
