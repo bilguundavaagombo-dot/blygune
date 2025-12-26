@@ -39,7 +39,7 @@
     <header>
         <div class="logo-group" onclick="window.location.href='index.html'">
             <div class="logo">AMT<span>.</span></div>
-            <div class="logo-sub">Action • Method • Technique</div>
+            <div class="logo-sub">Үйлдэл • Арга барил • Техник</div>
         </div>
         <div class="header-actions">
             <button class="icon-btn" onclick="toggleTheme()">◑</button>
@@ -50,6 +50,7 @@
         <span class="spinner">🥘</span>
         <h2 style="font-family: var(--font-head);">Бодож байна...</h2>
         <p style="color:var(--sub-text); margin-top:10px;">Түр хүлээнэ үү</p>
+        
         <div class="loader-tip" id="loader-tip">💡 Зөвлөгөө: Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал шүүслэг болдог.</div>
     </div>
 
@@ -93,10 +94,11 @@
             let i = Math.floor(Math.random() * loadingTips.length);
             tipEl.innerText = loadingTips[i];
 
+            // CHANGED: 8000ms (8 seconds) so it's slower and easier to read
             setInterval(() => {
                 i = (i + 1) % loadingTips.length;
                 tipEl.innerText = loadingTips[i];
-            }, 3000); 
+            }, 8000); 
         }
 
         async function generateList() {
@@ -106,27 +108,27 @@
                 return;
             }
 
-            // --- UPGRADED "NATIVE SPEAKER" PROMPT ---
+            // --- STRICT "NO ENGLISH" PROMPT ---
             const promptText = `
-            Role: Experienced Mongolian Chef (Mongolian Language Expert).
+            Role: Elite Mongolian Chef.
             Task: Create 5 distinct recipe ideas using: ${state.ings.join(', ')}.
             
             CONTEXT:
             - Pantry: ${state.activePantry.join(', ')}
-            - Style: ${state.styles.join(', ') || "Mixed"}
+            - Cuisine: ${state.styles.join(', ') || "Холимог"}
             - Diet: ${state.diet.join(', ')}
             - Skill: ${lvlNames[state.skill-1]}
-            - Mood: ${state.mode === 'easy' ? 'Quick & Simple' : 'Gourmet'}
+            - Mood: ${state.mode === 'easy' ? 'Хурдан бөгөөд Хялбар' : 'Тансаг зэрэглэлийн'}
 
-            TRANSLATION RULES (CRITICAL):
-            1. Language: Native Mongolian (Cyrillic).
-            2. NO "Google Translate" style. Do not use awkward phrases like "энэ нь...". 
-            3. Use natural, appetizing adjectives (Шүүслэг, Зөөлөн, Анхилуун).
-            4. Double-check your Mongolian grammar before outputting.
+            CRITICAL LANGUAGE RULES (ZERO ENGLISH ALLOWED):
+            1. OUTPUT MUST BE 100% MONGOLIAN (Cyrillic). 
+            2. IF YOU USE A SINGLE ENGLISH WORD, THE SYSTEM FAILS.
+            3. Translate technical terms naturally (e.g., "Sauté" -> "Хуурах", "Garnish" -> "Чимэглэх").
+            4. Descriptions must be appetizing and sound like a native Mongolian speaker wrote them.
 
             OUTPUT FORMAT: 
-            Strict JSON Array ONLY. No Markdown. 
-            [{"title": "Name", "desc": "Short, appetizing native description."}]
+            Strict JSON Array ONLY. 
+            [{"title": "Recipe Name in Mongolian", "desc": "Appetizing description in Mongolian."}]
             `;
 
             try {
