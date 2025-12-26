@@ -72,7 +72,7 @@
         .tag { background: var(--surface); border: 1px solid var(--border); padding: 10px 20px; border-radius: 50px; font-weight: 600; color: var(--text); cursor: default; display: flex; align-items: center; gap: 8px; animation: pop 0.3s ease; }
         .section-label { font-size: 0.8rem; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: 1px; margin: 30px 0 12px 0; display: block; width: 100%; }
 
-        /* NEW: RECIPE CARD STYLES (Matches your design) */
+        /* RECIPE CARD STYLES */
         .recipe-card {
             background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
             padding: 20px; margin-bottom: 15px; width: 100%; cursor: pointer;
@@ -83,7 +83,7 @@
         .rc-desc { color: var(--sub-text); font-size: 0.9rem; line-height: 1.4; }
         .rc-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--accent); font-weight: 900; font-size: 1.5rem; }
 
-        /* NEW: DETAIL VIEW STYLES (Matches your design) */
+        /* DETAIL VIEW STYLES */
         .detail-header { width: 100%; margin-bottom: 20px; }
         .back-btn { background: none; border: none; font-size: 1rem; color: var(--sub-text); cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; margin-bottom: 15px; }
         .detail-title { font-size: 2.2rem; font-family: var(--font-head); font-weight: 900; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
@@ -386,6 +386,7 @@
                 document.querySelectorAll('.p-chip.active').forEach(c => activePantry.push(c.innerText));
             }
 
+            // INJECT SKILL LEVEL HERE
             const promptText = `
             Role: Pro Chef. Language: MONGOLIAN.
             Context: Create 5 distinct recipe ideas based on these inputs:
@@ -393,6 +394,7 @@
             - Pantry Access: ${activePantry.join(', ')}
             - Cuisine Style: ${state.styles.join(', ') || "Mix"}
             - Dietary: ${state.diet.join(', ')}
+            - User Skill Level: ${lvlNames[state.skill-1]} 
             - Mood: ${mode === 'easy' ? 'Very Quick & Easy' : 'Gourmet & Impressive'}
             
             OUTPUT FORMAT: STRICT JSON ARRAY. Do not use Markdown. Do not include 'json' tag.
@@ -444,16 +446,20 @@
             document.getElementById('loader-text').innerText = "Жорыг нарийвчилж байна...";
             document.getElementById('loader-screen').classList.add('active');
 
+            // DYNAMIC PROMPT BASED ON SKILL LEVEL
+            const skillLevel = lvlNames[state.skill-1];
+            
             const promptText = `
-            Role: Cooking Instructor for Beginners. Language: MONGOLIAN.
-            Task: Create a detailed, foolproof guide for the recipe: "${title}".
-            Target Audience: Absolute beginner (Non-cooker).
+            Role: Cooking Instructor. Language: MONGOLIAN.
+            Task: Create a detailed guide for the recipe: "${title}".
+            User Skill Level: ${skillLevel} (1=Beginner, 5=Pro).
             
             REQUIREMENTS:
-            1. INGREDIENTS: List precise quantities AND visual size comparisons (e.g., "1 medium onion (size of a tennis ball)", "200g beef (size of a deck of cards)").
-            2. PREP: List equipment needed.
-            3. STEPS: Very granular, numbered steps. Explain visual cues (e.g., "Cook until golden brown like a coin", "Water should be bubbling fiercely").
-            4. TIMING: Exact minutes for every step.
+            1. ADJUSTMENT: Write instructions specifically for a "${skillLevel}" cook. ${state.skill <= 2 ? 'Explain everything simply, use visual size comparisons (e.g. size of tennis ball), avoid jargon.' : 'Use standard cooking terminology.'}
+            2. INGREDIENTS: List precise quantities.
+            3. PREP: List equipment needed.
+            4. STEPS: Granular, numbered steps.
+            5. TIMING: Exact minutes for every step.
             
             FORMAT: HTML (Use <h3> for sections, <ul>/<li> for lists, <strong> for emphasis). NO Markdown.
             `;
