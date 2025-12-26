@@ -1,47 +1,61 @@
-export const config = {
-  runtime: 'edge', // Энэ нь кодыг маш хурдан ажиллуулна
-};
+export default async function handler(req, res) {
+    // 1. Enable CORS
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    );
 
-export default async function handler(req) {
-  // Зөвхөн POST хүсэлт хүлээн авна
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 });
-  }
-
-  try {
-    const { prompt } = await req.json();
-
-    // Vercel-ийн тохиргооноос API түлхүүрийг авна
-    // Бид олон түлхүүр ашиглаж байгаа тул эндээс санамсаргүйгээр сонгоно
-    const apiKeys = process.env.GEMINI_API_KEYS ? process.env.GEMINI_API_KEYS.split(',') : [];
-    
-    if (apiKeys.length === 0) {
-      return new Response(JSON.stringify({ error: 'Server configuration error: No API keys found' }), { status: 500 });
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
     }
 
-    const randomKey = apiKeys[Math.floor(Math.random() * apiKeys.length)].trim();
-
-    // Google Gemini API руу серверээс хүсэлт илгээх
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${randomKey}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-    });
-
-    const data = await response.json();
-
-    // Алдаа гарвал буцаах
-    if (data.error) {
-        return new Response(JSON.stringify({ error: data.error.message }), { status: 500 });
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    // Амжилттай бол хариуг буцаах
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    try {
+        const { prompt } = req.body;
+        const apiKey = process.env.OPENAI_API_KEY;
 
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
-  }
+        if (!apiKey) {
+            return res.status(500).json({ error: 'API Key missing' });
+        }
+
+        // 2. Call OpenAI API
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: "gpt-4o-mini", // Using 4o-mini (Fast & Cheap)
+                messages: [
+                    { role: "system", content: "You are a helpful chef." },
+                    { role: "user", content: prompt }
+                ],
+                temperature: 0.7
+            })
+        });
+
+        const data = await response.json();
+
+        // 3. Check for OpenAI specific errors
+        if (!response.ok) {
+            console.error("OpenAI Error:", data);
+            return res.status(500).json({ error: 'OpenAI Error' });
+        }
+
+        // 4. Send back just the text
+        const aiText = data.choices[0].message.content;
+        return res.status(200).json({ output: aiText });
+
+    } catch (error) {
+        console.error("Server Error:", error);
+        return res.status(500).json({ error: 'Error generating recipe' });
+    }
 }
