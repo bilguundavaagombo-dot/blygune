@@ -33,7 +33,7 @@ export default async function handler(req, res) {
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: "gpt-5.1-chat-latest", // Using 4o-mini (Fast & Cheap)
+                model: "gpt-5.1", // Using 4o-mini (Fast & Cheap)
                 messages: [
                     { role: "system", content: "You are a helpful chef." },
                     { role: "user", content: prompt }
