@@ -6,7 +6,7 @@
     <title>AMT - Дэлгэрэнгүй</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* EXACT SAME CSS */
+        /* --- EXACT SAME CSS AS OTHER PAGES --- */
         :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --input-bg: #FFFFFF; --surface: #FFFFFF; --radius: 20px; --font: 'Inter', sans-serif; --font-head: 'Playfair Display', serif; --shadow: 0 10px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
         [data-theme="dark"] { --bg: #0F1115; --text: #F3F4F6; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #2D3748; --input-bg: #1A202C; --surface: #1A202C; --shadow: none; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -17,19 +17,30 @@
         .logo { font-family: var(--font-head); font-weight: 900; font-size: 2rem; letter-spacing: -1px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .logo-sub { font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; color: var(--text); opacity: 0.8; }
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
+        .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
         main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; }
         .back-btn { background: none; border: none; font-size: 1rem; color: var(--sub-text); cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; margin-bottom: 15px; align-self: flex-start; }
-        .detail-header { width: 100%; margin-bottom: 20px; }
-        .detail-title { font-size: 2.2rem; font-family: var(--font-head); font-weight: 900; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
-        .detail-content { width: 100%; background: var(--surface); padding: 30px; border-radius: 20px; border: 1px solid var(--border); line-height: 1.7; font-size: 1rem; }
-        .detail-content h3 { color: var(--accent); margin: 25px 0 15px 0; font-size: 1.3rem; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
-        .detail-content ul { padding-left: 20px; margin-bottom: 20px; }
-        .detail-content li { margin-bottom: 10px; color: var(--text); }
+        
+        /* DETAIL SPECIFIC STYLES */
+        .detail-header { width: 100%; margin-bottom: 20px; text-align: center; }
+        .detail-title { font-size: 2.2rem; font-family: var(--font-head); font-weight: 900; color: var(--text); line-height: 1.1; margin-bottom: 10px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .detail-content { width: 100%; background: var(--surface); padding: 30px; border-radius: 20px; border: 1px solid var(--border); line-height: 1.7; font-size: 1rem; box-shadow: var(--shadow); }
+        
+        /* AI HTML STYLING */
+        .detail-content h3 { color: var(--accent); margin: 25px 0 15px 0; font-size: 1.3rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; font-family: var(--font-head); }
+        .detail-content ul, .detail-content ol { padding-left: 20px; margin-bottom: 20px; }
+        .detail-content li { margin-bottom: 12px; color: var(--text); }
         .detail-content strong { color: var(--text); font-weight: 800; }
+        .detail-content p { margin-bottom: 15px; color: var(--sub-text); }
+
+        /* LOADING */
         .loader-screen { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .loader-screen.hidden { display: none; }
         .spinner { font-size: 3rem; animation: spin 2s infinite; display: block; margin-bottom: 20px; }
+        .loader-tip { margin-top: 30px; padding: 15px 25px; background: rgba(255, 69, 0, 0.1); color: var(--text); border-radius: 12px; font-size: 0.9rem; max-width: 80%; line-height: 1.5; font-style: italic; animation: fadeIn 0.5s ease; border: 1px solid var(--accent); }
+        
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -45,54 +56,95 @@
 
     <div class="loader-screen" id="loader-screen">
         <span class="spinner">🥘</span>
-        <h2 style="font-family: var(--font-head);">Бодож байна...</h2>
+        <h2 style="font-family: var(--font-head);">Зааврыг бэлдэж байна...</h2>
         <p style="color:var(--sub-text); margin-top:10px;">Түр хүлээнэ үү</p>
+        <div class="loader-tip" id="loader-tip">💡 Зөвлөгөө: Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал шүүслэг болдог.</div>
     </div>
 
     <main id="main-content" style="display:none;">
-        <button class="back-btn" onclick="window.location.href='list.html'">← Сонголт руу буцах</button>
+        <button class="back-btn" onclick="window.location.href='list.html'">← Буцах</button>
         <div id="detail-container"></div>
     </main>
 
     <script>
         const lvlNames = ["Анхан", "Сурагч", "Дундаж", "Сайн", "Pro"];
+        
+        const loadingTips = [
+            "💡 Зөвлөгөө: Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал илүү шүүслэг болдог.",
+            "💡 Зөвлөгөө: Гоймон чанахдаа усандаа давс хангалттай хийвэл амт нь илүү тодорно.",
+            "💡 Зөвлөгөө: Сонгино хэрчихдээ хүйтэн усаар хутгаа норговол нүд cayхгүй.",
+            "💡 Зөвлөгөө: Шөл давстай болчихвол түүхий төмс хийж хэсэг буцалгаарай.",
+            "💡 Зөвлөгөө: Өндөг чанахдаа усанд нь халбага уксус хийвэл хальслахад амархан.",
+            "💡 Зөвлөгөө: Ногоогоо хэт болгохгүйн тулд буцалж буй уснаас гаргаад шууд мөстэй усанд сой.",
+            "💡 Зөвлөгөө: Сармисны хальсыг амархан арилгахын тулд хутганы хажуугаар зөөлөн дар.",
+            "💡 Зөвлөгөө: Махаа хөндлөн судал дагуу хэрчвэл зажлахад зөөлөн байдаг."
+        ];
 
         window.onload = () => {
             if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
+            rotateTips();
             getFullRecipe();
         };
 
-        function toggleTheme() { const d = document.body.getAttribute('data-theme') === 'dark'; document.body.setAttribute('data-theme', d ? 'light' : 'dark'); localStorage.setItem('theme', d ? 'light' : 'dark'); }
+        function toggleTheme() { 
+            const d = document.body.getAttribute('data-theme') === 'dark'; 
+            document.body.setAttribute('data-theme', d ? 'light' : 'dark'); 
+            localStorage.setItem('theme', d ? 'light' : 'dark'); 
+        }
+
+        function rotateTips() {
+            const tipEl = document.getElementById('loader-tip');
+            let i = Math.floor(Math.random() * loadingTips.length);
+            tipEl.innerText = loadingTips[i];
+            setInterval(() => {
+                i = (i + 1) % loadingTips.length;
+                tipEl.innerText = loadingTips[i];
+            }, 3000); 
+        }
 
         async function getFullRecipe() {
             const state = JSON.parse(localStorage.getItem('amt_state'));
             const title = localStorage.getItem('amt_selected_recipe');
             
-            if(!state || !title) window.location.href = 'index.html';
-
-            const skillName = lvlNames[state.skill-1];
-            let instructionStyle = "";
-            if (state.skill <= 2) {
-                instructionStyle = "EXPLAIN LIKE I'M 5. Use visual size comparisons (e.g., 'size of a tennis ball'). Avoid technical jargon.";
-            } else if (state.skill === 5) {
-                instructionStyle = "PROFESSIONAL CHEF. Use proper culinary terms (e.g., 'julienne', 'sear', 'deglaze').";
-            } else {
-                instructionStyle = "STANDARD home cook instructions.";
+            if(!state || !title) {
+                window.location.href = 'index.html';
+                return;
             }
 
+            // --- SMART SKILL LEVEL ADJUSTMENT ---
+            const skillName = lvlNames[state.skill-1];
+            let tone = "Professional";
+            let visual = "Standard culinary terms";
+
+            if (state.skill <= 2) {
+                tone = "Super Friendly, Patient, Encouraging";
+                visual = "EXPLAIN LIKE I AM 5. Use visual size comparisons (e.g., 'size of a tennis ball', 'thickness of a phone'). Avoid chef jargon.";
+            }
+
+            // --- UPGRADED "NATIVE INSTRUCTOR" PROMPT ---
             const promptText = `
-            Role: Cooking Instructor. Language: MONGOLIAN.
-            Task: Create a detailed guide for the recipe: "${title}".
-            User Skill Level: ${skillName}.
-            Instruction Style: ${instructionStyle}
+            Role: Experienced Mongolian Cooking Instructor.
+            Task: Write a detailed cooking guide for: "${title}".
+            Target Audience Skill: ${skillName} (${state.skill}/5).
             
-            REQUIREMENTS:
-            1. INGREDIENTS: List precise quantities.
-            2. PREP: List equipment needed.
-            3. STEPS: Granular, numbered steps matching the skill level.
-            4. TIMING: Exact minutes for every step.
-            
-            FORMAT: HTML (Use <h3> for sections, <ul>/<li> for lists, <strong> for emphasis). NO Markdown.
+            INSTRUCTIONS:
+            1. Language: Native Mongolian (Cyrillic). Use appetizing, natural words (шаржигнуур, зөөлөн, шүүслэг).
+            2. Tone: ${tone}.
+            3. Clarity: ${visual}.
+            4. Structure:
+               - Brief appetizing intro (1 sentence).
+               - Ingredients (Exact metric amounts).
+               - Tools needed.
+               - Step-by-step instructions (Numbered).
+               - Pro Tip at the end.
+
+            OUTPUT FORMAT: 
+            Return raw HTML body content only. 
+            Use <h3> for section headers.
+            Use <ul> for ingredients.
+            Use <ol> for steps.
+            Use <strong> for emphasis.
+            NO Markdown. NO <html> tags.
             `;
 
             try {
@@ -105,6 +157,7 @@
                 
                 if (data.output) {
                     let html = data.output;
+                    // Clean potential markdown
                     html = html.replace(/```html/g, '').replace(/```/g, '');
                     
                     document.getElementById('detail-container').innerHTML = `
@@ -117,7 +170,8 @@
                     document.getElementById('main-content').style.display = 'flex';
                 }
             } catch (err) {
-                alert("Жорыг ачаалж чадсангүй.");
+                console.error(err);
+                alert("Жорыг ачаалж чадсангүй. Дахин оролдоно уу.");
                 window.location.href = 'list.html';
             }
         }
