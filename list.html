@@ -30,7 +30,6 @@
         .loader-screen { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .loader-screen.hidden { display: none; }
         .spinner { font-size: 3rem; animation: spin 2s infinite; display: block; margin-bottom: 20px; }
-        /* NEW: Style for the loading tip */
         .loader-tip { margin-top: 30px; padding: 15px 25px; background: rgba(255, 69, 0, 0.1); color: var(--text); border-radius: 12px; font-size: 0.9rem; max-width: 80%; line-height: 1.5; font-style: italic; animation: fadeIn 0.5s ease; border: 1px solid var(--accent); }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
@@ -51,7 +50,6 @@
         <span class="spinner">🥘</span>
         <h2 style="font-family: var(--font-head);">Бодож байна...</h2>
         <p style="color:var(--sub-text); margin-top:10px;">Түр хүлээнэ үү</p>
-        
         <div class="loader-tip" id="loader-tip">💡 Зөвлөгөө: Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал шүүслэг болдог.</div>
     </div>
 
@@ -67,7 +65,6 @@
     <script>
         const lvlNames = ["Анхан", "Сурагч", "Дундаж", "Сайн", "Pro"];
         
-        // NEW: Tips Array
         const loadingTips = [
             "💡 Зөвлөгөө: Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал илүү шүүслэг болдог.",
             "💡 Зөвлөгөө: Гоймон чанахдаа усандаа давс хангалттай хийвэл амт нь илүү тодорно.",
@@ -81,7 +78,7 @@
 
         window.onload = () => {
             if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
-            rotateTips(); // Start rotating tips
+            rotateTips(); 
             generateList();
         };
 
@@ -91,18 +88,15 @@
             localStorage.setItem('theme', d ? 'light' : 'dark'); 
         }
 
-        // NEW: Function to change tips every 3 seconds
         function rotateTips() {
             const tipEl = document.getElementById('loader-tip');
-            let i = 0;
-            // Set random start
-            i = Math.floor(Math.random() * loadingTips.length);
+            let i = Math.floor(Math.random() * loadingTips.length);
             tipEl.innerText = loadingTips[i];
 
             setInterval(() => {
                 i = (i + 1) % loadingTips.length;
                 tipEl.innerText = loadingTips[i];
-            }, 3000); // Change every 3 seconds
+            }, 3000); 
         }
 
         async function generateList() {
@@ -112,18 +106,27 @@
                 return;
             }
 
+            // --- UPGRADED "NATIVE SPEAKER" PROMPT ---
             const promptText = `
-            Role: Pro Chef. Language: MONGOLIAN.
-            Context: Create 5 distinct recipe ideas based on these inputs:
-            - Main Ingredients: ${state.ings.join(', ')}
-            - Pantry Access: ${state.activePantry.join(', ')}
-            - Cuisine Style: ${state.styles.join(', ') || "Mix"}
-            - Dietary: ${state.diet.join(', ')}
-            - User Skill Level: ${lvlNames[state.skill-1]} 
-            - Mood: ${state.mode === 'easy' ? 'Very Quick & Easy' : 'Gourmet & Impressive'}
+            Role: Experienced Mongolian Chef (Mongolian Language Expert).
+            Task: Create 5 distinct recipe ideas using: ${state.ings.join(', ')}.
             
-            OUTPUT FORMAT: STRICT JSON ARRAY. Do not use Markdown. Do not include 'json' tag.
-            Example: [{"title": "Recipe Name", "desc": "Short appetizing description in 1 sentence."}]
+            CONTEXT:
+            - Pantry: ${state.activePantry.join(', ')}
+            - Style: ${state.styles.join(', ') || "Mixed"}
+            - Diet: ${state.diet.join(', ')}
+            - Skill: ${lvlNames[state.skill-1]}
+            - Mood: ${state.mode === 'easy' ? 'Quick & Simple' : 'Gourmet'}
+
+            TRANSLATION RULES (CRITICAL):
+            1. Language: Native Mongolian (Cyrillic).
+            2. NO "Google Translate" style. Do not use awkward phrases like "энэ нь...". 
+            3. Use natural, appetizing adjectives (Шүүслэг, Зөөлөн, Анхилуун).
+            4. Double-check your Mongolian grammar before outputting.
+
+            OUTPUT FORMAT: 
+            Strict JSON Array ONLY. No Markdown. 
+            [{"title": "Name", "desc": "Short, appetizing native description."}]
             `;
 
             try {
