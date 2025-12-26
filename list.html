@@ -6,85 +6,37 @@
     <title>AMT - Жорууд</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* --- EXACT SAME CSS AS INDEX.HTML --- */
-        :root {
-            --bg: #F8F9FB;
-            --text: #1F2937;
-            --sub-text: #6B7280;
-            --accent: #FF4500;
-            --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%);
-            --border: #E5E7EB;
-            --input-bg: #FFFFFF;
-            --surface: #FFFFFF;
-            --radius: 20px;
-            --font: 'Inter', sans-serif;
-            --font-head: 'Playfair Display', serif;
-            --shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
-            --glass: blur(14px);
-        }
-
-        [data-theme="dark"] {
-            --bg: #0F1115;
-            --text: #F3F4F6;
-            --sub-text: #9CA3AF;
-            --accent: #FF5722;
-            --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%);
-            --border: #2D3748;
-            --input-bg: #1A202C;
-            --surface: #1A202C;
-            --shadow: none;
-        }
-
+        /* EXACT SAME CSS FROM INDEX.HTML */
+        :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --input-bg: #FFFFFF; --surface: #FFFFFF; --radius: 20px; --font: 'Inter', sans-serif; --font-head: 'Playfair Display', serif; --shadow: 0 10px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
+        [data-theme="dark"] { --bg: #0F1115; --text: #F3F4F6; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #2D3748; --input-bg: #1A202C; --surface: #1A202C; --shadow: none; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            background-color: var(--bg); color: var(--text); font-family: var(--font);
-            min-height: 100vh; overflow-x: hidden; 
-            transition: background 0.3s, color 0.3s;
-            padding-bottom: 20px;
-        }
-
-        /* HEADER */
-        header {
-            padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass);
-            border-bottom: 1px solid var(--border);
-        }
+        body { background-color: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-x: hidden; transition: background 0.3s, color 0.3s; padding-bottom: 20px; }
+        header { padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 100; background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass); border-bottom: 1px solid var(--border); }
         [data-theme="dark"] header { background: rgba(15, 17, 21, 0.7); }
-
         .logo-group { cursor: pointer; display: flex; flex-direction: column; text-decoration: none; color: inherit; line-height: 1; }
         .logo { font-family: var(--font-head); font-weight: 900; font-size: 2rem; letter-spacing: -1px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .logo-sub { font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; color: var(--text); opacity: 0.8; }
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
         .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
-
-        /* MAIN & LIST STYLES */
         main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; }
         .hero { text-align: center; margin-bottom: 35px; width: 100%; }
         .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
-        
         .back-btn { background: none; border: none; font-size: 1rem; color: var(--sub-text); cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; margin-bottom: 15px; align-self: flex-start; }
-        
-        .recipe-card {
-            background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
-            padding: 20px; margin-bottom: 15px; width: 100%; cursor: pointer;
-            transition: 0.3s; position: relative; overflow: hidden;
-        }
+        .recipe-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 15px; width: 100%; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
         .recipe-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .rc-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 5px; font-family: var(--font-head); }
         .rc-desc { color: var(--sub-text); font-size: 0.9rem; line-height: 1.4; }
         .rc-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--accent); font-weight: 900; font-size: 1.5rem; }
-
-        /* LOADING */
         .loader-screen { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .loader-screen.hidden { display: none; }
         .spinner { font-size: 3rem; animation: spin 2s infinite; display: block; margin-bottom: 20px; }
+        /* NEW: Style for the loading tip */
+        .loader-tip { margin-top: 30px; padding: 15px 25px; background: rgba(255, 69, 0, 0.1); color: var(--text); border-radius: 12px; font-size: 0.9rem; max-width: 80%; line-height: 1.5; font-style: italic; animation: fadeIn 0.5s ease; border: 1px solid var(--accent); }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-
     <header>
         <div class="logo-group" onclick="window.location.href='index.html'">
             <div class="logo">AMT<span>.</span></div>
@@ -99,6 +51,8 @@
         <span class="spinner">🥘</span>
         <h2 style="font-family: var(--font-head);">Бодож байна...</h2>
         <p style="color:var(--sub-text); margin-top:10px;">Түр хүлээнэ үү</p>
+        
+        <div class="loader-tip" id="loader-tip">💡 Зөвлөгөө: Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал шүүслэг болдог.</div>
     </div>
 
     <main id="main-content" style="display:none;">
@@ -113,8 +67,21 @@
     <script>
         const lvlNames = ["Анхан", "Сурагч", "Дундаж", "Сайн", "Pro"];
         
+        // NEW: Tips Array
+        const loadingTips = [
+            "💡 Зөвлөгөө: Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал илүү шүүслэг болдог.",
+            "💡 Зөвлөгөө: Гоймон чанахдаа усандаа давс хангалттай хийвэл амт нь илүү тодорно.",
+            "💡 Зөвлөгөө: Сонгино хэрчихдээ хүйтэн усаар хутгаа норговол нүд cayхгүй.",
+            "💡 Зөвлөгөө: Шөл давстай болчихвол түүхий төмс хийж хэсэг буцалгаарай.",
+            "💡 Зөвлөгөө: Өндөг чанахдаа усанд нь халбага уксус хийвэл хальслахад амархан.",
+            "💡 Зөвлөгөө: Ногоогоо хэт болгохгүйн тулд буцалж буй уснаас гаргаад шууд мөстэй усанд сой.",
+            "💡 Зөвлөгөө: Сармисны хальсыг амархан арилгахын тулд хутганы хажуугаар зөөлөн дар.",
+            "💡 Зөвлөгөө: Махаа хөндлөн судал дагуу хэрчвэл зажлахад зөөлөн байдаг."
+        ];
+
         window.onload = () => {
             if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
+            rotateTips(); // Start rotating tips
             generateList();
         };
 
@@ -124,15 +91,27 @@
             localStorage.setItem('theme', d ? 'light' : 'dark'); 
         }
 
+        // NEW: Function to change tips every 3 seconds
+        function rotateTips() {
+            const tipEl = document.getElementById('loader-tip');
+            let i = 0;
+            // Set random start
+            i = Math.floor(Math.random() * loadingTips.length);
+            tipEl.innerText = loadingTips[i];
+
+            setInterval(() => {
+                i = (i + 1) % loadingTips.length;
+                tipEl.innerText = loadingTips[i];
+            }, 3000); // Change every 3 seconds
+        }
+
         async function generateList() {
-            // 1. Get data passed from index.html
             const state = JSON.parse(localStorage.getItem('amt_state'));
             if(!state) {
                 window.location.href = 'index.html';
                 return;
             }
 
-            // 2. Build Prompt
             const promptText = `
             Role: Pro Chef. Language: MONGOLIAN.
             Context: Create 5 distinct recipe ideas based on these inputs:
@@ -148,7 +127,6 @@
             `;
 
             try {
-                // 3. Call OpenAI via Vercel Backend
                 const response = await fetch('/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -158,13 +136,11 @@
                 
                 if (data.output) {
                     let raw = data.output;
-                    // Clean up markdown if AI adds it
                     raw = raw.replace(/```json/g, '').replace(/```/g, '').trim();
                     const recipes = JSON.parse(raw);
                     
                     renderRecipeList(recipes);
                     
-                    // Show Content
                     document.getElementById('loader-screen').classList.add('hidden');
                     document.getElementById('main-content').style.display = 'flex';
                 }
@@ -186,7 +162,6 @@
                     <div class="rc-desc">${r.desc}</div>
                     <div class="rc-arrow">→</div>
                 `;
-                // On click: Save selected recipe name and go to Detail page
                 card.onclick = () => {
                     localStorage.setItem('amt_selected_recipe', r.title);
                     window.location.href = 'detail.html';
