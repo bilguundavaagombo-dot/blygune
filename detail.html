@@ -47,7 +47,7 @@
     <header>
         <div class="logo-group" onclick="window.location.href='index.html'">
             <div class="logo">AMT<span>.</span></div>
-            <div class="logo-sub">Action • Method • Technique</div>
+            <div class="logo-sub">Үйлдэл • Арга барил • Техник</div>
         </div>
         <div class="header-actions">
             <button class="icon-btn" onclick="toggleTheme()">◑</button>
@@ -96,10 +96,12 @@
             const tipEl = document.getElementById('loader-tip');
             let i = Math.floor(Math.random() * loadingTips.length);
             tipEl.innerText = loadingTips[i];
+            
+            // CHANGED: 8000ms (8 seconds)
             setInterval(() => {
                 i = (i + 1) % loadingTips.length;
                 tipEl.innerText = loadingTips[i];
-            }, 3000); 
+            }, 8000); 
         }
 
         async function getFullRecipe() {
@@ -112,28 +114,42 @@
             }
 
             const skillName = lvlNames[state.skill-1];
-            
-            // --- STRICT MONGOLIAN LANGUAGE PROMPT ---
-            const promptText = `
-            Role: Native Mongolian Professional Chef (Not a Robot).
-            Task: Write a cooking recipe for "${title}".
-            Target Audience: ${skillName} (${state.skill}/5).
-            
-            CRITICAL LANGUAGE RULES (MUST FOLLOW):
-            1. DO NOT translate word-for-word from English. Write directly in Mongolian.
-            2. GRAMMAR: Use standard recipe flow (e.g., "Махаа хэрчинэ", "Хуурна", "Буцалгана"). Do NOT use "Хийх хэрэгтэй" or "Хийгээрэй".
-            3. TONE: Natural, expert, and appetizing. Avoid robotic connecting words like "Энэ нь" or "Тэгээд".
-            4. VOCABULARY: Use correct culinary terms (Шимгээнэ, Агшаана, Хуурна, Жигнэнэ).
+            let visual = "";
 
-            CLARITY RULES:
-            - ${state.skill <= 2 ? 'Explain simply using visual cues (e.g., "size of a thumb").' : 'Use professional chef terminology.'}
+            if (state.skill <= 2) {
+                visual = "EXPLAIN LIKE I AM 5. Use visual size comparisons (e.g., 'size of a tennis ball'). Avoid chef jargon.";
+            }
+
+            // --- STRICT "NO ENGLISH" PROMPT FOR DETAIL VIEW ---
+            const promptText = `
+            Role: Experienced Mongolian Cooking Instructor.
+            Task: Write a detailed cooking guide for: "${title}".
+            Target Audience Skill: ${skillName} (${state.skill}/5).
+            
+            CRITICAL LANGUAGE RULES (ZERO ENGLISH ALLOWED):
+            1. OUTPUT MUST BE 100% MONGOLIAN (Cyrillic). 
+            2. Do NOT use English headers like "Ingredients". Use "Орц".
+            3. Do NOT use English headers like "Instructions". Use "Хийх дараалал".
+            4. Do NOT use English headers like "Intro". Use "Товч танилцуулга".
+            5. Translate ALL culinary terms (Sauté -> Хуурах, Garnish -> Чимэглэх).
+
+            CONTENT RULES:
+            1. Tone: Natural, native speaker, appetizing.
+            2. Clarity: ${visual}
+            3. Structure:
+               - Appetizing Intro (1 sentence).
+               - Ingredients (Metric).
+               - Tools.
+               - Step-by-step instructions (Numbered).
+               - Chef's Tip.
 
             OUTPUT FORMAT: 
             Raw HTML body only. 
-            <h3>Intro</h3> (1 appetizing sentence)
-            <h3>Орц</h3> (Ingredients in metric)
-            <h3>Хийх дараалал</h3> (Numbered list <ol>, clear steps)
-            <strong>Chef's Tip</strong> (At the end)
+            <h3>Танилцуулга</h3> 
+            <h3>Орц</h3> 
+            <h3>Хэрэгсэл</h3>
+            <h3>Хийх дараалал</h3> (<ol>)
+            <strong>Тогоочийн зөвлөгөө</strong>
             NO Markdown. NO <html> tags.
             `;
 
