@@ -47,10 +47,10 @@
         header {
             padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;
             position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass);
+            background: rgba(255, 255, 255, 0.6); backdrop-filter: var(--glass);
             border-bottom: 1px solid var(--border);
         }
-        [data-theme="dark"] header { background: rgba(15, 17, 21, 0.7); }
+        [data-theme="dark"] header { background: rgba(15, 17, 21, 0.6); }
 
         .logo-group { cursor: pointer; display: flex; flex-direction: column; text-decoration: none; color: inherit; line-height: 1; }
         .logo { font-family: var(--font-head); font-weight: 900; font-size: 2rem; letter-spacing: -1px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -58,7 +58,7 @@
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
         .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
-        /* VIEW TRANSITIONS */
+        /* VIEW MANAGEMENT */
         .view-section { display: none; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; animation: fadeIn 0.4s ease; }
         .view-section.active { display: flex; flex-direction: column; align-items: center; }
 
@@ -72,7 +72,7 @@
         .tag { background: var(--surface); border: 1px solid var(--border); padding: 10px 20px; border-radius: 50px; font-weight: 600; color: var(--text); cursor: default; display: flex; align-items: center; gap: 8px; animation: pop 0.3s ease; }
         .section-label { font-size: 0.8rem; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: 1px; margin: 30px 0 12px 0; display: block; width: 100%; }
 
-        /* RECIPE CARD STYLES */
+        /* RECIPE CARDS */
         .recipe-card {
             background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
             padding: 20px; margin-bottom: 15px; width: 100%; cursor: pointer;
@@ -83,7 +83,7 @@
         .rc-desc { color: var(--sub-text); font-size: 0.9rem; line-height: 1.4; }
         .rc-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--accent); font-weight: 900; font-size: 1.5rem; }
 
-        /* DETAIL VIEW STYLES */
+        /* DETAIL VIEW */
         .detail-header { width: 100%; margin-bottom: 20px; }
         .back-btn { background: none; border: none; font-size: 1rem; color: var(--sub-text); cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; margin-bottom: 15px; }
         .detail-title { font-size: 2.2rem; font-family: var(--font-head); font-weight: 900; color: var(--text); line-height: 1.1; margin-bottom: 10px; }
@@ -91,8 +91,14 @@
         .detail-content h3 { color: var(--accent); margin: 25px 0 15px 0; font-size: 1.3rem; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
         .detail-content ul { padding-left: 20px; margin-bottom: 20px; }
         .detail-content li { margin-bottom: 10px; color: var(--text); }
+        .detail-content strong { color: var(--text); font-weight: 800; }
 
-        /* GRIDS & BARS */
+        /* LOADING */
+        .loader-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .loader-screen.active { display: flex; }
+        .spinner { font-size: 3rem; animation: spin 2s infinite; display: block; margin-bottom: 20px; }
+
+        /* UI ELEMENTS */
         .style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; width: 100%; }
         .style-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 5px; align-items: center; }
         .style-chip.selected { background: var(--text); color: var(--bg); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
@@ -101,10 +107,8 @@
         .lvl-step.active { background: var(--text); color: var(--bg); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
         .level-desc { text-align: center; font-size: 0.9rem; color: var(--accent); margin-top: 10px; font-weight: 600; font-style: italic; min-height: 24px; width: 100%; }
 
-        /* PANTRY */
         .pantry-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 25px; margin-top: 15px; width: 100%; }
         .pantry-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .pantry-title { font-weight: 700; font-size: 1rem; }
         .switch { position: relative; display: inline-block; width: 48px; height: 26px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .4s; border-radius: 34px; }
@@ -116,33 +120,17 @@
         .p-chip { padding: 8px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; font-size: 0.85rem; font-weight: 600; color: var(--sub-text); cursor: pointer; transition: 0.2s; user-select: none; }
         .p-chip.active { background: var(--accent-grad); color: white; border: none; box-shadow: 0 4px 10px rgba(255, 69, 0, 0.2); }
 
-        /* DIETARY & CALC */
-        .dietary-section { width: 100%; margin-bottom: 30px; }
-        .filters { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; margin-top: 10px; }
-        .filter-chip { padding: 10px 18px; border-radius: 14px; background: var(--input-bg); color: var(--sub-text); font-size: 0.9rem; cursor: pointer; border: 1px solid var(--border); transition: 0.2s; font-weight: 600; }
-        .filter-chip.selected { background: var(--text); color: var(--bg); border-color: var(--text); }
-        .custom-diet-input { border: 1px dashed var(--sub-text); background: transparent; color: var(--text); padding: 10px 16px; border-radius: 14px; font-family: var(--font); font-size: 0.9rem; outline: none; width: 100px; transition: 0.3s; }
-        .custom-diet-input:focus { width: 140px; border-color: var(--accent); border-style: solid; }
-        .calc-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 25px; margin-top: 30px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .counter { display: flex; align-items: center; gap: 15px; }
-        .count-btn { width: 35px; height: 35px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; color: var(--text); }
-        .count-val { font-size: 1.4rem; font-weight: 800; min-width: 30px; text-align: center; }
-        .tips-box { margin-top: 20px; width: 100%; padding: 15px; border-radius: 16px; background: linear-gradient(135deg, #FF4500, #FF8C00); color: white; text-align: center; font-size: 0.95rem; line-height: 1.5; font-style: italic; box-shadow: var(--shadow); }
-
-        /* BOTTOM BAR */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px; background: rgba(255,255,255,0.7); backdrop-filter: var(--glass); border-top: 1px solid var(--border); display: flex; justify-content: center; z-index: 900; }
         [data-theme="dark"] .bottom-nav { background: rgba(15, 23, 42, 0.7); }
         .btn-continue { width: 100%; max-width: 600px; height: 65px; border-radius: 35px; background: var(--text); color: var(--bg); border: none; font-size: 1.1rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 0 35px; box-shadow: 0 15px 30px rgba(0,0,0,0.15); transition: 0.3s; }
         .btn-continue:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        /* MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 1100; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-card { width: 90%; max-width: 600px; max-height: 85vh; background: var(--bg); border-radius: 24px; padding: 30px; transform: scale(0.9); opacity: 0; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); overflow-y: auto; border: 1px solid var(--border); }
         .modal-overlay.active .modal-card { transform: scale(1); opacity: 1; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .modal-title { font-size: 1.4rem; font-weight: 900; }
-        .btn-close { width: 40px; height: 40px; border-radius: 50%; background: var(--border); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text); display: flex; align-items: center; justify-content: center; }
+        .btn-close { width: 40px; height: 40px; border-radius: 50%; background: var(--border); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text); display: flex; align-items: center; justify-content: center; float: right; }
+        
         .taste-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 30px; }
         .taste-chip { padding: 18px; border-radius: 16px; background: var(--surface); border: 2px solid var(--border); text-align: center; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: 0.2s; }
         .taste-chip.selected { background: var(--text); color: var(--bg); border-color: var(--text); }
@@ -153,10 +141,16 @@
         .btn-gen-gourmet { background: var(--accent); color: white; }
         .btn-gen-easy { background: var(--surface); color: var(--text); border: 2px solid var(--border); }
 
-        /* LOADING SCREEN */
-        .loader-screen { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        .loader-screen.active { display: flex; }
-        .spinner { font-size: 3rem; animation: spin 2s infinite; display: block; margin-bottom: 20px; }
+        .filters { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; margin-top: 10px; margin-bottom: 30px; }
+        .filter-chip { padding: 10px 18px; border-radius: 14px; background: var(--input-bg); color: var(--sub-text); font-size: 0.9rem; cursor: pointer; border: 1px solid var(--border); transition: 0.2s; font-weight: 600; }
+        .filter-chip.selected { background: var(--text); color: var(--bg); border-color: var(--text); }
+        .custom-diet-input { border: 1px dashed var(--sub-text); background: transparent; color: var(--text); padding: 10px 16px; border-radius: 14px; font-family: var(--font); font-size: 0.9rem; outline: none; width: 100px; transition: 0.3s; }
+        
+        .calc-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 25px; margin-top: 30px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .counter { display: flex; align-items: center; gap: 15px; }
+        .count-btn { width: 35px; height: 35px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; color: var(--text); }
+        .count-val { font-size: 1.4rem; font-weight: 800; min-width: 30px; text-align: center; }
+        .tips-box { margin-top: 20px; width: 100%; padding: 15px; border-radius: 16px; background: linear-gradient(135deg, #FF4500, #FF8C00); color: white; text-align: center; font-size: 0.95rem; line-height: 1.5; font-style: italic; box-shadow: var(--shadow); }
 
         @keyframes pop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         @keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
@@ -166,10 +160,10 @@
 <body>
 
     <header>
-        <a href="index.html" class="logo-group">
+        <div class="logo-group" onclick="goHome()">
             <div class="logo">AMT<span>.</span></div>
             <div class="logo-sub">Action • Method • Technique</div>
-        </a>
+        </div>
         <div class="header-actions">
             <button class="icon-btn" onclick="toggleTheme()">◑</button>
         </div>
@@ -190,10 +184,9 @@
         <div class="input-wrapper">
             <input type="text" id="main-input" class="main-input" placeholder="Өндөг, Мах, Төмс..." onkeypress="handleEnter(event)">
         </div>
-
         <div class="tags-area" id="tags-area"></div>
 
-        <span class="section-label">🍽️ Хоолны төрөл (Дээд тал нь 3)</span>
+        <span class="section-label">🍽️ Хоолны төрөл (Max 3)</span>
         <div class="style-grid" id="style-grid"></div>
 
         <span class="section-label">👨‍🍳 Хоол хийх чадвар</span>
@@ -204,9 +197,8 @@
             <div class="lvl-step" onclick="setLevel(4)" id="lvl-4"><span class="lvl-emoji">🔪</span><span class="lvl-label">Сайн</span></div>
             <div class="lvl-step" onclick="setLevel(5)" id="lvl-5"><span class="lvl-emoji">👨‍🍳</span><span class="lvl-label">Pro</span></div>
         </div>
-        <div class="level-desc" id="level-desc">Өдөр тутмын хоолыг сайн хийдэг.</div>
 
-        <span class="section-label">🥫 Гэрийн нөөц / Амтлагч</span>
+        <span class="section-label">🥫 Гэрийн нөөц</span>
         <div class="level-bar" style="margin-bottom:10px;">
             <div class="lvl-step" onclick="setPantryLvl(1)" id="pl-1"><span class="lvl-emoji">🧂</span><span class="lvl-label">Цөөн</span></div>
             <div class="lvl-step active" onclick="setPantryLvl(2)" id="pl-2"><span class="lvl-emoji">🧅</span><span class="lvl-label">Дундаж</span></div>
@@ -215,7 +207,7 @@
             <div class="lvl-step" onclick="setPantryLvl(5)" id="pl-5"><span class="lvl-emoji">🏆</span><span class="lvl-label">Бүрэн</span></div>
         </div>
 
-        <div class="pantry-box" id="pantry-box">
+        <div class="pantry-box">
             <div class="pantry-header">
                 <span class="pantry-title">Идэвхтэй амтлагчууд</span>
                 <label class="switch">
@@ -224,35 +216,28 @@
                 </label>
             </div>
             <div class="pantry-content" id="pantry-content">
-                <p style="font-size:0.8rem; color:var(--sub-text); margin-bottom:10px;">Байхгүй зүйлсээ дарж идэвхгүй болгоно уу:</p>
                 <div class="pantry-chips-grid" id="pantry-chips-area"></div>
             </div>
         </div>
 
-        <div class="dietary-section">
-            <span class="section-label">Харшил / Цээр</span>
-            <div class="filters" id="dietary-filters">
-                <div class="filter-chip" onclick="toggleFilter(this, 'Самар ороогүй')">🥜 Самар</div>
-                <div class="filter-chip" onclick="toggleFilter(this, 'Цавуулаггүй')">🍞 Цавуулаг</div>
-                <div class="filter-chip" onclick="toggleFilter(this, 'Гахайн махгүй')">🐷 Гахайн мах</div>
-                <div class="filter-chip" onclick="toggleFilter(this, 'Сүүгүй')">🥛 Сүү</div>
-                <div class="filter-chip" onclick="toggleFilter(this, 'Сахаргүй')">🍬 Сахар</div>
-                <div class="filter-chip" onclick="toggleFilter(this, 'Өндөггүй')">🥚 Өндөг</div>
-                <div class="filter-chip" onclick="toggleFilter(this, 'Халуун ногоогүй')">🌶️ Халуун ногоо</div>
-                <input type="text" class="custom-diet-input" placeholder="+ Бусад" onkeypress="handleCustomDiet(event)">
-            </div>
+        <div class="filters" id="dietary-filters">
+            <div class="filter-chip" onclick="toggleFilter(this, 'Самар ороогүй')">🥜 Самар</div>
+            <div class="filter-chip" onclick="toggleFilter(this, 'Гахайн махгүй')">🐷 Гахайн мах</div>
+            <div class="filter-chip" onclick="toggleFilter(this, 'Сүүгүй')">🥛 Сүү</div>
+            <div class="filter-chip" onclick="toggleFilter(this, 'Сахаргүй')">🍬 Сахар</div>
+            <div class="filter-chip" onclick="toggleFilter(this, 'Халуун ногоогүй')">🌶️ Халуун ногоо</div>
+            <input type="text" class="custom-diet-input" placeholder="+ Бусад" onkeypress="handleCustomDiet(event)">
         </div>
 
         <div class="calc-box">
-            <span class="calc-title">ТООЦООЛОЛ (Хүний тоо)</span>
+            <span class="calc-title">ХҮНИЙ ТОО</span>
             <div class="counter">
                 <button class="count-btn" onclick="updServ(-1)">−</button>
                 <span class="count-val" id="serv-val">2</span>
                 <button class="count-btn" onclick="updServ(1)">+</button>
             </div>
         </div>
-
-        <div class="tips-box" id="daily-tip">Зөвлөгөө уншиж байна...</div>
+        <div class="tips-box" id="daily-tip">Зөвлөгөө...</div>
     </main>
 
     <main id="view-list" class="view-section">
@@ -278,12 +263,10 @@
 
     <div class="modal-overlay" id="modal-overlay" onclick="closeSettings(event)">
         <div class="modal-card" id="settings-modal" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <h2 class="modal-title">Эцсийн Тохиргоо</h2>
-                <button class="btn-close" onclick="closeSettings()">&times;</button>
-            </div>
-
-            <span class="section-label" style="margin-top:0;">АМТНЫ ТӨРӨЛ (СОНГОХ - 2 хүртэл)</span>
+            <button class="btn-close" onclick="closeSettings()">&times;</button>
+            <h2 class="modal-title" style="margin-bottom:20px;">Эцсийн Тохиргоо</h2>
+            
+            <span class="section-label" style="margin-top:0;">АМТНЫ ТӨРӨЛ</span>
             <div class="taste-grid" id="taste-grid"></div>
 
             <span class="section-label">ТӨХӨӨРӨМЖ</span>
@@ -291,10 +274,10 @@
 
             <div style="margin-top:30px;">
                 <button class="btn-generate btn-gen-gourmet" onclick="generateList('gourmet')">
-                    <span>✨ 5 Тансаг Цэс</span>
+                    <span>✨ 5 Тансаг Жор</span>
                 </button>
                 <button class="btn-generate btn-gen-easy" onclick="generateList('easy')">
-                    <span>⚡ 5 Хурдан Цэс</span>
+                    <span>⚡ 5 Хурдан Жор</span>
                 </button>
             </div>
         </div>
@@ -309,12 +292,11 @@
             ["Кетчуп", "Майонез", "Томат паст", "Гич", "Сод"],
             ["Гурвалжин будаа", "Гоймон", "Цардуул", "Хуурай сүү", "Гүнжид"]
         ];
-        const styles = [ {n:"Тогооч", e:"👨‍🍳"}, {n:"Монгол", e:"🇲🇳"}, {n:"Ази", e:"🥢"}, {n:"Итали", e:"🍝"}, {n:"Франц", e:"🥐"}, {n:"Мексик", e:"🌮"}, {n:"Шөл", e:"🍲"}, {n:"Өглөөний", e:"🍳"}, {n:"Эрүүл", e:"🥗"}, {n:"Түргэн", e:"🍔"}, {n:"Цагаан хоол", e:"🥬"}, {n:"Амттан", e:"🍰"} ];
+        const styles = [ {n:"Тогооч", e:"👨‍🍳"}, {n:"Монгол", e:"🇲🇳"}, {n:"Ази", e:"🥢"}, {n:"Итали", e:"🍝"}, {n:"Франц", e:"🥐"}, {n:"Шөл", e:"🍲"}, {n:"Өглөөний", e:"🍳"}, {n:"Эрүүл", e:"🥗"}, {n:"Түргэн", e:"🍔"}, {n:"Цагаан хоол", e:"🥬"}];
         const tastes = ["Хэвийн", "Зөөлөн", "Халуун ногоотой", "Баялаг/Umami", "Чихэрлэг", "Исгэлэн"];
-        const appliances = ["Плетка", "Шарах шүүгээ", "Air Fryer", "Битүү чанагч", "Агшаагч", "Блендер", "Грил", "Талх шарагч"];
-        const lvlDescs = ["Дэлгэрэнгүй заавар хэрэгтэй.", "Энгийн хоол хийж чаддаг.", "Өдөр тутмын хоол сайн хийдэг.", "Нарийн ажиллагаатай хоол.", "Мэргэжлийн түвшний мэдлэгтэй."];
+        const appliances = ["Плетка", "Шарах шүүгээ", "Air Fryer", "Битүү чанагч", "Агшаагч", "Блендер"];
         const lvlNames = ["Анхан", "Сурагч", "Дундаж", "Сайн", "Pro"];
-
+        
         let state = { ings: [], styles: [], skill: 3, pantryLvl: 2, pantryActiveItems: [], apps: [], diet: [], servings: 2, selectedTastes: ['Хэвийн'] };
 
         window.onload = () => {
@@ -328,7 +310,7 @@
             document.getElementById('appliance-area').innerHTML = appliances.map(a => `<div class="app-chip ${state.apps.includes(a) ? 'selected' : ''}" onclick="toggleApp('${a}')">${a}</div>`).join('');
         }
 
-        // --- CORE ---
+        // --- CORE LOGIC ---
         function handleEnter(e) { if(e.key === 'Enter' && e.target.value) { addIng(e.target.value); e.target.value=''; } }
         function addIng(val) { val = val.charAt(0).toUpperCase() + val.slice(1); if(!state.ings.includes(val)) state.ings.push(val); renderTags(); }
         function removeIng(val) { state.ings = state.ings.filter(x => x !== val); renderTags(); }
@@ -339,27 +321,16 @@
         }
 
         function toggleStyle(val) { if(state.styles.includes(val)) state.styles = state.styles.filter(x => x !== val); else if(state.styles.length < 3) state.styles.push(val); renderUI(); }
-        function setLevel(l) { state.skill = l; document.querySelectorAll('.level-bar .lvl-step').forEach((el, i) => i+1 === l ? el.classList.add('active') : el.classList.remove('active')); document.getElementById('level-desc').innerText = lvlDescs[l-1]; }
-        
-        function setPantryLvl(l) {
-            state.pantryLvl = l;
-            for(let i=1; i<=5; i++) { const el = document.getElementById('pl-'+i); if(i===l) el.classList.add('active'); else el.classList.remove('active'); }
-            loadPantry(l);
-        }
-        function loadPantry(lvl) {
-            let items = []; for(let i=0; i<lvl; i++) items = items.concat(pantryData[i]);
-            state.pantryActiveItems = [...new Set(items)]; renderPantryChips();
-        }
-        function renderPantryChips() { document.getElementById('pantry-chips-area').innerHTML = state.pantryActiveItems.map(item => `<div class="p-chip active" onclick="togglePantryItem(this)">${item}</div>`).join(''); }
-        function togglePantryItem(el) { el.classList.toggle('active'); }
-        function togglePantry() { const on = document.getElementById('pantry-switch').checked; document.getElementById('pantry-content').classList.toggle('disabled', !on); }
-
+        function setLevel(l) { state.skill = l; document.querySelectorAll('.level-bar .lvl-step').forEach((el, i) => i+1 === l ? el.classList.add('active') : el.classList.remove('active')); }
+        function setPantryLvl(l) { state.pantryLvl = l; for(let i=1; i<=5; i++) { document.getElementById('pl-'+i).classList.toggle('active', i===l); } loadPantry(l); }
+        function loadPantry(lvl) { let items = []; for(let i=0; i<lvl; i++) items = items.concat(pantryData[i]); state.pantryActiveItems = [...new Set(items)]; renderPantryChips(); }
+        function renderPantryChips() { document.getElementById('pantry-chips-area').innerHTML = state.pantryActiveItems.map(item => `<div class="p-chip active" onclick="this.classList.toggle('active')">${item}</div>`).join(''); }
+        function togglePantry() { document.getElementById('pantry-content').classList.toggle('disabled', !document.getElementById('pantry-switch').checked); }
         function toggleFilter(el, type) { if(state.diet.includes(type)) { state.diet = state.diet.filter(d => d !== type); el.classList.remove('selected'); } else { state.diet.push(type); el.classList.add('selected'); } }
         function handleCustomDiet(e) { if (e.key === 'Enter' && e.target.value.trim()) { state.diet.push(e.target.value.trim()); e.target.value = ''; alert("Нэмэгдлээ"); } }
         function updServ(n) { state.servings = Math.max(1, state.servings + n); document.getElementById('serv-val').innerText = state.servings; }
         function toggleApp(val) { state.apps.includes(val) ? state.apps = state.apps.filter(x=>x!==val) : state.apps.push(val); renderUI(); }
         function setTaste(val) { if (state.selectedTastes.includes(val)) state.selectedTastes = state.selectedTastes.filter(t => t !== val); else if (state.selectedTastes.length < 2) state.selectedTastes.push(val); renderUI(); }
-        
         function randomTip() { const tips = ["Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал шүүслэг болдог.", "Гоймон чанахдаа усандаа давс хангалттай хийвэл амт нь илүү тодорно."]; document.getElementById('daily-tip').innerText = "💡 " + tips[Math.floor(Math.random()*tips.length)]; }
         function toggleTheme() { const d = document.body.getAttribute('data-theme') === 'dark'; document.body.setAttribute('data-theme', d ? 'light' : 'dark'); localStorage.setItem('theme', d ? 'light' : 'dark'); }
         function openSettings() { document.getElementById('modal-overlay').classList.add('active'); document.getElementById('settings-modal').classList.add('active'); }
@@ -369,6 +340,7 @@
         function switchView(viewId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
+            // Hide bottom nav if not home
             document.getElementById('bottom-nav').style.display = (viewId === 'view-home') ? 'flex' : 'none';
             window.scrollTo(0,0);
         }
@@ -386,7 +358,7 @@
                 document.querySelectorAll('.p-chip.active').forEach(c => activePantry.push(c.innerText));
             }
 
-            // INJECT SKILL LEVEL HERE
+            // Prompt specifically asks for JSON Array
             const promptText = `
             Role: Pro Chef. Language: MONGOLIAN.
             Context: Create 5 distinct recipe ideas based on these inputs:
@@ -411,6 +383,7 @@
                 
                 if (data.candidates && data.candidates[0].content) {
                     let raw = data.candidates[0].content.parts[0].text;
+                    // Clean up markdown if AI adds it
                     raw = raw.replace(/```json/g, '').replace(/```/g, '').trim();
                     const recipes = JSON.parse(raw);
                     
@@ -436,6 +409,7 @@
                     <div class="rc-desc">${r.desc}</div>
                     <div class="rc-arrow">→</div>
                 `;
+                // Add click event to fetch details for THIS recipe
                 card.onclick = () => getFullRecipe(r.title);
                 container.appendChild(card);
             });
@@ -446,20 +420,29 @@
             document.getElementById('loader-text').innerText = "Жорыг нарийвчилж байна...";
             document.getElementById('loader-screen').classList.add('active');
 
-            // DYNAMIC PROMPT BASED ON SKILL LEVEL
-            const skillLevel = lvlNames[state.skill-1];
+            // --- SKILL LEVEL LOGIC INJECTED HERE ---
+            const skillName = lvlNames[state.skill-1];
+            let instructionStyle = "";
             
+            if (state.skill <= 2) {
+                instructionStyle = "EXPLAIN LIKE I'M 5. Use visual size comparisons (e.g., 'size of a tennis ball'). Avoid technical jargon.";
+            } else if (state.skill === 5) {
+                instructionStyle = "PROFESSIONAL CHEF. Use proper culinary terms (e.g., 'julienne', 'sear', 'deglaze').";
+            } else {
+                instructionStyle = "STANDARD home cook instructions.";
+            }
+
             const promptText = `
             Role: Cooking Instructor. Language: MONGOLIAN.
             Task: Create a detailed guide for the recipe: "${title}".
-            User Skill Level: ${skillLevel} (1=Beginner, 5=Pro).
+            User Skill Level: ${skillName}.
+            Instruction Style: ${instructionStyle}
             
             REQUIREMENTS:
-            1. ADJUSTMENT: Write instructions specifically for a "${skillLevel}" cook. ${state.skill <= 2 ? 'Explain everything simply, use visual size comparisons (e.g. size of tennis ball), avoid jargon.' : 'Use standard cooking terminology.'}
-            2. INGREDIENTS: List precise quantities.
-            3. PREP: List equipment needed.
-            4. STEPS: Granular, numbered steps.
-            5. TIMING: Exact minutes for every step.
+            1. INGREDIENTS: List precise quantities.
+            2. PREP: List equipment needed.
+            3. STEPS: Granular, numbered steps matching the skill level.
+            4. TIMING: Exact minutes for every step.
             
             FORMAT: HTML (Use <h3> for sections, <ul>/<li> for lists, <strong> for emphasis). NO Markdown.
             `;
