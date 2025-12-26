@@ -6,7 +6,7 @@
     <title>AMT - Жорууд</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* EXACT SAME CSS FROM INDEX.HTML */
+        /* EXACT SAME CSS FROM INDEX.HTML + NEW STYLES FOR HEALTH INFO */
         :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --input-bg: #FFFFFF; --surface: #FFFFFF; --radius: 20px; --font: 'Inter', sans-serif; --font-head: 'Playfair Display', serif; --shadow: 0 10px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
         [data-theme="dark"] { --bg: #0F1115; --text: #F3F4F6; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #2D3748; --input-bg: #1A202C; --surface: #1A202C; --shadow: none; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -22,11 +22,20 @@
         .hero { text-align: center; margin-bottom: 35px; width: 100%; }
         .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
         .back-btn { background: none; border: none; font-size: 1rem; color: var(--sub-text); cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; margin-bottom: 15px; align-self: flex-start; }
+        
         .recipe-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 15px; width: 100%; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
         .recipe-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .rc-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 5px; font-family: var(--font-head); }
-        .rc-desc { color: var(--sub-text); font-size: 0.9rem; line-height: 1.4; }
+        .rc-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 8px; font-family: var(--font-head); }
+        .rc-desc { color: var(--sub-text); font-size: 0.9rem; line-height: 1.4; margin-bottom: 12px; }
+        
+        /* NEW STYLES FOR CALORIES & HEALTH */
+        .rc-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 5px; }
+        .rc-badge { font-size: 0.75rem; padding: 6px 12px; border-radius: 20px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
+        .rc-cal { background: rgba(255, 69, 0, 0.1); color: var(--accent); }
+        .rc-health { background: var(--border); color: var(--text); }
+        
         .rc-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--accent); font-weight: 900; font-size: 1.5rem; }
+
         .loader-screen { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .loader-screen.hidden { display: none; }
         .spinner { font-size: 3rem; animation: spin 2s infinite; display: block; margin-bottom: 20px; }
@@ -50,6 +59,7 @@
         <span class="spinner">🥘</span>
         <h2 style="font-family: var(--font-head);">Бодож байна...</h2>
         <p style="color:var(--sub-text); margin-top:10px;">Түр хүлээнэ үү</p>
+        
         <div class="loader-tip" id="loader-tip">💡 Зөвлөгөө: Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал шүүслэг болдог.</div>
     </div>
 
@@ -92,6 +102,7 @@
             const tipEl = document.getElementById('loader-tip');
             let i = Math.floor(Math.random() * loadingTips.length);
             tipEl.innerText = loadingTips[i];
+
             setInterval(() => {
                 i = (i + 1) % loadingTips.length;
                 tipEl.innerText = loadingTips[i];
@@ -105,32 +116,35 @@
                 return;
             }
 
-            // --- STRICT "ONLY PROVIDED INGREDIENTS" PROMPT ---
+            // --- REFINED PROMPT ---
+            // 1. Enforces FAST logic if easy.
+            // 2. Requests Calories and Health Tags.
+            // 3. Enforces SHORT Description.
             const promptText = `
             Role: Elite Mongolian Chef.
             Language: Native Mongolian (Cyrillic).
-            Task: Create 5 recipe ideas based on ONLY the user's ingredients.
+            Task: Create 5 distinct recipe ideas using ONLY: ${state.ings.join(', ')} and ${state.activePantry.join(', ')}.
 
-            USER SELECTIONS:
-            1. Main Ingredients: ${state.ings.join(', ')}
-            2. Pantry/Seasonings: ${state.activePantry.join(', ')}
-            3. Cuisine Style: ${state.styles.join(', ') || "Any"}
-            4. Cooking Skill: ${lvlNames[state.skill-1]}
-            5. Dietary Restrictions: ${state.diet.join(', ') || "None"}
-            6. Servings: ${state.servings} people
-            7. Taste Profile: ${state.selectedTastes.join(', ') || "Standard"}
-            8. Appliances Available: ${state.apps.join(', ') || "Standard Kitchen"}
-            9. Mood: ${state.mode === 'easy' ? 'Quick & Simple' : 'Gourmet'}
+            USER SETTINGS:
+            - Mood: ${state.mode === 'easy' ? 'EXTREMELY FAST (Ready in 20 mins, Minimal effort, Lazy cooking)' : 'Gourmet & Impressive'}
+            - Cuisine: ${state.styles.join(', ') || "Any"}
+            - Diet: ${state.diet.join(', ') || "None"}
+            - Servings: ${state.servings}
+            - Appliances: ${state.apps.join(', ') || "Stove"}
 
-            STRICT INGREDIENT RULES (MUST FOLLOW):
-            1. USE ONLY THE LISTED "MAIN INGREDIENTS" AND "PANTRY".
-            2. DO NOT ADD extra ingredients (no onions, no butter, no milk, no extra spices) unless they are in the User Selections lists above.
-            3. If a recipe usually needs onions but the user didn't list onions, DO NOT include onions. Adapt the recipe.
-            4. Output MUST be 100% Mongolian. No English words.
+            STRICT INGREDIENT RULES:
+            1. USE ONLY PROVIDED INGREDIENTS. Do NOT add extra stuff (No onions if not listed).
+            2. If ingredients are limited, suggest very simple dishes (e.g., Boiled meat, Fried egg).
 
-            OUTPUT FORMAT: 
-            Strict JSON Array ONLY. No Markdown.
-            [{"title": "Recipe Name in Mongolian", "desc": "Appetizing description in Mongolian."}]
+            OUTPUT FORMAT (JSON ARRAY ONLY):
+            [
+                {
+                    "title": "Recipe Name (Mongolian)", 
+                    "desc": "Very short appetizing description (Max 12 words).",
+                    "cal": "Approximate Calories (e.g. 450 ккал)",
+                    "health": "Health Benefit (e.g. Өндөр уурагтай / Витаминлаг / Эслэг ихтэй)"
+                }
+            ]
             `;
 
             try {
@@ -164,6 +178,10 @@
                 card.className = 'recipe-card';
                 card.innerHTML = `
                     <div class="rc-title">${r.title}</div>
+                    <div class="rc-meta">
+                        <span class="rc-badge rc-cal">🔥 ${r.cal}</span>
+                        <span class="rc-badge rc-health">🌿 ${r.health}</span>
+                    </div>
                     <div class="rc-desc">${r.desc}</div>
                     <div class="rc-arrow">→</div>
                 `;
