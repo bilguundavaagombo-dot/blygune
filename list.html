@@ -94,7 +94,7 @@
             let i = Math.floor(Math.random() * loadingTips.length);
             tipEl.innerText = loadingTips[i];
 
-            // CHANGED: 8000ms (8 seconds) so it's slower and easier to read
+            // 8 SECONDS
             setInterval(() => {
                 i = (i + 1) % loadingTips.length;
                 tipEl.innerText = loadingTips[i];
@@ -108,26 +108,31 @@
                 return;
             }
 
-            // --- STRICT "NO ENGLISH" PROMPT ---
+            // --- PROMPT WITH ALL USER INPUTS ---
             const promptText = `
             Role: Elite Mongolian Chef.
-            Task: Create 5 distinct recipe ideas using: ${state.ings.join(', ')}.
-            
-            CONTEXT:
-            - Pantry: ${state.activePantry.join(', ')}
-            - Cuisine: ${state.styles.join(', ') || "Холимог"}
-            - Diet: ${state.diet.join(', ')}
-            - Skill: ${lvlNames[state.skill-1]}
-            - Mood: ${state.mode === 'easy' ? 'Хурдан бөгөөд Хялбар' : 'Тансаг зэрэглэлийн'}
+            Language: Native Mongolian (Cyrillic).
+            Task: Create 5 distinct recipe ideas based on these inputs.
 
-            CRITICAL LANGUAGE RULES (ZERO ENGLISH ALLOWED):
-            1. OUTPUT MUST BE 100% MONGOLIAN (Cyrillic). 
+            USER SELECTIONS:
+            1. Main Ingredients: ${state.ings.join(', ')}
+            2. Pantry/Seasonings: ${state.activePantry.join(', ')}
+            3. Cuisine Style: ${state.styles.join(', ') || "Any"}
+            4. Cooking Skill: ${lvlNames[state.skill-1]}
+            5. Dietary Restrictions: ${state.diet.join(', ') || "None"}
+            6. Servings: ${state.servings} people
+            7. Taste Profile: ${state.selectedTastes.join(', ') || "Standard"}
+            8. Appliances Available: ${state.apps.join(', ') || "Standard Kitchen"}
+            9. Mood: ${state.mode === 'easy' ? 'Quick & Simple' : 'Gourmet'}
+
+            CRITICAL RULES:
+            1. OUTPUT MUST BE 100% MONGOLIAN. ZERO ENGLISH ALLOWED.
             2. IF YOU USE A SINGLE ENGLISH WORD, THE SYSTEM FAILS.
-            3. Translate technical terms naturally (e.g., "Sauté" -> "Хуурах", "Garnish" -> "Чимэглэх").
-            4. Descriptions must be appetizing and sound like a native Mongolian speaker wrote them.
+            3. Respect the "Appliances" and "Servings" count.
+            4. Descriptions must be appetizing.
 
             OUTPUT FORMAT: 
-            Strict JSON Array ONLY. 
+            Strict JSON Array ONLY. No Markdown.
             [{"title": "Recipe Name in Mongolian", "desc": "Appetizing description in Mongolian."}]
             `;
 
@@ -143,9 +148,7 @@
                     let raw = data.output;
                     raw = raw.replace(/```json/g, '').replace(/```/g, '').trim();
                     const recipes = JSON.parse(raw);
-                    
                     renderRecipeList(recipes);
-                    
                     document.getElementById('loader-screen').classList.add('hidden');
                     document.getElementById('main-content').style.display = 'flex';
                 }
