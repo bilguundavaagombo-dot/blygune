@@ -6,18 +6,59 @@
     <title>AMT - Хоолны Жор</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* SAME CSS AS BEFORE */
-        :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --input-bg: #FFFFFF; --surface: #FFFFFF; --radius: 20px; --font: 'Inter', sans-serif; --font-head: 'Playfair Display', serif; --shadow: 0 10px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
-        [data-theme="dark"] { --bg: #0F1115; --text: #F3F4F6; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #2D3748; --input-bg: #1A202C; --surface: #1A202C; --shadow: none; }
+        :root {
+            --bg: #F8F9FB;
+            --text: #1F2937;
+            --sub-text: #6B7280;
+            --accent: #FF4500;
+            --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%);
+            --border: #E5E7EB;
+            --input-bg: #FFFFFF;
+            --surface: #FFFFFF;
+            --radius: 20px;
+            --font: 'Inter', sans-serif;
+            --font-head: 'Playfair Display', serif;
+            --shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+            --glass: blur(14px);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0F1115;
+            --text: #F3F4F6;
+            --sub-text: #9CA3AF;
+            --accent: #FF5722;
+            --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%);
+            --border: #2D3748;
+            --input-bg: #1A202C;
+            --surface: #1A202C;
+            --shadow: none;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-x: hidden; transition: background 0.3s, color 0.3s; padding-bottom: 140px; }
-        header { padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 100; background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass); border-bottom: 1px solid var(--border); }
+
+        body {
+            background-color: var(--bg); color: var(--text); font-family: var(--font);
+            min-height: 100vh; overflow-x: hidden; 
+            transition: background 0.3s, color 0.3s;
+            padding-bottom: 140px;
+        }
+
+        /* HEADER */
+        header {
+            padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass);
+            border-bottom: 1px solid var(--border);
+        }
         [data-theme="dark"] header { background: rgba(15, 17, 21, 0.7); }
+
         .logo-group { cursor: pointer; display: flex; flex-direction: column; text-decoration: none; color: inherit; line-height: 1; }
         .logo { font-family: var(--font-head); font-weight: 900; font-size: 2rem; letter-spacing: -1px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .logo-sub { font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; color: var(--text); opacity: 0.8; }
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
         .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+        /* MAIN */
         main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; }
         .hero { text-align: center; margin-bottom: 35px; width: 100%; }
         .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
@@ -27,6 +68,8 @@
         .tags-area { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; min-height: 40px; width: 100%; }
         .tag { background: var(--surface); border: 1px solid var(--border); padding: 10px 20px; border-radius: 50px; font-weight: 600; color: var(--text); cursor: default; display: flex; align-items: center; gap: 8px; animation: pop 0.3s ease; }
         .section-label { font-size: 0.8rem; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: 1px; margin: 30px 0 12px 0; display: block; width: 100%; }
+
+        /* GRIDS & BARS */
         .style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; width: 100%; }
         .style-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 5px; align-items: center; }
         .style-chip.selected { background: var(--text); color: var(--bg); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
@@ -34,6 +77,8 @@
         .lvl-step { flex: 1; text-align: center; padding: 12px; border-radius: 14px; cursor: pointer; transition: 0.3s; color: var(--sub-text); display: flex; flex-direction: column; gap: 4px; user-select: none; }
         .lvl-step.active { background: var(--text); color: var(--bg); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
         .level-desc { text-align: center; font-size: 0.9rem; color: var(--accent); margin-top: 10px; font-weight: 600; font-style: italic; min-height: 24px; width: 100%; }
+
+        /* PANTRY */
         .pantry-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 25px; margin-top: 15px; width: 100%; }
         .pantry-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .pantry-title { font-weight: 700; font-size: 1rem; }
@@ -47,6 +92,8 @@
         .pantry-content.disabled .pantry-chips-grid { opacity: 0.3; pointer-events: none; }
         .p-chip { padding: 8px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; font-size: 0.85rem; font-weight: 600; color: var(--sub-text); cursor: pointer; transition: 0.2s; user-select: none; }
         .p-chip.active { background: var(--accent-grad); color: white; border: none; box-shadow: 0 4px 10px rgba(255, 69, 0, 0.2); }
+
+        /* DIETARY & CALC */
         .dietary-section { width: 100%; margin-bottom: 30px; }
         .filters { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; margin-top: 10px; }
         .filter-chip { padding: 10px 18px; border-radius: 14px; background: var(--input-bg); color: var(--sub-text); font-size: 0.9rem; cursor: pointer; border: 1px solid var(--border); transition: 0.2s; font-weight: 600; }
@@ -58,10 +105,14 @@
         .count-btn { width: 35px; height: 35px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; color: var(--text); }
         .count-val { font-size: 1.4rem; font-weight: 800; min-width: 30px; text-align: center; }
         .tips-box { margin-top: 20px; width: 100%; padding: 15px; border-radius: 16px; background: linear-gradient(135deg, #FF4500, #FF8C00); color: white; text-align: center; font-size: 0.95rem; line-height: 1.5; font-style: italic; box-shadow: var(--shadow); }
+
+        /* BOTTOM BAR */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px; background: rgba(255,255,255,0.7); backdrop-filter: var(--glass); border-top: 1px solid var(--border); display: flex; justify-content: center; z-index: 900; }
         [data-theme="dark"] .bottom-nav { background: rgba(15, 23, 42, 0.7); }
         .btn-continue { width: 100%; max-width: 600px; height: 65px; border-radius: 35px; background: var(--text); color: var(--bg); border: none; font-size: 1.1rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 0 35px; box-shadow: 0 15px 30px rgba(0,0,0,0.15); transition: 0.3s; }
         .btn-continue:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 1100; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-card { width: 90%; max-width: 600px; max-height: 85vh; background: var(--bg); border-radius: 24px; padding: 30px; transform: scale(0.9); opacity: 0; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); overflow-y: auto; border: 1px solid var(--border); }
@@ -78,16 +129,17 @@
         .btn-generate { width: 100%; padding: 22px; border-radius: 18px; border: none; margin-bottom: 12px; font-size: 1.1rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
         .btn-gen-gourmet { background: var(--accent); color: white; }
         .btn-gen-easy { background: var(--surface); color: var(--text); border: 2px solid var(--border); }
+
         @keyframes pop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo-group">
+        <a href="index.html" class="logo-group">
             <div class="logo">AMT<span>.</span></div>
             <div class="logo-sub">Action • Method • Technique</div>
-        </div>
+        </a>
         <div class="header-actions">
             <button class="icon-btn" onclick="toggleTheme()">◑</button>
         </div>
@@ -100,12 +152,12 @@
         </div>
 
         <div class="input-wrapper">
-            <input type="text" id="main-input" class="main-input" placeholder="Өндөг, Мах, Төмс..." onkeypress="handleEnter(event)" enterkeyhint="enter">
+            <input type="text" id="main-input" class="main-input" placeholder="Өндөг, Мах, Төмс..." onkeypress="handleEnter(event)">
         </div>
 
         <div class="tags-area" id="tags-area"></div>
 
-        <span class="section-label">🍽️ Хоолны төрөл (Max 3)</span>
+        <span class="section-label">🍽️ Хоолны төрөл (Дээд тал нь 3)</span>
         <div class="style-grid" id="style-grid"></div>
 
         <span class="section-label">👨‍🍳 Хоол хийх чадвар</span>
@@ -118,7 +170,7 @@
         </div>
         <div class="level-desc" id="level-desc">Өдөр тутмын хоолыг сайн хийдэг.</div>
 
-        <span class="section-label">🥫 Гэрийн нөөц</span>
+        <span class="section-label">🥫 Гэрийн нөөц / Амтлагч</span>
         <div class="level-bar" style="margin-bottom:10px;">
             <div class="lvl-step" onclick="setPantryLvl(1)" id="pl-1"><span class="lvl-emoji">🧂</span><span class="lvl-label">Цөөн</span></div>
             <div class="lvl-step active" onclick="setPantryLvl(2)" id="pl-2"><span class="lvl-emoji">🧅</span><span class="lvl-label">Дундаж</span></div>
@@ -142,7 +194,7 @@
         </div>
 
         <div class="dietary-section">
-            <span class="section-label">Харшил / Цээр</span>
+            <span class="section-label">Харшил </span>
             <div class="filters" id="dietary-filters">
                 <div class="filter-chip" onclick="toggleFilter(this, 'Самар ороогүй')">🥜 Самар</div>
                 <div class="filter-chip" onclick="toggleFilter(this, 'Цавуулаггүй')">🍞 Цавуулаг</div>
@@ -156,7 +208,7 @@
         </div>
 
         <div class="calc-box">
-            <span class="calc-title">ТООЦООЛОЛ (Хүний тоо)</span>
+            <span class="calc-title">Тооцоолол (Хүний тоо)</span>
             <div class="counter">
                 <button class="count-btn" onclick="updServ(-1)">−</button>
                 <span class="count-val" id="serv-val">2</span>
@@ -188,24 +240,40 @@
             <div class="appliance-chips" id="appliance-area"></div>
 
             <div style="margin-top:30px;">
-                <button class="btn-generate btn-gen-gourmet" onclick="saveAndGo('gourmet')">
+                <button class="btn-generate btn-gen-gourmet" onclick="callGeminiAPI('gourmet')">
                     <span>✨ 5 Тансаг Цэс</span>
                 </button>
-                <button class="btn-generate btn-gen-easy" onclick="saveAndGo('easy')">
+                <button class="btn-generate btn-gen-easy" onclick="callGeminiAPI('easy')">
                     <span>⚡ 5 Хурдан Цэс</span>
                 </button>
             </div>
+
+            <div id="ai-loading" style="display:none; text-align:center; margin-top:20px;">
+                <span style="font-size:2rem;">🍳</span>
+                <p style="color:var(--sub-text);">Тогооч бодож байна...</p>
+            </div>
+            <div id="ai-result" style="display:none; margin-top:20px; background:var(--surface); padding:20px; border-radius:16px; border:1px solid var(--border); line-height:1.6; font-size:0.95rem; white-space: pre-wrap;"></div>
         </div>
     </div>
 
     <script>
-        const pantryData = [["Давс", "Хар перц", "Ургамлын тос"], ["Сонгино", "Сармис", "Гурил", "Цагаан будаа", "Соя соус"], ["Элсэн чихэр", "Уксус", "Лаврын навч", "Цөцгийн тос"], ["Кетчуп", "Майонез", "Томат паст", "Гич", "Сод"], ["Гурвалжин будаа", "Гоймон", "Цардуул", "Хуурай сүү", "Гүнжид"]];
+        // --- DATA ---
+        const pantryData = [
+            ["Давс", "Хар перц", "Ургамлын тос"], 
+            ["Сонгино", "Сармис", "Гурил", "Цагаан будаа", "Соя соус"],
+            ["Элсэн чихэр", "Уксус", "Лаврын навч", "Цөцгийн тос"],
+            ["Кетчуп", "Майонез", "Томат паст", "Гич", "Сод"],
+            ["Гурвалжин будаа", "Гоймон", "Цардуул", "Хуурай сүү", "Гүнжид"]
+        ];
         const styles = [ {n:"Тогооч", e:"👨‍🍳"}, {n:"Монгол", e:"🇲🇳"}, {n:"Ази", e:"🥢"}, {n:"Итали", e:"🍝"}, {n:"Франц", e:"🥐"}, {n:"Мексик", e:"🌮"}, {n:"Шөл", e:"🍲"}, {n:"Өглөөний", e:"🍳"}, {n:"Эрүүл", e:"🥗"}, {n:"Түргэн", e:"🍔"}, {n:"Цагаан хоол", e:"🥬"}, {n:"Амттан", e:"🍰"} ];
         const tastes = ["Хэвийн", "Зөөлөн", "Халуун ногоотой", "Баялаг/Umami", "Чихэрлэг", "Исгэлэн"];
         const appliances = ["Плетка", "Шарах шүүгээ", "Air Fryer", "Битүү чанагч", "Агшаагч", "Блендер", "Грил", "Талх шарагч"];
         const lvlDescs = ["Дэлгэрэнгүй заавар хэрэгтэй.", "Энгийн хоол хийж чаддаг.", "Өдөр тутмын хоол сайн хийдэг.", "Нарийн ажиллагаатай хоол.", "Мэргэжлийн түвшний мэдлэгтэй."];
         const lvlNames = ["Анхан", "Сурагч", "Дундаж", "Сайн", "Pro"];
+
         let state = { ings: [], styles: [], skill: 3, pantryLvl: 2, pantryActiveItems: [], apps: [], diet: [], servings: 2, selectedTastes: ['Хэвийн'] };
+
+        // 🔴🔴 REMOVED API KEY - NOW HANDLED BY VERCEL BACKEND 🔴🔴
 
         window.onload = () => {
             if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
@@ -218,6 +286,7 @@
             document.getElementById('appliance-area').innerHTML = appliances.map(a => `<div class="app-chip ${state.apps.includes(a) ? 'selected' : ''}" onclick="toggleApp('${a}')">${a}</div>`).join('');
         }
 
+        // --- CORE ---
         function handleEnter(e) { if(e.key === 'Enter' && e.target.value) { addIng(e.target.value); e.target.value=''; } }
         function addIng(val) { val = val.charAt(0).toUpperCase() + val.slice(1); if(!state.ings.includes(val)) state.ings.push(val); renderTags(); }
         function removeIng(val) { state.ings = state.ings.filter(x => x !== val); renderTags(); }
@@ -230,8 +299,15 @@
         function toggleStyle(val) { if(state.styles.includes(val)) state.styles = state.styles.filter(x => x !== val); else if(state.styles.length < 3) state.styles.push(val); renderUI(); }
         function setLevel(l) { state.skill = l; document.querySelectorAll('.level-bar .lvl-step').forEach((el, i) => i+1 === l ? el.classList.add('active') : el.classList.remove('active')); document.getElementById('level-desc').innerText = lvlDescs[l-1]; }
         
-        function setPantryLvl(l) { state.pantryLvl = l; for(let i=1; i<=5; i++) { const el = document.getElementById('pl-'+i); if(i===l) el.classList.add('active'); else el.classList.remove('active'); } loadPantry(l); }
-        function loadPantry(lvl) { let items = []; for(let i=0; i<lvl; i++) items = items.concat(pantryData[i]); state.pantryActiveItems = [...new Set(items)]; renderPantryChips(); }
+        function setPantryLvl(l) {
+            state.pantryLvl = l;
+            for(let i=1; i<=5; i++) { const el = document.getElementById('pl-'+i); if(i===l) el.classList.add('active'); else el.classList.remove('active'); }
+            loadPantry(l);
+        }
+        function loadPantry(lvl) {
+            let items = []; for(let i=0; i<lvl; i++) items = items.concat(pantryData[i]);
+            state.pantryActiveItems = [...new Set(items)]; renderPantryChips();
+        }
         function renderPantryChips() { document.getElementById('pantry-chips-area').innerHTML = state.pantryActiveItems.map(item => `<div class="p-chip active" onclick="togglePantryItem(this)">${item}</div>`).join(''); }
         function togglePantryItem(el) { el.classList.toggle('active'); }
         function togglePantry() { const on = document.getElementById('pantry-switch').checked; document.getElementById('pantry-content').classList.toggle('disabled', !on); }
@@ -247,13 +323,16 @@
         function openSettings() { document.getElementById('modal-overlay').classList.add('active'); document.getElementById('settings-modal').classList.add('active'); }
         function closeSettings(e) { if (e && e.target !== e.currentTarget) return; document.getElementById('modal-overlay').classList.remove('active'); document.getElementById('settings-modal').classList.remove('active'); }
 
-        function saveAndGo(mode) {
+        // --- UPDATED LOGIC TO REDIRECT ---
+        function callGeminiAPI(mode) {
             let activePantry = [];
             if(document.getElementById('pantry-switch').checked) {
                 document.querySelectorAll('.p-chip.active').forEach(c => activePantry.push(c.innerText));
             }
             state.activePantry = activePantry;
             state.mode = mode;
+            
+            // Save state and redirect
             localStorage.setItem('amt_state', JSON.stringify(state));
             window.location.href = 'list.html';
         }
