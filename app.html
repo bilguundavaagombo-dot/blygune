@@ -58,11 +58,8 @@
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
         .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
-        /* VIEW TRANSITIONS */
-        .view-section { display: none; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; animation: fadeIn 0.4s ease; }
-        .view-section.active { display: flex; flex-direction: column; align-items: center; }
-
-        /* HERO & INPUTS */
+        /* MAIN */
+        main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; }
         .hero { text-align: center; margin-bottom: 35px; width: 100%; }
         .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
         .input-wrapper { position: relative; margin-bottom: 20px; width: 100%; }
@@ -71,6 +68,10 @@
         .tags-area { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; min-height: 40px; width: 100%; }
         .tag { background: var(--surface); border: 1px solid var(--border); padding: 10px 20px; border-radius: 50px; font-weight: 600; color: var(--text); cursor: default; display: flex; align-items: center; gap: 8px; animation: pop 0.3s ease; }
         .section-label { font-size: 0.8rem; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: 1px; margin: 30px 0 12px 0; display: block; width: 100%; }
+
+        /* VIEW MANAGEMENT */
+        .view-section { display: none; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: flex; flex-direction: column; align-items: center; }
 
         /* RECIPE CARD STYLES */
         .recipe-card {
@@ -271,9 +272,11 @@
 
     <div class="modal-overlay" id="modal-overlay" onclick="closeSettings(event)">
         <div class="modal-card" id="settings-modal" onclick="event.stopPropagation()">
-            <button class="btn-close" onclick="closeSettings()">&times;</button>
-            <h2 class="modal-title" style="margin-bottom:20px;">Эцсийн Тохиргоо</h2>
-            
+            <div class="modal-header">
+                <h2 class="modal-title">Эцсийн Тохиргоо</h2>
+                <button class="btn-close" onclick="closeSettings()">&times;</button>
+            </div>
+
             <span class="section-label" style="margin-top:0;">АМТНЫ ТӨРӨЛ</span>
             <div class="taste-grid" id="taste-grid"></div>
 
@@ -390,7 +393,7 @@
                 });
                 const data = await response.json();
                 
-                // READ THE OUTPUT PROPERTY FROM OPENAI BACKEND
+                // OPENAI RESPONSE HANDLING (data.output)
                 if (data.output) {
                     let raw = data.output;
                     // Clean up markdown if AI adds it
@@ -458,6 +461,7 @@
             `;
 
             try {
+                // OpenAI API Call via Vercel Backend
                 const response = await fetch('/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -465,7 +469,7 @@
                 });
                 const data = await response.json();
                 
-                // READ THE OUTPUT PROPERTY FROM OPENAI BACKEND
+                // OPENAI RESPONSE HANDLING (data.output)
                 if (data.output) {
                     let html = data.output;
                     html = html.replace(/```html/g, '').replace(/```/g, '');
