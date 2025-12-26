@@ -3,100 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AMT - Ухаалаг Жор</title>
+    <title>AMT - Хоолны Жор</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500;
+            --bg: #F8F9FB;
+            --text: #1F2937;
+            --sub-text: #6B7280;
+            --accent: #FF4500;
             --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%);
-            --border: #E5E7EB; --input-bg: #FFFFFF; --surface: #FFFFFF; --radius: 20px;
-            --font: 'Inter', sans-serif; --font-head: 'Playfair Display', serif;
-            --shadow: 0 10px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px);
+            --border: #E5E7EB;
+            --input-bg: #FFFFFF;
+            --surface: #FFFFFF;
+            --radius: 20px;
+            --font: 'Inter', sans-serif;
+            --font-head: 'Playfair Display', serif;
+            --shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+            --glass: blur(14px);
         }
+
         [data-theme="dark"] {
-            --bg: #0F1115; --text: #F3F4F6; --sub-text: #9CA3AF; --accent: #FF5722;
+            --bg: #0F1115;
+            --text: #F3F4F6;
+            --sub-text: #9CA3AF;
+            --accent: #FF5722;
             --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%);
-            --border: #2D3748; --input-bg: #1A202C; --surface: #1A202C; --shadow: none;
+            --border: #2D3748;
+            --input-bg: #1A202C;
+            --surface: #1A202C;
+            --shadow: none;
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-x: hidden; transition: background 0.3s, color 0.3s; padding-bottom: 140px; }
-        .hidden { display: none !important; }
+
+        body {
+            background-color: var(--bg); color: var(--text); font-family: var(--font);
+            min-height: 100vh; overflow-x: hidden; 
+            transition: background 0.3s, color 0.3s;
+            padding-bottom: 140px;
+        }
 
         /* HEADER */
-        header { padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 100; background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass); border-bottom: 1px solid var(--border); }
+        header {
+            padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass);
+            border-bottom: 1px solid var(--border);
+        }
         [data-theme="dark"] header { background: rgba(15, 17, 21, 0.7); }
+
         .logo-group { cursor: pointer; display: flex; flex-direction: column; text-decoration: none; color: inherit; line-height: 1; }
-        .logo { font-family: var(--font-head); font-weight: 900; font-size: 1.8rem; letter-spacing: -1px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .logo-sub { font-family: var(--font); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; opacity: 0.8; }
-        .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
-        
-        /* MAIN LAYOUT */
-        main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px 120px 20px; }
+        .logo { font-family: var(--font-head); font-weight: 900; font-size: 2rem; letter-spacing: -1px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-sub { font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; color: var(--text); opacity: 0.8; }
+        .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
+        .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+        /* MAIN */
+        main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; }
         .hero { text-align: center; margin-bottom: 35px; width: 100%; }
         .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
         .input-wrapper { position: relative; margin-bottom: 20px; width: 100%; }
         .main-input { width: 100%; padding: 22px 25px; border-radius: 25px; background: var(--input-bg); border: 2px solid var(--border); font-size: 1.2rem; color: var(--text); outline: none; transition: 0.3s; box-shadow: var(--shadow); }
         .main-input:focus { border-color: var(--accent); }
-        
-        /* UI ELEMENTS */
         .tags-area { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; min-height: 40px; width: 100%; }
-        .tag { background: var(--surface); border: 1px solid var(--border); padding: 10px 20px; border-radius: 50px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .tag { background: var(--surface); border: 1px solid var(--border); padding: 10px 20px; border-radius: 50px; font-weight: 600; color: var(--text); cursor: default; display: flex; align-items: center; gap: 8px; animation: pop 0.3s ease; }
         .section-label { font-size: 0.8rem; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: 1px; margin: 30px 0 12px 0; display: block; width: 100%; }
-        
+
+        /* GRIDS & BARS */
         .style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; width: 100%; }
         .style-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 5px; align-items: center; }
         .style-chip.selected { background: var(--text); color: var(--bg); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-        
-        /* LEVEL BAR */
-        .level-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; background: var(--surface); padding: 6px; border-radius: 20px; border: 1px solid var(--border); width: 100%; }
-        .lvl-step { text-align: center; padding: 10px 2px; border-radius: 14px; cursor: pointer; transition: 0.3s; color: var(--sub-text); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .level-bar { display: flex; background: var(--surface); padding: 6px; border-radius: 20px; border: 1px solid var(--border); width: 100%; }
+        .lvl-step { flex: 1; text-align: center; padding: 12px; border-radius: 14px; cursor: pointer; transition: 0.3s; color: var(--sub-text); display: flex; flex-direction: column; gap: 4px; user-select: none; }
         .lvl-step.active { background: var(--text); color: var(--bg); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
-        .lvl-emoji { font-size: 1.2rem; margin-bottom: 2px; }
-        .lvl-label { font-size: 0.75rem; font-weight: 600; }
         .level-desc { text-align: center; font-size: 0.9rem; color: var(--accent); margin-top: 10px; font-weight: 600; font-style: italic; min-height: 24px; width: 100%; }
-        
+
         /* PANTRY */
-        .pantry-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 25px; margin-top: 15px; width: 100%; }
+        .pantry-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 25px; margin-top: 15px; width: 100%; }
         .pantry-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .pantry-title { font-weight: 700; font-size: 1rem; }
         .switch { position: relative; display: inline-block; width: 48px; height: 26px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .4s; border-radius: 34px; }
         .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--accent); }
         input:checked + .slider:before { transform: translateX(22px); }
-        .pantry-chips-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .pantry-chips-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; transition: 0.3s; }
         .pantry-content.disabled .pantry-chips-grid { opacity: 0.3; pointer-events: none; }
         .p-chip { padding: 8px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; font-size: 0.85rem; font-weight: 600; color: var(--sub-text); cursor: pointer; transition: 0.2s; user-select: none; }
-        .p-chip.active { background: var(--accent-grad); color: white; border: none; }
-        
-        /* DIET & CALC */
+        .p-chip.active { background: var(--accent-grad); color: white; border: none; box-shadow: 0 4px 10px rgba(255, 69, 0, 0.2); }
+
+        /* DIETARY & CALC */
         .dietary-section { width: 100%; margin-bottom: 30px; }
         .filters { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; margin-top: 10px; }
         .filter-chip { padding: 10px 18px; border-radius: 14px; background: var(--input-bg); color: var(--sub-text); font-size: 0.9rem; cursor: pointer; border: 1px solid var(--border); transition: 0.2s; font-weight: 600; }
         .filter-chip.selected { background: var(--text); color: var(--bg); border-color: var(--text); }
         .custom-diet-input { border: 1px dashed var(--sub-text); background: transparent; color: var(--text); padding: 10px 16px; border-radius: 14px; font-family: var(--font); font-size: 0.9rem; outline: none; width: 100px; transition: 0.3s; }
         .custom-diet-input:focus { width: 140px; border-color: var(--accent); border-style: solid; }
-        .calc-box { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 20px 25px; margin-top: 30px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        .calc-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 25px; margin-top: 30px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
         .counter { display: flex; align-items: center; gap: 15px; }
         .count-btn { width: 35px; height: 35px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; color: var(--text); }
+        .count-val { font-size: 1.4rem; font-weight: 800; min-width: 30px; text-align: center; }
         .tips-box { margin-top: 20px; width: 100%; padding: 15px; border-radius: 16px; background: linear-gradient(135deg, #FF4500, #FF8C00); color: white; text-align: center; font-size: 0.95rem; line-height: 1.5; font-style: italic; box-shadow: var(--shadow); }
-        
-        /* BOTTOM NAV */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px; background: rgba(255,255,255,0.8); backdrop-filter: var(--glass); border-top: 1px solid var(--border); display: flex; justify-content: center; z-index: 900; }
-        [data-theme="dark"] .bottom-nav { background: rgba(15, 23, 42, 0.8); }
+
+        /* BOTTOM BAR */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px; background: rgba(255,255,255,0.7); backdrop-filter: var(--glass); border-top: 1px solid var(--border); display: flex; justify-content: center; z-index: 900; }
+        [data-theme="dark"] .bottom-nav { background: rgba(15, 23, 42, 0.7); }
         .btn-continue { width: 100%; max-width: 600px; height: 65px; border-radius: 35px; background: var(--text); color: var(--bg); border: none; font-size: 1.1rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 0 35px; box-shadow: 0 15px 30px rgba(0,0,0,0.15); transition: 0.3s; }
-        .btn-continue:hover { transform: scale(1.02); }
         .btn-continue:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 1100; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-card { width: 90%; max-width: 500px; max-height: 85vh; background: var(--bg); border-radius: 24px; padding: 30px; transform: scale(0.9); opacity: 0; transition: 0.3s; border: 1px solid var(--border); }
+        .modal-card { width: 90%; max-width: 600px; max-height: 85vh; background: var(--bg); border-radius: 24px; padding: 30px; transform: scale(0.9); opacity: 0; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); overflow-y: auto; border: 1px solid var(--border); }
         .modal-overlay.active .modal-card { transform: scale(1); opacity: 1; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .modal-title { font-size: 1.4rem; font-weight: 900; }
         .btn-close { width: 40px; height: 40px; border-radius: 50%; background: var(--border); border: none; font-size: 1.5rem; cursor: pointer; color: var(--text); display: flex; align-items: center; justify-content: center; }
-        
         .taste-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 30px; }
         .taste-chip { padding: 18px; border-radius: 16px; background: var(--surface); border: 2px solid var(--border); text-align: center; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: 0.2s; }
         .taste-chip.selected { background: var(--text); color: var(--bg); border-color: var(--text); }
@@ -104,55 +127,14 @@
         .app-chip { padding: 10px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
         .app-chip.selected { background: var(--text); color: var(--bg); }
         .btn-generate { width: 100%; padding: 22px; border-radius: 18px; border: none; margin-bottom: 12px; font-size: 1.1rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
-        .btn-gen-gourmet { background: var(--accent); color: white; box-shadow: 0 10px 25px rgba(255, 69, 0, 0.25); }
+        .btn-gen-gourmet { background: var(--accent); color: white; }
         .btn-gen-easy { background: var(--surface); color: var(--text); border: 2px solid var(--border); }
 
-        /* RESULTS & DETAILS VIEWS */
-        #view-results, #view-details {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100dvh; 
-            background: var(--bg); z-index: 2000; padding: 80px 20px 20px 20px;
-            overflow-y: auto; display: none; flex-direction: column; align-items: center;
-            -webkit-overflow-scrolling: touch;
-        }
-        .results-container, .details-container { max-width: 700px; width: 100%; padding-bottom: 100px; }
-        
-        .recipe-card { background: var(--surface); border-radius: 24px; padding: 25px; margin-bottom: 25px; border: 1px solid var(--border); box-shadow: var(--shadow); animation: pop 0.4s ease-out; }
-        .recipe-card h3 { font-family: var(--font-head); font-size: 1.5rem; color: var(--accent); margin-bottom: 10px; }
-        .recipe-card p { font-size: 0.95rem; line-height: 1.6; color: var(--text); margin-bottom: 15px; }
-        
-        .btn-select { width: 100%; padding: 14px; border-radius: 16px; border: none; background: var(--text); color: var(--bg); font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-select:hover { transform: scale(1.02); background: var(--accent); }
-
-        .details-content { background: var(--surface); padding: 30px; border-radius: 30px; border: 1px solid var(--border); }
-        .details-content h2 { color: var(--accent); font-family: var(--font-head); margin-bottom: 20px; font-size: 2rem; border-bottom: 2px solid var(--border); padding-bottom: 15px; }
-        .details-content h4 { margin-top: 25px; margin-bottom: 10px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 1px; }
-        .details-content ul, .details-content ol { padding-left: 20px; margin-bottom: 20px; }
-        .details-content li { margin-bottom: 10px; line-height: 1.6; }
-
-        #ai-loading-full { text-align: center; margin-top: 100px; }
-        .loader { font-size: 3rem; animation: spin 2s infinite linear; display: inline-block; }
-        .btn-back { position: fixed; top: 20px; left: 20px; padding: 10px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; cursor: pointer; font-weight: 700; color: var(--text); z-index: 3000; box-shadow: var(--shadow); }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pop { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-
-        /* --- MOBILE OPTIMIZATIONS --- */
-        @media (max-width: 600px) {
-            .modal-overlay { align-items: flex-end; } 
-            .modal-card { width: 100%; max-width: 100%; border-radius: 30px 30px 0 0; padding: 30px 25px 50px 25px; transform: translateY(100%); border-bottom: none; }
-            .modal-overlay.active .modal-card { transform: translateY(0); }
-            
-            .hero h1 { font-size: 2rem; }
-            .style-chip, .p-chip, .app-chip { padding: 12px; font-size: 0.9rem; }
-            .style-grid { grid-template-columns: repeat(auto-fill, minmax(30%, 1fr)); }
-            
-            .level-bar { margin-bottom: 20px; }
-            .lvl-label { font-size: 0.65rem; }
-            .lvl-emoji { font-size: 1.4rem; }
-        }
     </style>
 </head>
 <body>
+
     <header>
         <a href="index.html" class="logo-group">
             <div class="logo">AMT<span>.</span></div>
@@ -163,21 +145,41 @@
         </div>
     </header>
 
-    <main id="main-content">
+    <main>
         <div class="hero">
             <h1>Танд юу байна?</h1>
             <p>Хөргөгчинд байгаа орцоо оруулаад, мэргэжлийн жор аваарай.</p>
         </div>
+
         <div class="input-wrapper">
             <input type="text" id="main-input" class="main-input" placeholder="Өндөг, Мах, Төмс..." onkeypress="handleEnter(event)">
         </div>
+
         <div class="tags-area" id="tags-area"></div>
-        <span class="section-label">🍽️ Хоолны төрөл</span>
+
+        <span class="section-label">🍽️ Хоолны төрөл (Дээд тал нь 3)</span>
         <div class="style-grid" id="style-grid"></div>
+
         <span class="section-label">👨‍🍳 Хоол хийх чадвар</span>
-        <div class="level-bar" id="lvl-bar"></div>
+        <div class="level-bar">
+            <div class="lvl-step" onclick="setLevel(1)" id="lvl-1"><span class="lvl-emoji">🐣</span><span class="lvl-label">Анхан</span></div>
+            <div class="lvl-step" onclick="setLevel(2)" id="lvl-2"><span class="lvl-emoji">🍳</span><span class="lvl-label">Сурагч</span></div>
+            <div class="lvl-step active" onclick="setLevel(3)" id="lvl-3"><span class="lvl-emoji">🍲</span><span class="lvl-label">Дундаж</span></div>
+            <div class="lvl-step" onclick="setLevel(4)" id="lvl-4"><span class="lvl-emoji">🔪</span><span class="lvl-label">Сайн</span></div>
+            <div class="lvl-step" onclick="setLevel(5)" id="lvl-5"><span class="lvl-emoji">👨‍🍳</span><span class="lvl-label">Pro</span></div>
+        </div>
+        <div class="level-desc" id="level-desc">Өдөр тутмын хоолыг сайн хийдэг.</div>
+
         <span class="section-label">🥫 Гэрийн нөөц / Амтлагч</span>
-        <div class="pantry-box">
+        <div class="level-bar" style="margin-bottom:10px;">
+            <div class="lvl-step" onclick="setPantryLvl(1)" id="pl-1"><span class="lvl-emoji">🧂</span><span class="lvl-label">Цөөн</span></div>
+            <div class="lvl-step active" onclick="setPantryLvl(2)" id="pl-2"><span class="lvl-emoji">🧅</span><span class="lvl-label">Дундаж</span></div>
+            <div class="lvl-step" onclick="setPantryLvl(3)" id="pl-3"><span class="lvl-emoji">🥫</span><span class="lvl-label">Их</span></div>
+            <div class="lvl-step" onclick="setPantryLvl(4)" id="pl-4"><span class="lvl-emoji">🌶️</span><span class="lvl-label">Нэмэлт</span></div>
+            <div class="lvl-step" onclick="setPantryLvl(5)" id="pl-5"><span class="lvl-emoji">🏆</span><span class="lvl-label">Бүрэн</span></div>
+        </div>
+
+        <div class="pantry-box" id="pantry-box">
             <div class="pantry-header">
                 <span class="pantry-title">Идэвхтэй амтлагчууд</span>
                 <label class="switch">
@@ -187,9 +189,10 @@
             </div>
             <div class="pantry-content" id="pantry-content">
                 <p style="font-size:0.8rem; color:var(--sub-text); margin-bottom:10px;">Байхгүй зүйлсээ дарж идэвхгүй болгоно уу:</p>
-                <div class="pantry-chips-grid" id="pantry-area"></div>
+                <div class="pantry-chips-grid" id="pantry-chips-area"></div>
             </div>
         </div>
+
         <div class="dietary-section">
             <span class="section-label">Харшил / Цээр</span>
             <div class="filters" id="dietary-filters">
@@ -203,6 +206,7 @@
                 <input type="text" class="custom-diet-input" placeholder="+ Бусад" onkeypress="handleCustomDiet(event)">
             </div>
         </div>
+
         <div class="calc-box">
             <span class="calc-title">ТООЦООЛОЛ (Хүний тоо)</span>
             <div class="counter">
@@ -211,35 +215,14 @@
                 <button class="count-btn" onclick="updServ(1)">+</button>
             </div>
         </div>
+
         <div class="tips-box" id="daily-tip">Зөвлөгөө уншиж байна...</div>
     </main>
 
-    <div id="view-results">
-        <button class="btn-back" onclick="closeResultsView()">← Буцах</button>
-        <div class="results-container">
-            <h2 class="result-title">Таны Жор 👨‍🍳</h2>
-            <div id="ai-loading-full">
-                <div class="loader">🍳</div>
-                <p style="color:var(--sub-text); margin-top:15px;">Тогооч жорыг боловсруулж байна...</p>
-            </div>
-            <div id="ai-result-list"></div>
-        </div>
-    </div>
-
-    <div id="view-details">
-        <button class="btn-back" onclick="closeDetailsView()">← Жагсаалт руу</button>
-        <div class="details-container">
-            <div id="ai-loading-details">
-                <div class="loader">🔪</div>
-                <p>Дэлгэрэнгүй зааврыг бэлдэж байна...</p>
-            </div>
-            <div id="details-content" class="details-content" style="display:none;"></div>
-        </div>
-    </div>
-
     <div class="bottom-nav">
         <button id="analyze-btn" class="btn-continue" onclick="openSettings()" disabled>
-            <span>ҮРГЭЛЖЛҮҮЛЭХ</span> <span>→</span>
+            <span>ҮРГЭЛЖЛҮҮЛЭХ</span>
+            <span>→</span>
         </button>
     </div>
 
@@ -249,19 +232,32 @@
                 <h2 class="modal-title">Эцсийн Тохиргоо</h2>
                 <button class="btn-close" onclick="closeSettings()">&times;</button>
             </div>
-            <span class="section-label" style="margin-top:0;">АМТНЫ ТӨРӨЛ</span>
+
+            <span class="section-label" style="margin-top:0;">АМТНЫ ТӨРӨЛ (СОНГОХ - 2 хүртэл)</span>
             <div class="taste-grid" id="taste-grid"></div>
+
             <span class="section-label">ТӨХӨӨРӨМЖ</span>
             <div class="appliance-chips" id="appliance-area"></div>
+
             <div style="margin-top:30px;">
-                <button class="btn-generate btn-gen-gourmet" onclick="callGeminiAPI('gourmet')">✨ 5 Тансаг Цэс</button>
-                <button class="btn-generate btn-gen-easy" onclick="callGeminiAPI('easy')">⚡ 5 Хурдан Цэс</button>
+                <button class="btn-generate btn-gen-gourmet" onclick="callGeminiAPI('gourmet')">
+                    <span>✨ 5 Тансаг Цэс</span>
+                </button>
+                <button class="btn-generate btn-gen-easy" onclick="callGeminiAPI('easy')">
+                    <span>⚡ 5 Хурдан Цэс</span>
+                </button>
             </div>
+
+            <div id="ai-loading" style="display:none; text-align:center; margin-top:20px;">
+                <span style="font-size:2rem;">🍳</span>
+                <p style="color:var(--sub-text);">Тогооч бодож байна...</p>
+            </div>
+            <div id="ai-result" style="display:none; margin-top:20px; background:var(--surface); padding:20px; border-radius:16px; border:1px solid var(--border); line-height:1.6; font-size:0.95rem; white-space: pre-wrap;"></div>
         </div>
     </div>
 
     <script>
-        // APP DATA
+        // --- DATA ---
         const pantryData = [
             ["Давс", "Хар перц", "Ургамлын тос"], 
             ["Сонгино", "Сармис", "Гурил", "Цагаан будаа", "Соя соус"],
@@ -272,53 +268,25 @@
         const styles = [ {n:"Тогооч", e:"👨‍🍳"}, {n:"Монгол", e:"🇲🇳"}, {n:"Ази", e:"🥢"}, {n:"Итали", e:"🍝"}, {n:"Франц", e:"🥐"}, {n:"Мексик", e:"🌮"}, {n:"Шөл", e:"🍲"}, {n:"Өглөөний", e:"🍳"}, {n:"Эрүүл", e:"🥗"}, {n:"Түргэн", e:"🍔"}, {n:"Цагаан хоол", e:"🥬"}, {n:"Амттан", e:"🍰"} ];
         const tastes = ["Хэвийн", "Зөөлөн", "Халуун ногоотой", "Баялаг/Umami", "Чихэрлэг", "Исгэлэн"];
         const appliances = ["Плетка", "Шарах шүүгээ", "Air Fryer", "Битүү чанагч", "Агшаагч", "Блендер", "Грил", "Талх шарагч"];
+        const lvlDescs = ["Дэлгэрэнгүй заавар хэрэгтэй.", "Энгийн хоол хийж чаддаг.", "Өдөр тутмын хоол сайн хийдэг.", "Нарийн ажиллагаатай хоол.", "Мэргэжлийн түвшний мэдлэгтэй."];
         const lvlNames = ["Анхан", "Сурагч", "Дундаж", "Сайн", "Pro"];
-        
+
         let state = { ings: [], styles: [], skill: 3, pantryLvl: 2, pantryActiveItems: [], apps: [], diet: [], servings: 2, selectedTastes: ['Хэвийн'] };
 
-        // INITIALIZATION
+        // API KEY removed for Vercel Security
+        
         window.onload = () => {
             if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
             loadPantry(2); renderUI(); randomTip();
         };
 
-        // UI RENDERING
         function renderUI() {
-            document.getElementById('style-grid').innerHTML = styles.map(s => `<div class="style-chip ${state.styles.includes(s.n) ? 'selected' : ''}" onclick="toggleStyle('${s.n}')"><span style="font-size:1.5rem">${s.e}</span><span>${s.n}</span></div>`).join('');
+            document.getElementById('style-grid').innerHTML = styles.map(s => `<div class="style-chip ${state.styles.includes(s.n) ? 'selected' : ''}" onclick="toggleStyle('${s.n}')"><span class="style-emoji">${s.e}</span><span class="style-name">${s.n}</span></div>`).join('');
             document.getElementById('taste-grid').innerHTML = tastes.map(v => `<div class="taste-chip ${state.selectedTastes.includes(v) ? 'selected' : ''}" onclick="setTaste('${v}')">${v}</div>`).join('');
             document.getElementById('appliance-area').innerHTML = appliances.map(a => `<div class="app-chip ${state.apps.includes(a) ? 'selected' : ''}" onclick="toggleApp('${a}')">${a}</div>`).join('');
-            
-            // Level bar (Grid Fix)
-            document.getElementById('lvl-bar').innerHTML = lvlNames.map((n, i) => {
-                const emojis = ["🐣","🍳","🍲","🔪","👨‍🍳"];
-                return `<div class="lvl-step ${i+1===state.skill ? 'active' : ''}" onclick="setLevel(${i+1})">
-                    <span class="lvl-emoji">${emojis[i]}</span>
-                    <span class="lvl-label">${n}</span>
-                </div>`;
-            }).join('');
         }
 
-        // PANTRY LOGIC
-        function loadPantry(lvl) { 
-            let items = []; 
-            for(let i=0; i<lvl; i++) items = items.concat(pantryData[i]); 
-            state.pantryActiveItems = [...new Set(items)]; 
-            renderPantryChips(); 
-        }
-        function renderPantryChips() { 
-            document.getElementById('pantry-area').innerHTML = state.pantryActiveItems.map(item => `<div class="p-chip active" onclick="this.classList.toggle('active')">${item}</div>`).join(''); 
-        }
-        function setPantryLvl(l) { 
-            state.pantryLvl = l; 
-            for(let i=1; i<=5; i++) { 
-                const el = document.getElementById('pl-'+i); 
-                if(i===l) el.classList.add('active'); else el.classList.remove('active'); 
-            } 
-            loadPantry(l); 
-        }
-        function togglePantry() { const on = document.getElementById('pantry-switch').checked; document.getElementById('pantry-content').classList.toggle('disabled', !on); }
-
-        // INPUT & STATE MANAGEMENT
+        // --- CORE ---
         function handleEnter(e) { if(e.key === 'Enter' && e.target.value) { addIng(e.target.value); e.target.value=''; } }
         function addIng(val) { val = val.charAt(0).toUpperCase() + val.slice(1); if(!state.ings.includes(val)) state.ings.push(val); renderTags(); }
         function removeIng(val) { state.ings = state.ings.filter(x => x !== val); renderTags(); }
@@ -328,135 +296,78 @@
             if(state.ings.length > 0) { btn.disabled = false; btn.style.opacity = 1; } else { btn.disabled = true; btn.style.opacity = 0.5; }
         }
 
-        function toggleStyle(val) { state.styles.includes(val) ? state.styles = state.styles.filter(x => x !== val) : state.styles.push(val); renderUI(); }
-        function setLevel(l) { state.skill = l; renderUI(); document.getElementById('level-desc').innerText = ["Заавар хэрэгтэй", "Энгийн", "Өдөр тутмын", "Нарийн", "Мэргэжлийн"][l-1]; }
-        function toggleApp(val) { state.apps.includes(val) ? state.apps = state.apps.filter(x=>x!==val) : state.apps.push(val); renderUI(); }
-        function setTaste(val) { state.selectedTastes.includes(val) ? state.selectedTastes = state.selectedTastes.filter(t => t !== val) : state.selectedTastes.push(val); renderUI(); }
-        function updServ(n) { state.servings = Math.max(1, state.servings + n); document.getElementById('serv-val').innerText = state.servings; }
-        function toggleFilter(el, type) { if(state.diet.includes(type)) { state.diet = state.diet.filter(d => d !== type); el.classList.remove('selected'); } else { state.diet.push(type); el.classList.add('selected'); } }
-        function handleCustomDiet(e) { if (e.key === 'Enter' && e.target.value.trim()) { const val = e.target.value.trim(); state.diet.push(val); e.target.value = ''; alert(val + " нэмэгдлээ"); } }
+        function toggleStyle(val) { if(state.styles.includes(val)) state.styles = state.styles.filter(x => x !== val); else if(state.styles.length < 3) state.styles.push(val); renderUI(); }
+        function setLevel(l) { state.skill = l; document.querySelectorAll('.level-bar .lvl-step').forEach((el, i) => i+1 === l ? el.classList.add('active') : el.classList.remove('active')); document.getElementById('level-desc').innerText = lvlDescs[l-1]; }
         
-        // UTILS
+        function setPantryLvl(l) {
+            state.pantryLvl = l;
+            for(let i=1; i<=5; i++) { const el = document.getElementById('pl-'+i); if(i===l) el.classList.add('active'); else el.classList.remove('active'); }
+            loadPantry(l);
+        }
+        function loadPantry(lvl) {
+            let items = []; for(let i=0; i<lvl; i++) items = items.concat(pantryData[i]);
+            state.pantryActiveItems = [...new Set(items)]; renderPantryChips();
+        }
+        function renderPantryChips() { document.getElementById('pantry-chips-area').innerHTML = state.pantryActiveItems.map(item => `<div class="p-chip active" onclick="togglePantryItem(this)">${item}</div>`).join(''); }
+        function togglePantryItem(el) { el.classList.toggle('active'); }
+        function togglePantry() { const on = document.getElementById('pantry-switch').checked; document.getElementById('pantry-content').classList.toggle('disabled', !on); }
+
+        function toggleFilter(el, type) { if(state.diet.includes(type)) { state.diet = state.diet.filter(d => d !== type); el.classList.remove('selected'); } else { state.diet.push(type); el.classList.add('selected'); } }
+        function handleCustomDiet(e) { if (e.key === 'Enter' && e.target.value.trim()) { state.diet.push(e.target.value.trim()); e.target.value = ''; alert("Нэмэгдлээ"); } }
+        function updServ(n) { state.servings = Math.max(1, state.servings + n); document.getElementById('serv-val').innerText = state.servings; }
+        function toggleApp(val) { state.apps.includes(val) ? state.apps = state.apps.filter(x=>x!==val) : state.apps.push(val); renderUI(); }
+        function setTaste(val) { if (state.selectedTastes.includes(val)) state.selectedTastes = state.selectedTastes.filter(t => t !== val); else if (state.selectedTastes.length < 2) state.selectedTastes.push(val); renderUI(); }
+        
         function randomTip() { const tips = ["Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал шүүслэг болдог.", "Гоймон чанахдаа усандаа давс хангалттай хийвэл амт нь илүү тодорно."]; document.getElementById('daily-tip').innerText = "💡 " + tips[Math.floor(Math.random()*tips.length)]; }
         function toggleTheme() { const d = document.body.getAttribute('data-theme') === 'dark'; document.body.setAttribute('data-theme', d ? 'light' : 'dark'); localStorage.setItem('theme', d ? 'light' : 'dark'); }
-        function openSettings() { document.getElementById('modal-overlay').classList.add('active'); }
-        function closeSettings(e) { if (!e || e.target === e.currentTarget || e.target.classList.contains('btn-close')) document.getElementById('modal-overlay').classList.remove('active'); }
+        function openSettings() { document.getElementById('modal-overlay').classList.add('active'); document.getElementById('settings-modal').classList.add('active'); }
+        function closeSettings(e) { if (e && e.target !== e.currentTarget) return; document.getElementById('modal-overlay').classList.remove('active'); document.getElementById('settings-modal').classList.remove('active'); }
 
-        // VIEW LOGIC
-        function closeResultsView() {
-            document.getElementById('view-results').classList.add('hidden');
-            document.getElementById('main-content').classList.remove('hidden');
-            document.querySelector('.bottom-nav').classList.remove('hidden');
-            document.getElementById('view-details').classList.add('hidden');
-            document.getElementById('view-details').style.display = 'none';
-        }
-        function closeDetailsView() {
-            document.getElementById('view-details').classList.add('hidden');
-            document.getElementById('view-details').style.display = 'none';
-            document.getElementById('view-results').classList.remove('hidden');
-            document.getElementById('view-results').style.display = 'flex';
-        }
-
-        // --- BACKEND API LOGIC (For Website) ---
+        // --- UPDATED AI API INTEGRATION FOR VERCEL ---
         async function callGeminiAPI(mode) {
-            document.getElementById('modal-overlay').classList.remove('active');
-            document.getElementById('main-content').classList.add('hidden');
-            document.querySelector('.bottom-nav').classList.add('hidden');
-            
-            const resView = document.getElementById('view-results');
-            resView.classList.remove('hidden');
-            resView.style.display = 'flex';
-            
-            document.getElementById('ai-loading-full').style.display = 'block';
-            document.getElementById('ai-result-list').innerHTML = '';
+            document.getElementById('ai-loading').style.display = 'block';
+            document.getElementById('ai-result').style.display = 'none';
+            document.getElementById('ai-result').innerHTML = '';
 
             let activePantry = [];
-            if(document.getElementById('pantry-switch').checked) { document.querySelectorAll('.p-chip.active').forEach(c => activePantry.push(c.innerText)); }
-            
-            const prompt = `Role: Pro Chef (AMT). Language: MONGOLIAN.
-            INPUT: Main Ingredients:${state.ings.join(', ')} 
-            Pantry Ingredients:${activePantry.join(', ')} 
-            Cuisine:${state.styles.join(', ')} 
-            Skill:${lvlNames[state.skill-1]} 
-            Apps:${state.apps.join(', ')} 
-            Taste:${state.selectedTastes.join(', ')} 
-            Diet:${state.diet.join(', ')}
-            
-            STRICT RULE: Generate ${mode==='easy'?'5 Quick':'5 Gourmet'} recipes using ONLY the provided "Main Ingredients" and "Pantry Ingredients". 
-            DO NOT ADD EXTRA INGREDIENTS (like Milk, Eggs, Veggies) unless they are in the INPUT list.
-            FORMAT: HTML structure: <div class="recipe-card"><h3>Name</h3><p>Description</p><button class="btn-select" onclick="selectRecipe('Name')">Дэлгэрэнгүй үзэх</button></div>. No markdown.`;
+            if(document.getElementById('pantry-switch').checked) {
+                document.querySelectorAll('.p-chip.active').forEach(c => activePantry.push(c.innerText));
+            }
+
+            const promptText = `Role: Pro Chef. Language: MONGOLIAN.
+            INPUT:
+            - Main: ${state.ings.join(', ')}
+            - Pantry: ${activePantry.join(', ')}
+            - Cuisine: ${state.styles.join(', ') || "Any"}
+            - Skill: ${lvlNames[state.skill-1]}
+            - Taste: ${state.selectedTastes.join(', ')}
+            - Diet: ${state.diet.join(', ')}
+            TASK: Generate ${mode==='easy'?'5 Quick':'5 Gourmet'} recipes.
+            Format: Simple HTML (h3 for titles, p for desc). No markdown.`;
 
             try {
-                // Вэбсайт учраас зүгээр л /api/generate гэхэд болно
+                // Fetch to Vercel Backend
                 const response = await fetch('/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt })
+                    body: JSON.stringify({ prompt: promptText })
                 });
-                
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Server Error: ${response.status} - ${errorText}`);
-                }
+
+                if (!response.ok) throw new Error('Network response was not ok');
 
                 const data = await response.json();
                 
-                if (data.error) throw new Error(data.error);
-
                 if (data.candidates && data.candidates[0].content) {
                     const txt = data.candidates[0].content.parts[0].text.replace(/```html/g, '').replace(/```/g, '');
-                    document.getElementById('ai-result-list').innerHTML = txt;
+                    document.getElementById('ai-result').innerHTML = txt;
+                    document.getElementById('ai-result').style.display = 'block';
                 }
             } catch (err) { 
                 console.error(err);
-                document.getElementById('ai-result-list').innerHTML = `<p style='color:red; text-align:center;'>Алдаа гарлаа: ${err.message}<br>Дахин оролдоно уу.</p>`;
+                alert("Алдаа гарлаа. Системтэй холбогдож чадсангүй."); 
             } 
-            finally { document.getElementById('ai-loading-full').style.display = 'none'; }
-        }
-
-        async function selectRecipe(recipeName) {
-            document.getElementById('view-results').style.display = 'none';
-            const detView = document.getElementById('view-details');
-            detView.classList.remove('hidden');
-            detView.style.display = 'flex';
-            
-            const contentDiv = document.getElementById('details-content');
-            contentDiv.innerHTML = `<div id="ai-loading-details" style="display:block;"><div class="loader">🍳</div><p>${recipeName} жорыг бэлдэж байна...</p></div>`;
-            contentDiv.style.display = 'block';
-
-            let activePantry = [];
-            if(document.getElementById('pantry-switch').checked) { document.querySelectorAll('.p-chip.active').forEach(c => activePantry.push(c.innerText)); }
-            const allIngredients = state.ings.join(', ') + ", " + activePantry.join(', ');
-
-            const prompt = `Чи бол мэргэжлийн тогооч. "${recipeName}" нэртэй хоолны дэлгэрэнгүй жорыг MONGOLIAN хэлээр бич.
-            АШИГЛАХ ОРЦ: ${allIngredients}.
-            ХАТУУ АНХААРУУЛГА: Зөвхөн дээрх орцуудыг ашигла. Шинэ орц нэмж болохгүй (ус, давс, перецээс бусад).
-            БҮТЭЦ: <h2>${recipeName}</h2> <p>Түүх/Онцлог</p> <h4>Орц (Байгаа зүйлс):</h4> <ul>...</ul> <h4>Заавар:</h4> <ol>...</ol> <h4>Зөвлөгөө:</h4> <p>...</p>
-            Зөвхөн HTML ашигла.`;
-
-            try {
-                const response = await fetch('/api/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt })
-                });
-                
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Server Error: ${response.status} - ${errorText}`);
-                }
-
-                const data = await response.json();
-
-                if (data.error) throw new Error(data.error);
-
-                if (data.candidates && data.candidates[0].content) {
-                    const txt = data.candidates[0].content.parts[0].text.replace(/```html/g, '').replace(/```/g, '');
-                    contentDiv.innerHTML = txt;
-                }
-            } catch (err) {
-                console.error(err);
-                contentDiv.innerHTML = `<p style="color:red; text-align:center;">Алдаа гарлаа: ${err.message}</p>`;
+            finally { 
+                document.getElementById('ai-loading').style.display = 'none'; 
             }
         }
     </script>
