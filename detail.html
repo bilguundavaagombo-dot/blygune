@@ -92,7 +92,6 @@
             const tipEl = document.getElementById('loader-tip');
             let i = Math.floor(Math.random() * loadingTips.length);
             tipEl.innerText = loadingTips[i];
-            // 8 SECONDS
             setInterval(() => {
                 i = (i + 1) % loadingTips.length;
                 tipEl.innerText = loadingTips[i];
@@ -115,17 +114,25 @@
                 visual = "Explain simply using visual cues (e.g., 'size of a thumb').";
             }
 
-            // --- PROMPT WITH ALL USER INPUTS ---
+            // --- STRICT "ONLY PROVIDED INGREDIENTS" PROMPT FOR DETAIL VIEW ---
             const promptText = `
             Role: Experienced Mongolian Cooking Instructor.
             Task: Write a detailed cooking guide for: "${title}".
-            Target Audience Skill: ${skillName} (${state.skill}/5).
             
-            USER SETTINGS:
-            - Servings: ${state.servings} people (Adjust quantities!)
-            - Appliances: ${state.apps.join(', ') || "Standard Kitchen"} (Use these tools!)
-            - Taste: ${state.selectedTastes.join(', ')}
-            - Diet: ${state.diet.join(', ')}
+            USER SELECTIONS (MUST FOLLOW):
+            1. Main Ingredients: ${state.ings.join(', ')}
+            2. Pantry/Seasonings: ${state.activePantry.join(', ')}
+            3. Cuisine Style: ${state.styles.join(', ') || "Any"}
+            4. Cooking Skill: ${lvlNames[state.skill-1]}
+            5. Dietary Restrictions: ${state.diet.join(', ') || "None"}
+            6. Servings: ${state.servings} people
+            7. Taste Profile: ${state.selectedTastes.join(', ') || "Standard"}
+            8. Appliances Available: ${state.apps.join(', ') || "Standard Kitchen"}
+
+            STRICT INGREDIENT RULES:
+            1. INGREDIENTS LIST must ONLY contain items from the user's selections above.
+            2. DO NOT include "extra" items like Onions, Milk, Butter, or Herbs unless they are listed in "Main Ingredients" or "Pantry".
+            3. ADAPT the recipe to work with ONLY these items.
 
             CRITICAL LANGUAGE RULES (ZERO ENGLISH ALLOWED):
             1. OUTPUT MUST BE 100% MONGOLIAN (Cyrillic). 
@@ -140,7 +147,7 @@
             3. Structure:
                - Appetizing Intro (1 sentence).
                - Ingredients (Metric).
-               - Tools needed.
+               - Tools needed (Based on Appliances).
                - Step-by-step instructions (Numbered).
                - Chef's Tip.
 
@@ -164,6 +171,7 @@
                 
                 if (data.output) {
                     let html = data.output;
+                    // Clean potential markdown
                     html = html.replace(/```html/g, '').replace(/```/g, '');
                     
                     document.getElementById('detail-container').innerHTML = `
