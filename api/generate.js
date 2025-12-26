@@ -1,55 +1,39 @@
-// Файлын зам: api/generate.js
+export default async function handler(req, res) {
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    );
 
-export const config = {
-  runtime: 'edge', // Vercel Edge Function (Хурдан, 10сек хязгаарт өртөхгүй)
-};
-
-export default async function handler(req) {
-  // Зөвхөн POST хүсэлт авна
-  if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method Not Allowed' }), { status: 405 });
-  }
-
-  try {
-    const { prompt } = await req.json();
-
-    // Vercel Settings дотор GEMINI_API_KEYS гэж хадгална
-    // Олон түлхүүр байвал таслалаар тусгаарлана (KEY1,KEY2,KEY3)
-    const keysString = process.env.GEMINI_API_KEYS;
-
-    if (!keysString) {
-      return new Response(JSON.stringify({ error: 'Server Config Error: API Keys missing.' }), { status: 500 });
+    if (req.method === 'OPTIONS') {
+        res.status(200).end();
+        return;
     }
 
-    // Түлхүүрүүдийг салгаж жагсаалт болгох
-    const apiKeys = keysString.split(',').map(key => key.trim());
-    
-    // Түлхүүр эргүүлэх (Rotation) - Санамсаргүй нэгийг сонгоно
-    const randomKey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
-
-    // gemini-1.5-flash модель ашиглана (Хамгийн тогтвортой, хурдан)
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${randomKey}`;
-
-    const response = await fetch(geminiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-    });
-
-    // Google-ээс ирсэн хариуг шалгах
-    if (!response.ok) {
-        const errText = await response.text();
-        return new Response(JSON.stringify({ error: `Gemini API Error: ${response.status} - ${errText}` }), { status: response.status });
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const data = await response.json();
+    try {
+        const { prompt } = req.body;
+        const apiKey = process.env.GEMINI_API_KEY;
 
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' }
-    });
+        if (!apiKey) {
+            return res.status(500).json({ error: 'API Key missing' });
+        }
 
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
-  }
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+        });
+
+        const data = await response.json();
+        return res.status(200).json(data);
+
+    } catch (error) {
+        return res.status(500).json({ error: 'Error generating recipe' });
+    }
 }
