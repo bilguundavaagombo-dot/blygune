@@ -111,39 +111,29 @@
                 return;
             }
 
-            // --- SMART SKILL LEVEL ADJUSTMENT ---
             const skillName = lvlNames[state.skill-1];
-            let tone = "Professional";
-            let visual = "Standard culinary terms";
-
-            if (state.skill <= 2) {
-                tone = "Super Friendly, Patient, Encouraging";
-                visual = "EXPLAIN LIKE I AM 5. Use visual size comparisons (e.g., 'size of a tennis ball', 'thickness of a phone'). Avoid chef jargon.";
-            }
-
-            // --- UPGRADED "NATIVE INSTRUCTOR" PROMPT ---
-            const promptText = `
-            Role: Experienced Mongolian Cooking Instructor.
-            Task: Write a detailed cooking guide for: "${title}".
-            Target Audience Skill: ${skillName} (${state.skill}/5).
             
-            INSTRUCTIONS:
-            1. Language: Native Mongolian (Cyrillic). Use appetizing, natural words (шаржигнуур, зөөлөн, шүүслэг).
-            2. Tone: ${tone}.
-            3. Clarity: ${visual}.
-            4. Structure:
-               - Brief appetizing intro (1 sentence).
-               - Ingredients (Exact metric amounts).
-               - Tools needed.
-               - Step-by-step instructions (Numbered).
-               - Pro Tip at the end.
+            // --- STRICT MONGOLIAN LANGUAGE PROMPT ---
+            const promptText = `
+            Role: Native Mongolian Professional Chef (Not a Robot).
+            Task: Write a cooking recipe for "${title}".
+            Target Audience: ${skillName} (${state.skill}/5).
+            
+            CRITICAL LANGUAGE RULES (MUST FOLLOW):
+            1. DO NOT translate word-for-word from English. Write directly in Mongolian.
+            2. GRAMMAR: Use standard recipe flow (e.g., "Махаа хэрчинэ", "Хуурна", "Буцалгана"). Do NOT use "Хийх хэрэгтэй" or "Хийгээрэй".
+            3. TONE: Natural, expert, and appetizing. Avoid robotic connecting words like "Энэ нь" or "Тэгээд".
+            4. VOCABULARY: Use correct culinary terms (Шимгээнэ, Агшаана, Хуурна, Жигнэнэ).
+
+            CLARITY RULES:
+            - ${state.skill <= 2 ? 'Explain simply using visual cues (e.g., "size of a thumb").' : 'Use professional chef terminology.'}
 
             OUTPUT FORMAT: 
-            Return raw HTML body content only. 
-            Use <h3> for section headers.
-            Use <ul> for ingredients.
-            Use <ol> for steps.
-            Use <strong> for emphasis.
+            Raw HTML body only. 
+            <h3>Intro</h3> (1 appetizing sentence)
+            <h3>Орц</h3> (Ingredients in metric)
+            <h3>Хийх дараалал</h3> (Numbered list <ol>, clear steps)
+            <strong>Chef's Tip</strong> (At the end)
             NO Markdown. NO <html> tags.
             `;
 
