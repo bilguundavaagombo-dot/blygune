@@ -6,7 +6,7 @@
     <title>AMT - Дэлгэрэнгүй</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* --- EXACT SAME CSS AS OTHER PAGES --- */
+        /* EXACT SAME CSS AS OTHER PAGES */
         :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --input-bg: #FFFFFF; --surface: #FFFFFF; --radius: 20px; --font: 'Inter', sans-serif; --font-head: 'Playfair Display', serif; --shadow: 0 10px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
         [data-theme="dark"] { --bg: #0F1115; --text: #F3F4F6; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #2D3748; --input-bg: #1A202C; --surface: #1A202C; --shadow: none; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -21,19 +21,15 @@
         main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; }
         .back-btn { background: none; border: none; font-size: 1rem; color: var(--sub-text); cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; margin-bottom: 15px; align-self: flex-start; }
         
-        /* DETAIL SPECIFIC STYLES */
         .detail-header { width: 100%; margin-bottom: 20px; text-align: center; }
         .detail-title { font-size: 2.2rem; font-family: var(--font-head); font-weight: 900; color: var(--text); line-height: 1.1; margin-bottom: 10px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .detail-content { width: 100%; background: var(--surface); padding: 30px; border-radius: 20px; border: 1px solid var(--border); line-height: 1.7; font-size: 1rem; box-shadow: var(--shadow); }
-        
-        /* AI HTML STYLING */
         .detail-content h3 { color: var(--accent); margin: 25px 0 15px 0; font-size: 1.3rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; font-family: var(--font-head); }
         .detail-content ul, .detail-content ol { padding-left: 20px; margin-bottom: 20px; }
         .detail-content li { margin-bottom: 12px; color: var(--text); }
         .detail-content strong { color: var(--text); font-weight: 800; }
         .detail-content p { margin-bottom: 15px; color: var(--sub-text); }
 
-        /* LOADING */
         .loader-screen { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .loader-screen.hidden { display: none; }
         .spinner { font-size: 3rem; animation: spin 2s infinite; display: block; margin-bottom: 20px; }
@@ -96,8 +92,7 @@
             const tipEl = document.getElementById('loader-tip');
             let i = Math.floor(Math.random() * loadingTips.length);
             tipEl.innerText = loadingTips[i];
-            
-            // CHANGED: 8000ms (8 seconds)
+            // 8 SECONDS
             setInterval(() => {
                 i = (i + 1) % loadingTips.length;
                 tipEl.innerText = loadingTips[i];
@@ -117,15 +112,21 @@
             let visual = "";
 
             if (state.skill <= 2) {
-                visual = "EXPLAIN LIKE I AM 5. Use visual size comparisons (e.g., 'size of a tennis ball'). Avoid chef jargon.";
+                visual = "Explain simply using visual cues (e.g., 'size of a thumb').";
             }
 
-            // --- STRICT "NO ENGLISH" PROMPT FOR DETAIL VIEW ---
+            // --- PROMPT WITH ALL USER INPUTS ---
             const promptText = `
             Role: Experienced Mongolian Cooking Instructor.
             Task: Write a detailed cooking guide for: "${title}".
             Target Audience Skill: ${skillName} (${state.skill}/5).
             
+            USER SETTINGS:
+            - Servings: ${state.servings} people (Adjust quantities!)
+            - Appliances: ${state.apps.join(', ') || "Standard Kitchen"} (Use these tools!)
+            - Taste: ${state.selectedTastes.join(', ')}
+            - Diet: ${state.diet.join(', ')}
+
             CRITICAL LANGUAGE RULES (ZERO ENGLISH ALLOWED):
             1. OUTPUT MUST BE 100% MONGOLIAN (Cyrillic). 
             2. Do NOT use English headers like "Ingredients". Use "Орц".
@@ -139,7 +140,7 @@
             3. Structure:
                - Appetizing Intro (1 sentence).
                - Ingredients (Metric).
-               - Tools.
+               - Tools needed.
                - Step-by-step instructions (Numbered).
                - Chef's Tip.
 
@@ -163,7 +164,6 @@
                 
                 if (data.output) {
                     let html = data.output;
-                    // Clean potential markdown
                     html = html.replace(/```html/g, '').replace(/```/g, '');
                     
                     document.getElementById('detail-container').innerHTML = `
