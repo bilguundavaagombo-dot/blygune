@@ -38,50 +38,69 @@
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
         .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
-        main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 800px; margin: 100px auto 0 auto; padding: 0 20px; }
+        main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 900px; margin: 100px auto 0 auto; padding: 0 0px; }
         
-        .hero { text-align: center; margin-bottom: 20px; width: 100%; }
+        .hero { text-align: center; margin-bottom: 20px; width: 100%; padding: 0 20px; }
         .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
 
-        .search-container { width: 100%; position: relative; margin-bottom: 30px; }
+        .search-container { width: calc(100% - 40px); position: relative; margin-bottom: 20px; margin-left: 20px; margin-right: 20px; }
         .search-input { width: 100%; padding: 18px 25px; padding-right: 60px; border-radius: 25px; background: var(--surface); border: 2px solid var(--border); font-size: 1.1rem; color: var(--text); outline: none; transition: 0.3s; box-shadow: var(--shadow); }
         .search-input:focus { border-color: var(--accent); }
         .search-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 45px; height: 45px; border-radius: 50%; background: var(--accent); color: white; border: none; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
-        /* REGION TITLES */
-        .region-title { width: 100%; text-align: left; font-size: 1.2rem; font-weight: 900; color: var(--sub-text); margin: 25px 0 15px 0; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-
-        .cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; }
-        .cat-card { 
-            background: var(--surface); border: 1px solid var(--border); border-radius: 20px; 
-            padding: 25px 15px; text-align: center; cursor: pointer; transition: 0.3s; 
-            display: flex; flex-direction: column; align-items: center; gap: 8px;
-            box-shadow: var(--shadow);
+        /* REGION SECTIONS */
+        .region-block { width: 100%; margin-bottom: 30px; padding-left: 20px; }
+        .region-title { font-size: 1.3rem; font-weight: 900; color: var(--text); margin-bottom: 15px; font-family: var(--font-head); display: flex; align-items: center; gap: 10px; }
+        
+        /* HORIZONTAL SCROLL CONTAINER - FIXED PADDING FOR HOVER */
+        .horizontal-scroll {
+            display: flex; gap: 15px; overflow-x: auto; 
+            padding-right: 20px; padding-bottom: 15px; padding-top: 10px; /* Added top padding so hover doesn't clip */
+            scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
-        .cat-card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .cat-emoji { font-size: 2.5rem; }
-        .cat-name { font-weight: 800; font-size: 1.1rem; }
+        .horizontal-scroll::-webkit-scrollbar { display: none; }
+
+        .cat-card { 
+            min-width: 140px; width: 140px;
+            background: var(--surface); border: 1px solid var(--border); border-radius: 22px; 
+            padding: 20px 10px; text-align: center; cursor: pointer; transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: var(--shadow); scroll-snap-align: start; flex: 0 0 auto;
+        }
+
+        /* --- FIXED: HOVER EFFECTS (Only on Desktop) --- */
+        @media (hover: hover) {
+            .cat-card:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+            .recipe-item:hover { border-color: var(--accent); transform: scale(1.01); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        }
+
+        /* --- FIXED: ACTIVE STATE (Touch Feedback for Mobile) --- */
+        .cat-card:active { transform: scale(0.95); border-color: var(--accent); opacity: 0.8; }
+        .recipe-item:active { transform: scale(0.98); background: var(--bg); }
+
+        .cat-emoji { font-size: 2.8rem; margin-bottom: 5px; }
+        .cat-name { font-weight: 800; font-size: 1rem; line-height: 1.2; }
 
         /* LIST VIEW */
-        .recipe-list { display: none; width: 100%; flex-direction: column; gap: 15px; animation: fadeIn 0.3s ease; }
-        .recipe-list.active { display: flex; }
+        .recipe-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 200; overflow-y: auto; padding: 20px; padding-top: 100px; animation: slideUp 0.3s ease; }
+        .recipe-overlay.active { display: block; }
         
         .recipe-item { 
             background: var(--surface); border: 1px solid var(--border); border-radius: 18px; 
             padding: 20px; display: flex; justify-content: space-between; align-items: center; 
-            cursor: pointer; transition: 0.2s; 
+            cursor: pointer; transition: 0.2s; margin-bottom: 15px;
         }
-        .recipe-item:hover { border-color: var(--accent); transform: scale(1.01); }
+        
         .ri-info { display: flex; flex-direction: column; gap: 5px; }
         .ri-title { font-weight: 800; font-size: 1.1rem; }
         .ri-meta { font-size: 0.85rem; color: var(--sub-text); }
         .ri-arrow { color: var(--accent); font-weight: 900; font-size: 1.5rem; }
 
-        .back-nav { width: 100%; display: none; margin-bottom: 20px; }
-        .back-nav.active { display: block; }
-        .back-btn { background: none; border: none; font-size: 1rem; color: var(--sub-text); cursor: pointer; font-weight: 700; }
+        .back-nav-float { position: fixed; top: 20px; left: 20px; z-index: 300; background: var(--surface); padding: 10px 20px; border-radius: 30px; border: 1px solid var(--border); font-weight: 700; cursor: pointer; display: none; box-shadow: var(--shadow); }
+        .back-nav-float.active { display: block; }
 
-        @keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { 0% { transform: translateY(100%); } 100% { transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -96,56 +115,77 @@
     </header>
 
     <main>
-        <div class="back-nav" id="back-nav">
-            <button class="back-btn" onclick="showCategories()">← Буцах</button>
-        </div>
+        <button class="back-nav-float" id="back-nav" onclick="closeDishes()">← Буцах</button>
 
         <div class="hero" id="hero-text">
             <h1>Бэлэн Цэс</h1>
             <p>Дэлхийн шилдэг жоруудаас сонгоорой</p>
         </div>
 
-        <div class="search-container" id="search-area">
+        <div class="search-container">
             <input type="text" id="recipe-search" class="search-input" placeholder="Хайх хоолоо бичнэ үү..." onkeypress="handleSearch(event)">
             <button class="search-btn" onclick="manualSearch()">🔍</button>
         </div>
 
         <div id="main-catalog-view">
             
-            <div class="region-title">🌏 АЗИ (ASIA)</div>
-            <div class="cat-grid" id="grid-asia"></div>
+            <div class="region-block">
+                <div class="region-title">🌏 АЗИ (ASIA)</div>
+                <div class="horizontal-scroll" id="grid-asia"></div>
+            </div>
 
-            <div class="region-title">🌍 ЕВРОП (EUROPE)</div>
-            <div class="cat-grid" id="grid-europe"></div>
+            <div class="region-block">
+                <div class="region-title">🌍 ЕВРОП (EUROPE)</div>
+                <div class="horizontal-scroll" id="grid-europe"></div>
+            </div>
 
-            <div class="region-title">🌎 АМЕРИК & БУСАД</div>
-            <div class="cat-grid" id="grid-america"></div>
+            <div class="region-block">
+                <div class="region-title">🌎 АМЕРИК (AMERICAS)</div>
+                <div class="horizontal-scroll" id="grid-america"></div>
+            </div>
+
+            <div class="region-block">
+                <div class="region-title">🥗 ТУСГАЙ ЦЭС (SPECIALS)</div>
+                <div class="horizontal-scroll" id="grid-other"></div>
+            </div>
 
         </div>
 
-        <div class="recipe-list" id="recipe-list"></div>
+        <div class="recipe-overlay" id="recipe-list">
+            <h2 id="list-title" style="text-align:center; margin-bottom:30px; font-family:var(--font-head); font-size:2rem;"></h2>
+            <div id="list-items"></div>
+        </div>
     </main>
 
     <script>
-        // --- DATABASE ---
         const catalogDB = {
             asia: [
-                { id: "mn", n: "Монгол", e: "🇲🇳", dishes: ["Цүйван", "Бууз", "Хуушуур", "Банштай цай", "Хорхог", "Цувдай", "Нийслэл салат"] },
-                { id: "kr", n: "Солонгос", e: "🇰🇷", dishes: ["Кимчи Жигэ", "Бүлгүги", "Бибимбап", "Токпокки", "Рамен"] },
-                { id: "jp", n: "Япон", e: "🇯🇵", dishes: ["Сүши", "Рамен", "Тахианы Терьяки", "Мисо шөл", "Кацу"] },
-                { id: "cn", n: "Хятад", e: "🇨🇳", dishes: ["Гунбао тахиа", "Шарсан будаа", "Бээжин нугас", "Банш"] }
+                { id: "mn", n: "Монгол", e: "🇲🇳", dishes: ["Цүйван", "Бууз", "Хуушуур", "Банштай цай", "Хорхог", "Цувдай", "Нийслэл салат", "Бантан", "Гурилтай шөл", "Бөөрөнхий мах", "Шарсан элэг"] },
+                { id: "kr", n: "Солонгос", e: "🇰🇷", dishes: ["Кимчи Жигэ", "Бүлгүги", "Бибимбап", "Токпокки", "Рамен", "Самгёпсал", "Жажанмён", "Кимпаб"] },
+                { id: "jp", n: "Япон", e: "🇯🇵", dishes: ["Сүши", "Рамен", "Тахианы Терьяки", "Мисо шөл", "Кацу", "Удон гоймон", "Онигири"] },
+                { id: "cn", n: "Хятад", e: "🇨🇳", dishes: ["Гунбао тахиа", "Шарсан будаа", "Бээжин нугас", "Банш", "Халуун ногоотой дүпү"] },
+                { id: "th", n: "Тайланд", e: "🇹🇭", dishes: ["Том Ям шөл", "Пад Тай", "Ногоон карри", "Манго стикки райс"] },
+                { id: "vn", n: "Вьетнам", e: "🇻🇳", dishes: ["Фо шөл (Pho)", "Вьетнам спринг ролл", "Бан ми"] },
+                { id: "in", n: "Энэтхэг", e: "🇮🇳", dishes: ["Батер чикен", "Тикка Масала", "Наан талх", "Карри", "Биряни"] }
             ],
             europe: [
-                { id: "it", n: "Итали", e: "🇮🇹", dishes: ["Карбонара", "Болонез", "Лазанья", "Пицца Маргарита", "Ризотто"] },
-                { id: "fr", n: "Франц", e: "🇫🇷", dishes: ["Рататуй", "Круассан", "Сонгины шөл", "Омлет"] },
-                { id: "ru", n: "Орос", e: "🇷🇺", dishes: ["Борщ", "Гуляш", "Тефтели", "Оливье салат", "Пирошки"] },
-                { id: "de", n: "Герман", e: "🇩🇪", dishes: ["Шницель", "Зайдас", "Претцель"] }
+                { id: "it", n: "Итали", e: "🇮🇹", dishes: ["Карбонара", "Болонез", "Лазанья", "Пицца Маргарита", "Ризотто", "Равиоли", "Тирамису"] },
+                { id: "fr", n: "Франц", e: "🇫🇷", dishes: ["Рататуй", "Круассан", "Сонгины шөл", "Омлет", "Крем Брюле"] },
+                { id: "ru", n: "Орос", e: "🇷🇺", dishes: ["Борщ", "Гуляш", "Тефтели", "Оливье салат", "Пирошки", "Винегрет", "Солянка", "Пельмени"] },
+                { id: "de", n: "Герман", e: "🇩🇪", dishes: ["Шницель", "Зайдас (Bratwurst)", "Претцель", "Төмсний салат"] },
+                { id: "tr", n: "Турк", e: "🇹🇷", dishes: ["Кебаб", "Донер", "Баклава", "Турк кофе", "Менемен"] },
+                { id: "es", n: "Испани", e: "🇪🇸", dishes: ["Паелла (Paella)", "Гаспачо", "Чуррос", "Тапас"] },
+                { id: "gr", n: "Грек", e: "🇬🇷", dishes: ["Грек салат", "Мусака", "Гирос", "Сувлаки"] }
             ],
             america: [
-                { id: "us", n: "Фаст Фүүд", e: "🍔", dishes: ["Бургер", "Хотдог", "Шарсан төмс", "Тахианы далавч", "Клаб Сэндвич"] },
-                { id: "mx", n: "Мексик", e: "🌮", dishes: ["Тако", "Буррито", "Кесадия", "Начос"] },
-                { id: "fit", n: "Эрүүл", e: "🥗", dishes: ["Цезарь Салат", "Авокадо Тоаст", "Салмон", "Ногооны зутан"] },
-                { id: "sw", n: "Амттан", e: "🍰", dishes: ["Бялуу", "Брауни", "Панкэйк", "Вафли"] }
+                { id: "us", n: "Фаст Фүүд", e: "🍔", dishes: ["Бургер", "Хотдог", "Шарсан төмс", "Тахианы далавч", "Клаб Сэндвич", "Мак & Чиз"] },
+                { id: "mx", n: "Мексик", e: "🌮", dishes: ["Тако", "Буррито", "Кесадия", "Начос", "Гуакамоле", "Энчиладам"] },
+                { id: "br", n: "Бразил", e: "🇧🇷", dishes: ["Фейжоада", "Бразил стейк", "Чурраско"] }
+            ],
+            other: [
+                { id: "fit", n: "Эрүүл", e: "🥗", dishes: ["Цезарь Салат", "Авокадо Тоаст", "Салмон", "Ногооны зутан", "Киноа салат"] },
+                { id: "sw", n: "Амттан", e: "🍰", dishes: ["Бялуу", "Брауни", "Панкэйк", "Вафли", "Чизкейк", "Маффин"] },
+                { id: "dr", n: "Уух зүйлс", e: "🍹", dishes: ["Сүүтэй цай", "Латте", "Смүүти", "Халуун шоколад", "Мөстэй цай", "Мохито (Mocktail)"] }
             ]
         };
 
@@ -164,6 +204,7 @@
             renderSection('grid-asia', catalogDB.asia);
             renderSection('grid-europe', catalogDB.europe);
             renderSection('grid-america', catalogDB.america);
+            renderSection('grid-other', catalogDB.other);
         }
 
         function renderSection(elementId, data) {
@@ -179,21 +220,9 @@
         }
 
         function showDishes(categoryObj) {
-            document.getElementById('main-catalog-view').style.display = 'none';
-            document.getElementById('hero-text').style.display = 'none';
-            document.getElementById('search-area').style.display = 'none';
-            document.getElementById('back-nav').classList.add('active');
-            
-            const list = document.getElementById('recipe-list');
-            list.innerHTML = '';
-            list.classList.add('active');
-
-            const h2 = document.createElement('h2');
-            h2.innerText = categoryObj.e + " " + categoryObj.n;
-            h2.style.marginBottom = '20px';
-            h2.style.textAlign = 'center';
-            h2.style.fontFamily = 'var(--font-head)';
-            list.appendChild(h2);
+            document.getElementById('list-title').innerText = categoryObj.e + " " + categoryObj.n;
+            const container = document.getElementById('list-items');
+            container.innerHTML = '';
 
             categoryObj.dishes.forEach(dishName => {
                 const item = document.createElement('div');
@@ -204,18 +233,17 @@
                     </div>
                     <div class="ri-arrow">→</div>
                 `;
-                // LINKS TO NEW PAGE
                 item.onclick = () => goToCatalogDetail(dishName);
-                list.appendChild(item);
+                container.appendChild(item);
             });
+
+            document.getElementById('recipe-list').classList.add('active');
+            document.getElementById('back-nav').classList.add('active');
         }
 
-        function showCategories() {
-            document.getElementById('main-catalog-view').style.display = 'block';
-            document.getElementById('hero-text').style.display = 'block';
-            document.getElementById('search-area').style.display = 'block';
-            document.getElementById('back-nav').classList.remove('active');
+        function closeDishes() {
             document.getElementById('recipe-list').classList.remove('active');
+            document.getElementById('back-nav').classList.remove('active');
         }
 
         function handleSearch(e) { if(e.key === 'Enter') manualSearch(); }
@@ -226,10 +254,7 @@
         }
 
         function goToCatalogDetail(dishName) {
-            // Save ONLY the dish name. We don't care about ingredients here.
             localStorage.setItem('catalog_selected_dish', dishName);
-            
-            // --- NEW PAGE CONNECTED ONLY TO CATALOG ---
             window.location.href = 'catalog_detail.html';
         }
     </script>
