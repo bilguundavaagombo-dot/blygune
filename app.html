@@ -45,17 +45,22 @@
             background-color: var(--bg); color: var(--text); font-family: var(--font);
             min-height: 100vh; overflow-x: hidden; 
             transition: background 0.3s, color 0.3s;
+            /* SAFE AREAS FOR MOBILE */
             padding-top: env(safe-area-inset-top);
             padding-bottom: 140px;
-            
-            /* --- FIXED: ZOOM OUT FOR DESKTOP FEEL ON MOBILE --- */
-            zoom: 65%; 
+        }
+
+        /* --- MOBILE ZOOM ONLY (Does not affect Desktop) --- */
+        @media only screen and (max-width: 768px) {
+            body {
+                zoom: 60%; /* This gives the "Computer Website" feel on phones */
+            }
         }
 
         /* HEADER */
         header {
             padding: 15px 30px; 
-            padding-top: max(15px, env(safe-area-inset-top));
+            padding-top: max(15px, env(safe-area-inset-top)); /* Notch Support */
             display: flex; justify-content: space-between; align-items: center;
             position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
             background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass);
@@ -71,6 +76,9 @@
 
         /* MAIN */
         main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; }
+        /* Add margin to clear fixed header on mobile zoom */
+        @media only screen and (max-width: 768px) { main { margin-top: 140px; } }
+
         .hero { text-align: center; margin-bottom: 35px; width: 100%; }
         .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
         .input-wrapper { position: relative; margin-bottom: 20px; width: 100%; }
@@ -85,11 +93,11 @@
         .style-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 5px; align-items: center; }
         .style-chip.selected { background: var(--text); color: var(--bg); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
         
-        /* --- FIXED: PERFECT GRID FOR LEVELS --- */
+        /* --- FIXED: PERFECT GRID FOR LEVELS (Skill & Pantry) --- */
         .level-bar { 
-            display: grid; 
+            display: grid; /* Changed from flex to grid */
             grid-template-columns: repeat(5, 1fr); /* 5 Equal Columns */
-            gap: 5px;
+            gap: 6px;
             background: var(--surface); 
             padding: 6px; 
             border-radius: 20px; 
@@ -97,8 +105,9 @@
             width: 100%; 
         }
         .lvl-step { 
+            /* flex: 1; removed */
             text-align: center; 
-            padding: 12px 5px; /* Tighter padding for grid */
+            padding: 10px 2px; 
             border-radius: 14px; 
             cursor: pointer; 
             transition: 0.3s; 
@@ -144,7 +153,8 @@
         /* BOTTOM BAR */
         .bottom-nav { 
             position: fixed; bottom: 0; left: 0; width: 100%; 
-            padding: 20px; padding-bottom: max(20px, env(safe-area-inset-bottom));
+            padding: 20px; 
+            padding-bottom: max(20px, env(safe-area-inset-bottom)); /* Swipe Bar Fix */
             background: rgba(255,255,255,0.7); backdrop-filter: var(--glass); 
             border-top: 1px solid var(--border); display: flex; justify-content: center; z-index: 900; 
         }
