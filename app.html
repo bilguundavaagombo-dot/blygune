@@ -45,15 +45,17 @@
             background-color: var(--bg); color: var(--text); font-family: var(--font);
             min-height: 100vh; overflow-x: hidden; 
             transition: background 0.3s, color 0.3s;
-            /* SAFE AREA PADDING FOR MOBILE */
             padding-top: env(safe-area-inset-top);
             padding-bottom: 140px;
+            
+            /* --- FIXED: ZOOM OUT FOR DESKTOP FEEL ON MOBILE --- */
+            zoom: 65%; 
         }
 
-        /* HEADER - ADJUSTED FOR NOTCH */
+        /* HEADER */
         header {
             padding: 15px 30px; 
-            padding-top: max(15px, env(safe-area-inset-top)); /* NOTCH FIX */
+            padding-top: max(15px, env(safe-area-inset-top));
             display: flex; justify-content: space-between; align-items: center;
             position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
             background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass);
@@ -67,14 +69,8 @@
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
         .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
-        /* MAIN - ADJUSTED FOR FIXED HEADER */
-        main { 
-            display: flex; flex-direction: column; align-items: center; 
-            width: 100%; max-width: 700px; margin: 0 auto; 
-            padding: 0 20px; 
-            padding-top: 110px; /* Clears the header on mobile */
-        }
-        
+        /* MAIN */
+        main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; }
         .hero { text-align: center; margin-bottom: 35px; width: 100%; }
         .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
         .input-wrapper { position: relative; margin-bottom: 20px; width: 100%; }
@@ -88,8 +84,32 @@
         .style-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; width: 100%; }
         .style-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.2s; display: flex; flex-direction: column; gap: 5px; align-items: center; }
         .style-chip.selected { background: var(--text); color: var(--bg); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
-        .level-bar { display: flex; background: var(--surface); padding: 6px; border-radius: 20px; border: 1px solid var(--border); width: 100%; }
-        .lvl-step { flex: 1; text-align: center; padding: 12px; border-radius: 14px; cursor: pointer; transition: 0.3s; color: var(--sub-text); display: flex; flex-direction: column; gap: 4px; user-select: none; }
+        
+        /* --- FIXED: PERFECT GRID FOR LEVELS --- */
+        .level-bar { 
+            display: grid; 
+            grid-template-columns: repeat(5, 1fr); /* 5 Equal Columns */
+            gap: 5px;
+            background: var(--surface); 
+            padding: 6px; 
+            border-radius: 20px; 
+            border: 1px solid var(--border); 
+            width: 100%; 
+        }
+        .lvl-step { 
+            text-align: center; 
+            padding: 12px 5px; /* Tighter padding for grid */
+            border-radius: 14px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            color: var(--sub-text); 
+            display: flex; 
+            flex-direction: column; 
+            gap: 4px; 
+            user-select: none; 
+            align-items: center;
+            justify-content: center;
+        }
         .lvl-step.active { background: var(--text); color: var(--bg); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
         .level-desc { text-align: center; font-size: 0.9rem; color: var(--accent); margin-top: 10px; font-weight: 600; font-style: italic; min-height: 24px; width: 100%; }
 
@@ -121,10 +141,10 @@
         .count-val { font-size: 1.4rem; font-weight: 800; min-width: 30px; text-align: center; }
         .tips-box { margin-top: 20px; width: 100%; padding: 15px; border-radius: 16px; background: linear-gradient(135deg, #FF4500, #FF8C00); color: white; text-align: center; font-size: 0.95rem; line-height: 1.5; font-style: italic; box-shadow: var(--shadow); }
 
-        /* BOTTOM BAR - ADJUSTED FOR HOME SWIPE INDICATOR */
+        /* BOTTOM BAR */
         .bottom-nav { 
             position: fixed; bottom: 0; left: 0; width: 100%; 
-            padding: 20px; padding-bottom: max(20px, env(safe-area-inset-bottom)); /* SAFE AREA FIX */
+            padding: 20px; padding-bottom: max(20px, env(safe-area-inset-bottom));
             background: rgba(255,255,255,0.7); backdrop-filter: var(--glass); 
             border-top: 1px solid var(--border); display: flex; justify-content: center; z-index: 900; 
         }
@@ -228,7 +248,7 @@
         </div>
 
         <div class="calc-box">
-            <span class="calc-title">ТООЦООЛОЛ (Хүний тоо)</span>
+            <span class="calc-title">Тооцоолол (Хүний тоо)</span>
             <div class="counter">
                 <button class="count-btn" onclick="updServ(-1)">−</button>
                 <span class="count-val" id="serv-val">2</span>
@@ -345,8 +365,6 @@
             }
             state.activePantry = activePantry;
             state.mode = mode;
-            
-            // Save state and redirect
             localStorage.setItem('amt_state', JSON.stringify(state));
             window.location.href = 'list.html';
         }
