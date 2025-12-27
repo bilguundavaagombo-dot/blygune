@@ -11,28 +11,62 @@
     <title>AMT - Дэлгэрэнгүй</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* --- EXACT SAME CSS AS OTHER PAGES --- */
+        /* --- BASE CSS --- */
         :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --input-bg: #FFFFFF; --surface: #FFFFFF; --radius: 20px; --font: 'Inter', sans-serif; --font-head: 'Playfair Display', serif; --shadow: 0 10px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
         [data-theme="dark"] { --bg: #0F1115; --text: #F3F4F6; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #2D3748; --input-bg: #1A202C; --surface: #1A202C; --shadow: none; }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-x: hidden; transition: background 0.3s, color 0.3s; padding-bottom: 40px; padding-top: env(safe-area-inset-top); }
-        header { padding: 15px 30px; padding-top: max(15px, env(safe-area-inset-top)); display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 100; background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass); border-bottom: 1px solid var(--border); }
+        
+        body { 
+            background-color: var(--bg); color: var(--text); font-family: var(--font); 
+            min-height: 100vh; overflow-x: hidden; transition: background 0.3s, color 0.3s; 
+            padding-bottom: 40px; padding-top: env(safe-area-inset-top); 
+        }
+
+        header { 
+            padding: 15px 30px; padding-top: max(15px, env(safe-area-inset-top)); 
+            display: flex; justify-content: space-between; align-items: center; 
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100; 
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass); 
+            border-bottom: 1px solid var(--border); 
+        }
         [data-theme="dark"] header { background: rgba(15, 17, 21, 0.7); }
+
         .logo-group { cursor: pointer; display: flex; flex-direction: column; text-decoration: none; color: inherit; line-height: 1; }
         .logo { font-family: var(--font-head); font-weight: 900; font-size: 2rem; letter-spacing: -1px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .logo-sub { font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; color: var(--text); opacity: 0.8; }
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
         .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
         
-        main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; }
+        main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 800px; margin: 100px auto 0 auto; padding: 0 20px; }
         .back-btn { background: none; border: none; font-size: 1rem; color: var(--sub-text); cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; margin-bottom: 15px; align-self: flex-start; }
         
-        .detail-header { width: 100%; margin-bottom: 20px; text-align: center; }
+        .detail-header { width: 100%; margin-bottom: 15px; text-align: center; }
         .detail-title { font-size: 2.2rem; font-family: var(--font-head); font-weight: 900; color: var(--text); line-height: 1.1; margin-bottom: 10px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* SKILL BADGE */
+        .skill-badge { 
+            display: inline-block; padding: 6px 14px; background: var(--surface); 
+            border: 1px solid var(--border); border-radius: 20px; 
+            font-size: 0.8rem; font-weight: 700; color: var(--accent); 
+            margin-bottom: 10px; box-shadow: var(--shadow); 
+        }
+
         .detail-content { width: 100%; background: var(--surface); padding: 30px; border-radius: 20px; border: 1px solid var(--border); line-height: 1.7; font-size: 1rem; box-shadow: var(--shadow); }
-        .detail-content h3 { color: var(--accent); margin: 25px 0 15px 0; font-size: 1.3rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; font-family: var(--font-head); }
+        
+        /* --- MOBILE WIDE VIEW OPTIMIZATION --- */
+        @media (max-width: 768px) {
+            main { padding: 0 10px; } /* Less padding outside */
+            .detail-content { 
+                padding: 20px 15px; /* Less padding inside = Wider Text */
+                border-radius: 15px; 
+            }
+            .detail-title { font-size: 1.8rem; }
+        }
+
+        .detail-content h3 { color: var(--accent); margin: 20px 0 10px 0; font-size: 1.2rem; border-bottom: 1px solid var(--border); padding-bottom: 8px; font-family: var(--font-head); }
         .detail-content ul, .detail-content ol { padding-left: 20px; margin-bottom: 20px; }
-        .detail-content li { margin-bottom: 12px; color: var(--text); }
+        .detail-content li { margin-bottom: 10px; color: var(--text); }
         .detail-content strong { color: var(--text); font-weight: 800; }
         .detail-content p { margin-bottom: 15px; color: var(--sub-text); }
 
@@ -41,7 +75,6 @@
         .loader-screen.hidden { display: none; }
         .spinner { font-size: 3rem; animation: spin 2s infinite; display: block; margin-bottom: 20px; }
         .loader-tip { margin-top: 30px; padding: 15px 25px; background: rgba(255, 69, 0, 0.1); color: var(--text); border-radius: 12px; font-size: 0.9rem; max-width: 80%; line-height: 1.5; font-style: italic; animation: fadeIn 0.5s ease; border: 1px solid var(--accent); }
-        
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
 
@@ -49,8 +82,7 @@
         .btn-donate {
             width: 100%; margin-top: 25px; padding: 18px; 
             border-radius: 18px; border: none; 
-            background: #22C55E; /* Green */
-            color: white; font-size: 1.1rem; font-weight: 800; 
+            background: #22C55E; color: white; font-size: 1.1rem; font-weight: 800; 
             cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; 
             box-shadow: 0 10px 20px rgba(34, 197, 94, 0.2); transition: 0.3s;
         }
@@ -61,21 +93,17 @@
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-card { width: 100%; max-width: 400px; background: var(--bg); border-radius: 24px; padding: 30px; transform: scale(0.9); opacity: 0; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid var(--border); text-align: center; max-height: 90vh; overflow-y: auto; }
         .modal-overlay.active .modal-card { transform: scale(1); opacity: 1; }
-        
         .donate-title { font-size: 1.4rem; font-weight: 900; margin-bottom: 10px; color: var(--text); }
         .donate-text { color: var(--sub-text); font-size: 0.95rem; margin-bottom: 25px; line-height: 1.5; }
         
-        /* PAYMENT CARDS */
         .pay-card { background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; text-align: left; }
         .pay-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
         .pay-logo { font-weight: 900; color: var(--text); font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
-        .pay-logo.golomt { color: #00AEEF; } /* Golomt Blue */
-        
+        .pay-logo.golomt { color: #00AEEF; }
         .account-box { display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 12px; border-radius: 12px; border: 1px dashed var(--sub-text); }
         .acc-number { font-family: monospace; font-size: 1.1rem; font-weight: 700; color: var(--text); }
         .btn-copy { background: var(--text); color: var(--bg); border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-copy:active { transform: scale(0.95); opacity: 0.8; }
-        
         .btn-close-donate { background: var(--border); color: var(--text); border: none; padding: 15px 40px; border-radius: 50px; font-weight: 700; cursor: pointer; margin-top: 10px; width: 100%; }
     </style>
 </head>
@@ -100,7 +128,12 @@
     <main id="main-content" style="display:none;">
         <button class="back-btn" onclick="window.location.href='list.html'">← Буцах</button>
         
-        <div id="detail-container"></div>
+        <div class="detail-header">
+            <div id="skill-display" class="skill-badge"></div>
+            <h1 class="detail-title" id="recipe-title"></h1>
+        </div>
+        
+        <div id="detail-container" class="detail-content"></div>
 
         <button class="btn-donate" onclick="openDonate()">
             <span>☕ Төсөл дэмжих</span>
@@ -162,7 +195,6 @@
             }, 8000); 
         }
 
-        // --- DONATION FUNCTIONS ---
         function openDonate() { document.getElementById('donate-modal').classList.add('active'); }
         function closeDonate(e) { if (e && e.target !== e.currentTarget) return; document.getElementById('donate-modal').classList.remove('active'); }
         
@@ -170,7 +202,7 @@
             navigator.clipboard.writeText(text).then(() => {
                 const originalText = btnElement.innerText;
                 btnElement.innerText = "ХУУЛСАН!";
-                btnElement.style.background = "#22C55E"; // Green feedback
+                btnElement.style.background = "#22C55E";
                 setTimeout(() => {
                     btnElement.innerText = originalText;
                     btnElement.style.background = "var(--text)";
@@ -188,13 +220,26 @@
             }
 
             const skillName = lvlNames[state.skill-1];
-            let visual = "";
+            
+            // SHOW TITLE AND SKILL BADGE
+            document.getElementById('recipe-title').innerText = title;
+            document.getElementById('skill-display').innerText = "Түвшин: " + skillName;
 
+            // --- ADJUST CLARITY BASED ON SKILL ---
+            let visual = "";
+            let tone = "Expert Chef";
+            
             if (state.skill <= 2) {
-                visual = "Explain simply using visual cues (e.g., 'size of a thumb').";
+                // Beginner: Explain like I am 5
+                visual = "Explain simply using visual cues (e.g., 'size of a thumb'). Make steps short and easy.";
+                tone = "Kind Teacher";
+            } else if (state.skill >= 4) {
+                // Pro: Concise, professional terms
+                visual = "Use professional culinary terms. Keep steps concise.";
+                tone = "Professional Chef";
             }
 
-            // --- STRICT "ONLY PROVIDED INGREDIENTS" PROMPT FOR DETAIL VIEW ---
+            // --- REMOVED "TOOLS/ХЭРЭГСЭЛ" FROM PROMPT ---
             const promptText = `
             Role: Experienced Mongolian Cooking Instructor.
             Task: Write a detailed cooking guide for: "${title}".
@@ -203,15 +248,15 @@
             1. Main Ingredients: ${state.ings.join(', ')}
             2. Pantry/Seasonings: ${state.activePantry.join(', ')}
             3. Cuisine Style: ${state.styles.join(', ') || "Any"}
-            4. Cooking Skill: ${lvlNames[state.skill-1]}
+            4. Cooking Skill: ${lvlNames[state.skill-1]} (Tone: ${tone})
             5. Dietary Restrictions: ${state.diet.join(', ') || "None"}
             6. Servings: ${state.servings} people
             7. Taste Profile: ${state.selectedTastes.join(', ') || "Standard"}
-            8. Appliances Available: ${state.apps.join(', ') || "Standard Kitchen"}
+            8. Appliances: ${state.apps.join(', ') || "Standard Kitchen"}
 
             STRICT INGREDIENT RULES:
-            1. INGREDIENTS LIST must ONLY contain items from the user's selections above.
-            2. DO NOT include "extra" items like Onions, Milk, Butter, or Herbs unless they are listed in "Main Ingredients" or "Pantry".
+            1. INGREDIENTS LIST must ONLY contain items from the user's selections.
+            2. DO NOT include "extra" items (No onions, milk, butter) unless listed.
             3. ADAPT the recipe to work with ONLY these items.
 
             CRITICAL LANGUAGE RULES (ZERO ENGLISH ALLOWED):
@@ -222,20 +267,18 @@
             5. Translate ALL culinary terms (Sauté -> Хуурах, Garnish -> Чимэглэх).
 
             CONTENT RULES:
-            1. Tone: Natural, native speaker, appetizing.
+            1. Tone: ${tone}.
             2. Clarity: ${visual}
             3. Structure:
                - Appetizing Intro (1 sentence).
                - Ingredients (Metric).
-               - Tools needed (Based on Appliances).
-               - Step-by-step instructions (Numbered).
+               - Step-by-step instructions (Numbered). (NO TOOLS SECTION)
                - Chef's Tip.
 
             OUTPUT FORMAT: 
             Raw HTML body only. 
             <h3>Танилцуулга</h3> 
             <h3>Орц</h3> 
-            <h3>Хэрэгсэл</h3>
             <h3>Хийх дараалал</h3> (<ol>)
             <strong>Тогоочийн зөвлөгөө</strong>
             NO Markdown. NO <html> tags.
@@ -251,15 +294,9 @@
                 
                 if (data.output) {
                     let html = data.output;
-                    // Clean potential markdown
                     html = html.replace(/```html/g, '').replace(/```/g, '');
                     
-                    document.getElementById('detail-container').innerHTML = `
-                        <div class="detail-header">
-                            <h1 class="detail-title">${title}</h1>
-                        </div>
-                        <div class="detail-content">${html}</div>
-                    `;
+                    document.getElementById('detail-container').innerHTML = html;
                     document.getElementById('loader-screen').classList.add('hidden');
                     document.getElementById('main-content').style.display = 'flex';
                 }
