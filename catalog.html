@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#F8F9FB">
+
+    <title>AMT - Бэлэн Жор</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- CORE VARIABLES --- */
+        :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --surface: #FFFFFF; --radius: 20px; --font: 'Inter', sans-serif; --font-head: 'Playfair Display', serif; --shadow: 0 10px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
+        [data-theme="dark"] { --bg: #0F1115; --text: #F3F4F6; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #2D3748; --surface: #1A202C; --shadow: none; }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background-color: var(--bg); color: var(--text); font-family: var(--font); 
+            min-height: 100vh; overflow-x: hidden; transition: background 0.3s, color 0.3s; 
+            padding-top: env(safe-area-inset-top); padding-bottom: 40px; 
+        }
+
+        /* MOBILE ZOOM */
+        @media only screen and (max-width: 768px) { body { zoom: 65%; } }
+
+        /* HEADER */
+        header { 
+            padding: 15px 30px; padding-top: max(15px, env(safe-area-inset-top)); 
+            display: flex; justify-content: space-between; align-items: center; 
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100; 
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass); 
+            border-bottom: 1px solid var(--border); 
+        }
+        [data-theme="dark"] header { background: rgba(15, 17, 21, 0.7); }
+
+        .logo-group { cursor: pointer; display: flex; flex-direction: column; text-decoration: none; color: inherit; line-height: 1; }
+        .logo { font-family: var(--font-head); font-weight: 900; font-size: 2rem; letter-spacing: -1px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-sub { font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; color: var(--text); opacity: 0.8; }
+        .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
+        .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+        /* MAIN */
+        main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 800px; margin: 100px auto 0 auto; padding: 0 20px; }
+        
+        .hero { text-align: center; margin-bottom: 30px; width: 100%; }
+        .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
+        
+        /* CATEGORY GRID */
+        .cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; }
+        .cat-card { 
+            background: var(--surface); border: 1px solid var(--border); border-radius: 20px; 
+            padding: 30px 20px; text-align: center; cursor: pointer; transition: 0.3s; 
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            box-shadow: var(--shadow);
+        }
+        .cat-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .cat-emoji { font-size: 3rem; }
+        .cat-name { font-weight: 800; font-size: 1.2rem; }
+
+        /* RECIPE LIST (Hidden by default) */
+        .recipe-list { display: none; width: 100%; flex-direction: column; gap: 15px; animation: fadeIn 0.3s ease; }
+        .recipe-list.active { display: flex; }
+        
+        .recipe-item { 
+            background: var(--surface); border: 1px solid var(--border); border-radius: 18px; 
+            padding: 20px; display: flex; justify-content: space-between; align-items: center; 
+            cursor: pointer; transition: 0.2s; 
+        }
+        .recipe-item:hover { border-color: var(--accent); transform: scale(1.01); }
+        .ri-info { display: flex; flex-direction: column; gap: 5px; }
+        .ri-title { font-weight: 800; font-size: 1.1rem; }
+        .ri-meta { font-size: 0.85rem; color: var(--sub-text); }
+        .ri-arrow { color: var(--accent); font-weight: 900; font-size: 1.5rem; }
+
+        .back-nav { width: 100%; display: none; margin-bottom: 20px; }
+        .back-nav.active { display: block; }
+        .back-btn { background: none; border: none; font-size: 1rem; color: var(--sub-text); cursor: pointer; font-weight: 700; }
+
+        @keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-group" onclick="window.location.href='index.html'">
+            <div class="logo">AMT<span>.</span></div>
+            <div class="logo-sub">Бэлэн Цэс</div>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" onclick="toggleTheme()">◑</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="back-nav" id="back-nav">
+            <button class="back-btn" onclick="showCategories()">← Төрөл сонгох</button>
+        </div>
+
+        <div class="hero" id="hero-text">
+            <h1>Ямар хоол идмээр байна?</h1>
+            <p>Дэлхийн шилдэг жоруудаас сонгоорой</p>
+        </div>
+
+        <div class="cat-grid" id="cat-grid"></div>
+
+        <div class="recipe-list" id="recipe-list"></div>
+    </main>
+
+    <script>
+        // --- DATABASE OF READY RECIPES ---
+        const menuDB = {
+            "🇲🇳 Монгол": [
+                { t: "Цүйван", m: "45 мин • 700 ккал" },
+                { t: "Бууз", m: "60 мин • 350 ккал" },
+                { t: "Хуушуур", m: "40 мин • 450 ккал" },
+                { t: "Банштай цай", m: "30 мин • 300 ккал" },
+                { t: "Хорхог", m: "90 мин • 800 ккал" }
+            ],
+            "🇮🇹 Итали": [
+                { t: "Карбонара", m: "20 мин • 550 ккал" },
+                { t: "Болонез", m: "60 мин • 600 ккал" },
+                { t: "Лазанья", m: "75 мин • 700 ккал" },
+                { t: "Пицца Маргарита", m: "40 мин • 800 ккал" },
+                { t: "Ризотто", m: "45 мин • 500 ккал" }
+            ],
+            "🇯🇵 Ази": [
+                { t: "Рамен", m: "120 мин • 600 ккал" },
+                { t: "Шарсан будаа", m: "15 мин • 450 ккал" },
+                { t: "Тахианы Терьяки", m: "25 мин • 400 ккал" },
+                { t: "Кимчи Жигэ", m: "30 мин • 350 ккал" },
+                { t: "Сүши", m: "60 мин • 300 ккал" }
+            ],
+            "🥗 Эрүүл": [
+                { t: "Цезарь Салат", m: "20 мин • 350 ккал" },
+                { t: "Авокадо Тоаст", m: "10 мин • 250 ккал" },
+                { t: "Ногоотой шөл", m: "30 мин • 200 ккал" },
+                { t: "Грек Салат", m: "15 мин • 280 ккал" },
+                { t: "Салмон загас", m: "25 мин • 450 ккал" }
+            ]
+        };
+
+        window.onload = () => {
+            if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
+            renderCategories();
+        };
+
+        function toggleTheme() { 
+            const d = document.body.getAttribute('data-theme') === 'dark'; 
+            document.body.setAttribute('data-theme', d ? 'light' : 'dark'); 
+            localStorage.setItem('theme', d ? 'light' : 'dark'); 
+        }
+
+        function renderCategories() {
+            const grid = document.getElementById('cat-grid');
+            grid.innerHTML = '';
+            
+            Object.keys(menuDB).forEach(key => {
+                const parts = key.split(' ');
+                const emoji = parts[0];
+                const name = parts[1];
+                
+                const card = document.createElement('div');
+                card.className = 'cat-card';
+                card.innerHTML = `<div class="cat-emoji">${emoji}</div><div class="cat-name">${name}</div>`;
+                card.onclick = () => showDishes(key);
+                grid.appendChild(card);
+            });
+        }
+
+        function showDishes(category) {
+            document.getElementById('cat-grid').style.display = 'none';
+            document.getElementById('hero-text').style.display = 'none';
+            document.getElementById('back-nav').classList.add('active');
+            
+            const list = document.getElementById('recipe-list');
+            list.innerHTML = '';
+            list.classList.add('active');
+
+            // Header for list
+            const h2 = document.createElement('h2');
+            h2.innerText = category + " хоолнууд";
+            h2.style.marginBottom = '20px';
+            h2.style.fontFamily = 'var(--font-head)';
+            list.appendChild(h2);
+
+            menuDB[category].forEach(dish => {
+                const item = document.createElement('div');
+                item.className = 'recipe-item';
+                item.innerHTML = `
+                    <div class="ri-info">
+                        <div class="ri-title">${dish.t}</div>
+                        <div class="ri-meta">${dish.m}</div>
+                    </div>
+                    <div class="ri-arrow">→</div>
+                `;
+                item.onclick = () => selectRecipe(dish.t, category);
+                list.appendChild(item);
+            });
+        }
+
+        function showCategories() {
+            document.getElementById('cat-grid').style.display = 'grid';
+            document.getElementById('hero-text').style.display = 'block';
+            document.getElementById('back-nav').classList.remove('active');
+            document.getElementById('recipe-list').classList.remove('active');
+        }
+
+        function selectRecipe(title, category) {
+            // 1. Set the Title
+            localStorage.setItem('amt_selected_recipe', title);
+            
+            // 2. Create a Mock State so detail.html works
+            // This tricks the AI into thinking we have all ingredients
+            const mockState = {
+                skill: 3, // Default to Medium
+                ings: [title], // Main ingredient is the dish name
+                activePantry: ["Standard Pantry"],
+                diet: [],
+                servings: 2,
+                styles: [category],
+                apps: ["Stove"],
+                mode: "catalog"
+            };
+            localStorage.setItem('amt_state', JSON.stringify(mockState));
+
+            // 3. Go to Detail
+            window.location.href = 'detail.html';
+        }
+    </script>
+</body>
+</html>
