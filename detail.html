@@ -41,6 +41,7 @@
         .loader-screen.hidden { display: none; }
         .spinner { font-size: 3rem; animation: spin 2s infinite; display: block; margin-bottom: 20px; }
         .loader-tip { margin-top: 30px; padding: 15px 25px; background: rgba(255, 69, 0, 0.1); color: var(--text); border-radius: 12px; font-size: 0.9rem; max-width: 80%; line-height: 1.5; font-style: italic; animation: fadeIn 0.5s ease; border: 1px solid var(--accent); }
+        
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
 
@@ -69,16 +70,12 @@
         .pay-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
         .pay-logo { font-weight: 900; color: var(--text); font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
         .pay-logo.golomt { color: #00AEEF; } /* Golomt Blue */
-        .pay-logo.social { color: #E84F30; } /* SocialPay Orange */
         
         .account-box { display: flex; justify-content: space-between; align-items: center; background: var(--bg); padding: 12px; border-radius: 12px; border: 1px dashed var(--sub-text); }
         .acc-number { font-family: monospace; font-size: 1.1rem; font-weight: 700; color: var(--text); }
         .btn-copy { background: var(--text); color: var(--bg); border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-copy:active { transform: scale(0.95); opacity: 0.8; }
         
-        .qr-area { margin-top: 10px; display: flex; justify-content: center; }
-        .qr-img { width: 150px; height: 150px; background: #eee; border-radius: 12px; object-fit: cover; } /* Placeholders */
-
         .btn-close-donate { background: var(--border); color: var(--text); border: none; padding: 15px 40px; border-radius: 50px; font-weight: 700; cursor: pointer; margin-top: 10px; width: 100%; }
     </style>
 </head>
@@ -123,20 +120,6 @@
                     <span class="acc-number" id="golomt-acc">660015001105185957</span>
                     <button class="btn-copy" onclick="copyText('660015001105185957', this)">ХУУЛАХ</button>
                 </div>
-            </div>
-
-            <div class="pay-card">
-                <div class="pay-header">
-                    <span class="pay-logo social">📱 SocialPay</span>
-                </div>
-                <div class="account-box">
-                    <span class="acc-number" id="social-num">99273350</span>
-                    <button class="btn-copy" onclick="copyText('99273350', this)">ХУУЛАХ</button>
-                </div>
-                <div class="qr-area">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=99273350" class="qr-img" alt="SocialPay QR">
-                </div>
-                <p style="font-size:0.75rem; color:var(--sub-text); text-align:center; margin-top:5px;">QR уншуулах</p>
             </div>
 
             <button class="btn-close-donate" onclick="closeDonate()">Хаах</button>
