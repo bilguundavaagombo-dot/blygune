@@ -11,29 +11,55 @@
     <title>AMT - Хоолны Жор</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* BASE VARIABLES */
-        :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --input-bg: #FFFFFF; --surface: #FFFFFF; --radius: 20px; --font: 'Inter', sans-serif; --font-head: 'Playfair Display', serif; --shadow: 0 10px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
-        [data-theme="dark"] { --bg: #0F1115; --text: #F3F4F6; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #2D3748; --input-bg: #1A202C; --surface: #1A202C; --shadow: none; }
-        
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            background-color: var(--bg); color: var(--text); font-family: var(--font); 
-            min-height: 100vh; overflow-x: hidden; transition: background 0.3s, color 0.3s; 
-            /* Extra padding for mobile scrolling */
-            padding-bottom: 160px; 
+        :root {
+            --bg: #F8F9FB;
+            --text: #1F2937;
+            --sub-text: #6B7280;
+            --accent: #FF4500;
+            --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%);
+            --border: #E5E7EB;
+            --input-bg: #FFFFFF;
+            --surface: #FFFFFF;
+            --radius: 20px;
+            --font: 'Inter', sans-serif;
+            --font-head: 'Playfair Display', serif;
+            --shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+            --glass: blur(14px);
         }
 
-        /* HEADER - ADJUSTED FOR IPHONE NOTCH */
-        header { 
+        [data-theme="dark"] {
+            --bg: #0F1115;
+            --text: #F3F4F6;
+            --sub-text: #9CA3AF;
+            --accent: #FF5722;
+            --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%);
+            --border: #2D3748;
+            --input-bg: #1A202C;
+            --surface: #1A202C;
+            --shadow: none;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--bg); color: var(--text); font-family: var(--font);
+            min-height: 100vh; overflow-x: hidden; 
+            transition: background 0.3s, color 0.3s;
+            /* SAFE AREA PADDING FOR MOBILE */
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: 140px;
+        }
+
+        /* HEADER - ADJUSTED FOR NOTCH */
+        header {
             padding: 15px 30px; 
             padding-top: max(15px, env(safe-area-inset-top)); /* NOTCH FIX */
-            display: flex; justify-content: space-between; align-items: center; 
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 100; 
-            background: rgba(255, 255, 255, 0.8); backdrop-filter: var(--glass); 
-            border-bottom: 1px solid var(--border); 
+            display: flex; justify-content: space-between; align-items: center;
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass);
+            border-bottom: 1px solid var(--border);
         }
-        [data-theme="dark"] header { background: rgba(15, 17, 21, 0.8); }
+        [data-theme="dark"] header { background: rgba(15, 17, 21, 0.7); }
 
         .logo-group { cursor: pointer; display: flex; flex-direction: column; text-decoration: none; color: inherit; line-height: 1; }
         .logo { font-family: var(--font-head); font-weight: 900; font-size: 2rem; letter-spacing: -1px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -41,8 +67,14 @@
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
         .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
-        /* MAIN */
-        main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 0 auto; padding: 0 20px; padding-top: 110px; }
+        /* MAIN - ADJUSTED FOR FIXED HEADER */
+        main { 
+            display: flex; flex-direction: column; align-items: center; 
+            width: 100%; max-width: 700px; margin: 0 auto; 
+            padding: 0 20px; 
+            padding-top: 110px; /* Clears the header on mobile */
+        }
+        
         .hero { text-align: center; margin-bottom: 35px; width: 100%; }
         .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
         .input-wrapper { position: relative; margin-bottom: 20px; width: 100%; }
@@ -89,23 +121,21 @@
         .count-val { font-size: 1.4rem; font-weight: 800; min-width: 30px; text-align: center; }
         .tips-box { margin-top: 20px; width: 100%; padding: 15px; border-radius: 16px; background: linear-gradient(135deg, #FF4500, #FF8C00); color: white; text-align: center; font-size: 0.95rem; line-height: 1.5; font-style: italic; box-shadow: var(--shadow); }
 
-        /* BOTTOM BAR - ADJUSTED FOR IPHONE HOME INDICATOR */
+        /* BOTTOM BAR - ADJUSTED FOR HOME SWIPE INDICATOR */
         .bottom-nav { 
             position: fixed; bottom: 0; left: 0; width: 100%; 
-            padding: 20px; 
-            padding-bottom: max(20px, env(safe-area-inset-bottom)); /* SAFE AREA FIX */
-            background: rgba(255,255,255,0.85); backdrop-filter: var(--glass); 
+            padding: 20px; padding-bottom: max(20px, env(safe-area-inset-bottom)); /* SAFE AREA FIX */
+            background: rgba(255,255,255,0.7); backdrop-filter: var(--glass); 
             border-top: 1px solid var(--border); display: flex; justify-content: center; z-index: 900; 
         }
-        [data-theme="dark"] .bottom-nav { background: rgba(15, 23, 42, 0.85); }
-        
+        [data-theme="dark"] .bottom-nav { background: rgba(15, 23, 42, 0.7); }
         .btn-continue { width: 100%; max-width: 600px; height: 65px; border-radius: 35px; background: var(--text); color: var(--bg); border: none; font-size: 1.1rem; font-weight: 800; letter-spacing: 1px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 0 35px; box-shadow: 0 15px 30px rgba(0,0,0,0.15); transition: 0.3s; }
         .btn-continue:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* MODAL */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 1100; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 1100; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-card { width: 100%; max-width: 600px; max-height: 85vh; background: var(--bg); border-radius: 24px; padding: 30px; transform: scale(0.9); opacity: 0; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); overflow-y: auto; border: 1px solid var(--border); }
+        .modal-card { width: 90%; max-width: 600px; max-height: 85vh; background: var(--bg); border-radius: 24px; padding: 30px; transform: scale(0.9); opacity: 0; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); overflow-y: auto; border: 1px solid var(--border); }
         .modal-overlay.active .modal-card { transform: scale(1); opacity: 1; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .modal-title { font-size: 1.4rem; font-weight: 900; }
@@ -113,6 +143,9 @@
         .taste-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 30px; }
         .taste-chip { padding: 18px; border-radius: 16px; background: var(--surface); border: 2px solid var(--border); text-align: center; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: 0.2s; }
         .taste-chip.selected { background: var(--text); color: var(--bg); border-color: var(--text); }
+        .appliance-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 30px; }
+        .app-chip { padding: 10px 18px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+        .app-chip.selected { background: var(--text); color: var(--bg); }
         .btn-generate { width: 100%; padding: 22px; border-radius: 18px; border: none; margin-bottom: 12px; font-size: 1.1rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
         .btn-gen-gourmet { background: var(--accent); color: white; }
         .btn-gen-easy { background: var(--surface); color: var(--text); border: 2px solid var(--border); }
@@ -125,7 +158,7 @@
     <header>
         <a href="index.html" class="logo-group">
             <div class="logo">AMT<span>.</span></div>
-            <div class="logo-sub">Үйлдэл • Арга барил • Техник</div>
+            <div class="logo-sub">Action • Method • Technique</div>
         </a>
         <div class="header-actions">
             <button class="icon-btn" onclick="toggleTheme()">◑</button>
@@ -181,7 +214,7 @@
         </div>
 
         <div class="dietary-section">
-            <span class="section-label">Харшил / Цээр</span>
+            <span class="section-label">Харшил </span>
             <div class="filters" id="dietary-filters">
                 <div class="filter-chip" onclick="toggleFilter(this, 'Самар ороогүй')">🥜 Самар</div>
                 <div class="filter-chip" onclick="toggleFilter(this, 'Цавуулаггүй')">🍞 Цавуулаг</div>
@@ -238,12 +271,21 @@
     </div>
 
     <script>
-        const pantryData = [["Давс", "Хар перц", "Ургамлын тос"], ["Сонгино", "Сармис", "Гурил", "Цагаан будаа", "Соя соус"], ["Элсэн чихэр", "Уксус", "Лаврын навч", "Цөцгийн тос"], ["Кетчуп", "Майонез", "Томат паст", "Гич", "Сод"], ["Гурвалжин будаа", "Гоймон", "Цардуул", "Хуурай сүү", "Гүнжид"]];
+        // --- DATA ---
+        const pantryData = [
+            ["Давс", "Хар перц", "Ургамлын тос"], 
+            ["Сонгино", "Сармис", "Гурил", "Цагаан будаа", "Соя соус"],
+            ["Элсэн чихэр", "Уксус", "Лаврын навч", "Цөцгийн тос"],
+            ["Кетчуп", "Майонез", "Томат паст", "Гич", "Сод"],
+            ["Гурвалжин будаа", "Гоймон", "Цардуул", "Хуурай сүү", "Гүнжид"]
+        ];
         const styles = [ {n:"Тогооч", e:"👨‍🍳"}, {n:"Монгол", e:"🇲🇳"}, {n:"Ази", e:"🥢"}, {n:"Итали", e:"🍝"}, {n:"Франц", e:"🥐"}, {n:"Мексик", e:"🌮"}, {n:"Шөл", e:"🍲"}, {n:"Өглөөний", e:"🍳"}, {n:"Эрүүл", e:"🥗"}, {n:"Түргэн", e:"🍔"}, {n:"Цагаан хоол", e:"🥬"}, {n:"Амттан", e:"🍰"} ];
         const tastes = ["Хэвийн", "Зөөлөн", "Халуун ногоотой", "Баялаг/Umami", "Чихэрлэг", "Исгэлэн"];
         const appliances = ["Плетка", "Шарах шүүгээ", "Air Fryer", "Битүү чанагч", "Агшаагч", "Блендер", "Грил", "Талх шарагч"];
         const lvlDescs = ["Дэлгэрэнгүй заавар хэрэгтэй.", "Энгийн хоол хийж чаддаг.", "Өдөр тутмын хоол сайн хийдэг.", "Нарийн ажиллагаатай хоол.", "Мэргэжлийн түвшний мэдлэгтэй."];
         const lvlNames = ["Анхан", "Сурагч", "Дундаж", "Сайн", "Pro"];
+
+        // CHANGED: selectedTastes starts empty [] instead of ['Хэвийн']
         let state = { ings: [], styles: [], skill: 3, pantryLvl: 2, pantryActiveItems: [], apps: [], diet: [], servings: 2, selectedTastes: [] };
 
         window.onload = () => {
@@ -254,9 +296,12 @@
         function renderUI() {
             document.getElementById('style-grid').innerHTML = styles.map(s => `<div class="style-chip ${state.styles.includes(s.n) ? 'selected' : ''}" onclick="toggleStyle('${s.n}')"><span class="style-emoji">${s.e}</span><span class="style-name">${s.n}</span></div>`).join('');
             document.getElementById('taste-grid').innerHTML = tastes.map(v => `<div class="taste-chip ${state.selectedTastes.includes(v) ? 'selected' : ''}" onclick="setTaste('${v}')">${v}</div>`).join('');
+            
+            // CHANGED: Uses 'taste-chip' class for Appliances to match design
             document.getElementById('appliance-area').innerHTML = appliances.map(a => `<div class="taste-chip ${state.apps.includes(a) ? 'selected' : ''}" onclick="toggleApp('${a}')">${a}</div>`).join('');
         }
 
+        // --- CORE ---
         function handleEnter(e) { if(e.key === 'Enter' && e.target.value) { addIng(e.target.value); e.target.value=''; } }
         function addIng(val) { val = val.charAt(0).toUpperCase() + val.slice(1); if(!state.ings.includes(val)) state.ings.push(val); renderTags(); }
         function removeIng(val) { state.ings = state.ings.filter(x => x !== val); renderTags(); }
@@ -269,8 +314,15 @@
         function toggleStyle(val) { if(state.styles.includes(val)) state.styles = state.styles.filter(x => x !== val); else if(state.styles.length < 3) state.styles.push(val); renderUI(); }
         function setLevel(l) { state.skill = l; document.querySelectorAll('.level-bar .lvl-step').forEach((el, i) => i+1 === l ? el.classList.add('active') : el.classList.remove('active')); document.getElementById('level-desc').innerText = lvlDescs[l-1]; }
         
-        function setPantryLvl(l) { state.pantryLvl = l; for(let i=1; i<=5; i++) { const el = document.getElementById('pl-'+i); if(i===l) el.classList.add('active'); else el.classList.remove('active'); } loadPantry(l); }
-        function loadPantry(lvl) { let items = []; for(let i=0; i<lvl; i++) items = items.concat(pantryData[i]); state.pantryActiveItems = [...new Set(items)]; renderPantryChips(); }
+        function setPantryLvl(l) {
+            state.pantryLvl = l;
+            for(let i=1; i<=5; i++) { const el = document.getElementById('pl-'+i); if(i===l) el.classList.add('active'); else el.classList.remove('active'); }
+            loadPantry(l);
+        }
+        function loadPantry(lvl) {
+            let items = []; for(let i=0; i<lvl; i++) items = items.concat(pantryData[i]);
+            state.pantryActiveItems = [...new Set(items)]; renderPantryChips();
+        }
         function renderPantryChips() { document.getElementById('pantry-chips-area').innerHTML = state.pantryActiveItems.map(item => `<div class="p-chip active" onclick="togglePantryItem(this)">${item}</div>`).join(''); }
         function togglePantryItem(el) { el.classList.toggle('active'); }
         function togglePantry() { const on = document.getElementById('pantry-switch').checked; document.getElementById('pantry-content').classList.toggle('disabled', !on); }
@@ -293,6 +345,8 @@
             }
             state.activePantry = activePantry;
             state.mode = mode;
+            
+            // Save state and redirect
             localStorage.setItem('amt_state', JSON.stringify(state));
             window.location.href = 'list.html';
         }
