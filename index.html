@@ -6,93 +6,35 @@
     <title>AMT - Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #F8F9FB;
-            --text: #1F2937;
-            --sub-text: #6B7280;
-            --accent: #FF4500; 
-            --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%);
-            --border: #E5E7EB;
-            --card-bg: rgba(255, 255, 255, 0.7);
-            --radius: 24px;
-            --shadow: 0 15px 40px -10px rgba(0,0,0,0.08);
-            --glass: blur(14px);
-        }
-        [data-theme="dark"] {
-            --bg: #0F1115;
-            --text: #F9FAFB;
-            --sub-text: #9CA3AF;
-            --accent: #FF5722;
-            --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%);
-            --border: #1F2937;
-            --card-bg: rgba(31, 41, 55, 0.6);
-            --shadow: 0 15px 40px -10px rgba(0,0,0,0.4);
-        }
+        /* EXACT SAME CSS AS BEFORE */
+        :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --card-bg: rgba(255, 255, 255, 0.7); --radius: 24px; --shadow: 0 15px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
+        [data-theme="dark"] { --bg: #0F1115; --text: #F9FAFB; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #1F2937; --card-bg: rgba(31, 41, 55, 0.6); --shadow: 0 15px 40px -10px rgba(0,0,0,0.4); }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body {
-            background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif;
-            min-height: 100vh; overflow-x: hidden; display: flex; flex-direction: column;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        /* --- MOBILE ZOOM LOGIC (ONLY MOBILE) --- */
-        @media only screen and (max-width: 768px) {
-            body { zoom: 65%; } 
-        }
-
-        header {
-            padding: 20px 40px; display: flex; justify-content: space-between; align-items: center;
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
-            background: rgba(255, 255, 255, 0.02); backdrop-filter: var(--glass); -webkit-backdrop-filter: var(--glass);
-            border-bottom: 1px solid var(--border);
-        }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden; display: flex; flex-direction: column; transition: background 0.3s, color 0.3s; }
+        @media only screen and (max-width: 768px) { body { zoom: 65%; } }
+        header { padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 100; background: rgba(255, 255, 255, 0.02); backdrop-filter: var(--glass); -webkit-backdrop-filter: var(--glass); border-bottom: 1px solid var(--border); }
         .logo-container { display: flex; flex-direction: column; line-height: 1; cursor: pointer; }
-        .logo { 
-            font-family: 'Playfair Display', serif; font-weight: 900; font-size: 2rem; letter-spacing: -1px; 
-            background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-        .logo-sub {
-            font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 800; 
-            text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; color: var(--text); opacity: 0.8;
-        }
-        .theme-btn {
-            width: 45px; height: 45px; border-radius: 50%; background: var(--card-bg); border: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer; color: var(--text);
-            transition: 0.3s; box-shadow: var(--shadow);
-        }
+        .logo { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 2rem; letter-spacing: -1px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo-sub { font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; color: var(--text); opacity: 0.8; }
+        .theme-btn { width: 45px; height: 45px; border-radius: 50%; background: var(--card-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
         .theme-btn:hover { transform: rotate(20deg); border-color: var(--accent); color: var(--accent); }
-        main {
-            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 120px 20px 60px 20px; text-align: center; max-width: 1000px; margin: 0 auto; width: 100%;
-        }
+        main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 120px 20px 60px 20px; text-align: center; max-width: 1000px; margin: 0 auto; width: 100%; }
         .site-desc { max-width: 600px; margin-bottom: 50px; animation: fadeIn 0.8s ease; }
         .site-desc h1 { font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 15px; line-height: 1.1; color: var(--text); }
         .site-desc p { font-size: 1.1rem; color: var(--sub-text); line-height: 1.6; }
         .nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; margin-bottom: 40px; }
         @media (max-width: 768px) { .nav-grid { grid-template-columns: 1fr; } }
-        .nav-card {
-            background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 20px;
-            cursor: pointer; transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; align-items: center; gap: 10px;
-            box-shadow: var(--shadow); position: relative; overflow: hidden;
-        }
+        .nav-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px 20px; cursor: pointer; transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: var(--shadow); position: relative; overflow: hidden; }
         .nav-card:hover { transform: translateY(-5px); border-color: var(--accent); }
         .nav-card.active { border-color: var(--accent); background: rgba(255, 69, 0, 0.03); transform: scale(1.02); }
         .card-icon { font-size: 3rem; margin-bottom: 5px; }
         .card-title { font-size: 1.2rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
         .card-desc { font-size: 0.85rem; color: var(--sub-text); font-weight: 500; opacity: 0.8; margin-top: 5px; max-width: 200px; line-height: 1.4; }
-        .info-panel {
-            width: 100%; max-width: 700px; min-height: 120px; background: var(--card-bg); border: 1px solid var(--border);
-            border-radius: var(--radius); padding: 30px; text-align: center; opacity: 0; transform: translateY(10px); transition: 0.4s;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
+        .info-panel { width: 100%; max-width: 700px; min-height: 120px; background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 30px; text-align: center; opacity: 0; transform: translateY(10px); transition: 0.4s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .info-panel.visible { opacity: 1; transform: translateY(0); }
         .info-title { font-size: 1.1rem; font-weight: 700; color: var(--accent); margin-bottom: 10px; text-transform: uppercase;}
         .info-text { font-size: 1rem; color: var(--sub-text); line-height: 1.5; margin-bottom: 20px; }
-        .start-btn {
-            padding: 15px 40px; border-radius: 50px; background: var(--text); color: var(--bg);
-            border: none; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: none;
-        }
+        .start-btn { padding: 15px 40px; border-radius: 50px; background: var(--text); color: var(--bg); border: none; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: none; }
         .start-btn:hover { transform: scale(1.05); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
         footer { padding: 30px; text-align: center; color: var(--sub-text); font-size: 0.8rem; font-weight: 500; border-top: 1px solid var(--border); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -134,12 +76,12 @@
             'food': { 
                 title: "Ухаалаг Жор Үүсгэгч", 
                 text: "Хөргөгчиндөө байгаа орцуудыг оруулаад, хиймэл оюун ухаанаар (AI) өөрт тохирсон 5 өөр төрлийн жорыг хормын дотор аваарай.", 
-                link: "app.html" // Usually goes to the inputs page
+                link: "app.html" // CORRECT LINK TO YOUR APP
             },
             'history': { 
                 title: "Бэлэн Жор (Catalog)", 
                 text: "Монгол, Итали, Ази болон бусад төрлийн дэлхийн шилдэг хоолнуудын бэлэн жоруудаас сонгож хийх.", 
-                link: "catalog.html" // NEW LINK
+                link: "catalog.html" // LINK TO CATALOG
             },
             'drinks': { 
                 title: "Уух Зүйлс & Коктейль", 
@@ -169,7 +111,6 @@
                 currentLink = data.link;
                 const btn = document.getElementById('start-btn');
                 
-                // ENABLE BUTTON FOR FOOD AND CATALOG
                 if(key === 'food' || key === 'history') {
                     btn.style.display = 'block'; 
                     btn.innerText = (key === 'history') ? "НЭЭХ →" : "ЭХЛҮҮЛЭХ →"; 
