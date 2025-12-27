@@ -45,8 +45,14 @@
         /* MAIN */
         main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 800px; margin: 100px auto 0 auto; padding: 0 20px; }
         
-        .hero { text-align: center; margin-bottom: 30px; width: 100%; }
+        .hero { text-align: center; margin-bottom: 20px; width: 100%; }
         .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
+
+        /* SEARCH BAR */
+        .search-container { width: 100%; position: relative; margin-bottom: 30px; }
+        .search-input { width: 100%; padding: 18px 25px; padding-right: 60px; border-radius: 25px; background: var(--surface); border: 2px solid var(--border); font-size: 1.1rem; color: var(--text); outline: none; transition: 0.3s; box-shadow: var(--shadow); }
+        .search-input:focus { border-color: var(--accent); }
+        .search-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 45px; height: 45px; border-radius: 50%; background: var(--accent); color: white; border: none; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
         /* CATEGORY GRID */
         .cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; }
@@ -100,7 +106,12 @@
 
         <div class="hero" id="hero-text">
             <h1>Ямар хоол идмээр байна?</h1>
-            <p>Дэлхийн шилдэг жоруудаас сонгоорой</p>
+            <p>1000+ Жор & Хайлтын систем</p>
+        </div>
+
+        <div class="search-container" id="search-area">
+            <input type="text" id="recipe-search" class="search-input" placeholder="Хүссэн хоолоо бичнэ үү (Жишээ: Сүши)..." onkeypress="handleSearch(event)">
+            <button class="search-btn" onclick="manualSearch()">🔍</button>
         </div>
 
         <div class="cat-grid" id="cat-grid"></div>
@@ -109,35 +120,45 @@
     </main>
 
     <script>
-        // --- DATABASE OF READY RECIPES ---
+        // --- EXPANDED DATABASE ---
         const menuDB = {
             "🇲🇳 Монгол": [
-                { t: "Цүйван", m: "45 мин • 700 ккал" },
-                { t: "Бууз", m: "60 мин • 350 ккал" },
-                { t: "Хуушуур", m: "40 мин • 450 ккал" },
-                { t: "Банштай цай", m: "30 мин • 300 ккал" },
-                { t: "Хорхог", m: "90 мин • 800 ккал" }
+                { t: "Цүйван", m: "45 мин" }, { t: "Бууз", m: "60 мин" }, { t: "Хуушуур", m: "40 мин" },
+                { t: "Банштай цай", m: "30 мин" }, { t: "Хорхог", m: "90 мин" }, { t: "Гурилтай шөл", m: "35 мин" },
+                { t: "Цувдай", m: "60 мин" }, { t: "Нийслэл салат", m: "25 мин" }, { t: "Бөөрөнхий мах", m: "40 мин" },
+                { t: "Шарсан элэг", m: "20 мин" }, { t: "Бантан", m: "15 мин" }, { t: "Хуйцаа", m: "50 мин" }
             ],
-            "🇮🇹 Итали": [
-                { t: "Карбонара", m: "20 мин • 550 ккал" },
-                { t: "Болонез", m: "60 мин • 600 ккал" },
-                { t: "Лазанья", m: "75 мин • 700 ккал" },
-                { t: "Пицца Маргарита", m: "40 мин • 800 ккал" },
-                { t: "Ризотто", m: "45 мин • 500 ккал" }
+            "🇮🇹 Итали/Европ": [
+                { t: "Карбонара", m: "20 мин" }, { t: "Болонез", m: "60 мин" }, { t: "Лазанья", m: "75 мин" },
+                { t: "Пицца Маргарита", m: "40 мин" }, { t: "Ризотто", m: "45 мин" }, { t: "Стейк (Steak)", m: "30 мин" },
+                { t: "Грек салат", m: "15 мин" }, { t: "Мөөгтэй крем шөл", m: "30 мин" }, { t: "Шницель", m: "40 мин" }
             ],
-            "🇯🇵 Ази": [
-                { t: "Рамен", m: "120 мин • 600 ккал" },
-                { t: "Шарсан будаа", m: "15 мин • 450 ккал" },
-                { t: "Тахианы Терьяки", m: "25 мин • 400 ккал" },
-                { t: "Кимчи Жигэ", m: "30 мин • 350 ккал" },
-                { t: "Сүши", m: "60 мин • 300 ккал" }
+            "🇰🇷 Солонгос/Ази": [
+                { t: "Рамен", m: "20 мин" }, { t: "Кимчи Жигэ", m: "30 мин" }, { t: "Бибимбап", m: "25 мин" },
+                { t: "Шарсан будаа", m: "15 мин" }, { t: "Тахианы Терьяки", m: "25 мин" }, { t: "Сүши", m: "60 мин" },
+                { t: "Бүлгүги (Bulgogi)", m: "40 мин" }, { t: "Токпокки", m: "25 мин" }, { t: "Мантуун бууз", m: "60 мин" }
             ],
-            "🥗 Эрүүл": [
-                { t: "Цезарь Салат", m: "20 мин • 350 ккал" },
-                { t: "Авокадо Тоаст", m: "10 мин • 250 ккал" },
-                { t: "Ногоотой шөл", m: "30 мин • 200 ккал" },
-                { t: "Грек Салат", m: "15 мин • 280 ккал" },
-                { t: "Салмон загас", m: "25 мин • 450 ккал" }
+            "🇷🇺 Орос/Зөвлөлт": [
+                { t: "Борщ шөл", m: "90 мин" }, { t: "Тефтели", m: "45 мин" }, { t: "Котлет", m: "40 мин" },
+                { t: "Гуляш", m: "60 мин" }, { t: "Оливье салат", m: "30 мин" }, { t: "Пирошки", m: "60 мин" },
+                { t: "Винегрет", m: "25 мин" }, { t: "Солянка", m: "50 мин" }
+            ],
+            "🍔 Түргэн Хоол": [
+                { t: "Бургер", m: "30 мин" }, { t: "Шарсан төмс (Fries)", m: "20 мин" }, { t: "Хотдог", m: "15 мин" },
+                { t: "Тахианы далавч", m: "40 мин" }, { t: "Клаб Сэндвич", m: "15 мин" }, { t: "Тако", m: "30 мин" },
+                { t: "Кесадия", m: "20 мин" }
+            ],
+            "🥗 Эрүүл/Фитнесс": [
+                { t: "Авокадо Тоаст", m: "10 мин" }, { t: "Овьёос (Oatmeal)", m: "10 мин" }, { t: "Жимсний салат", m: "10 мин" },
+                { t: "Чанасан тахианы цээж", m: "25 мин" }, { t: "Ногооны зутан", m: "30 мин" }, { t: "Салмон загас", m: "25 мин" }
+            ],
+            "🍰 Амттан": [
+                { t: "Бялуу (Cake)", m: "60 мин" }, { t: "Панкэйк", m: "20 мин" }, { t: "Вафли", m: "25 мин" },
+                { t: "Брауни", m: "40 мин" }, { t: "Кекс", m: "45 мин" }, { t: "Жигнэмэг (Cookies)", m: "30 мин" }
+            ],
+            "☕ Уух зүйлс": [
+                { t: "Сүүтэй цай", m: "15 мин" }, { t: "Латте кофе", m: "10 мин" }, { t: "Жимсний смүүти", m: "5 мин" },
+                { t: "Халуун шоколад", m: "10 мин" }, { t: "Мөстэй цай", m: "5 мин" }
             ]
         };
 
@@ -159,7 +180,7 @@
             Object.keys(menuDB).forEach(key => {
                 const parts = key.split(' ');
                 const emoji = parts[0];
-                const name = parts[1];
+                const name = parts.slice(1).join(' ');
                 
                 const card = document.createElement('div');
                 card.className = 'cat-card';
@@ -172,15 +193,15 @@
         function showDishes(category) {
             document.getElementById('cat-grid').style.display = 'none';
             document.getElementById('hero-text').style.display = 'none';
+            document.getElementById('search-area').style.display = 'none'; // Hide search in list view
             document.getElementById('back-nav').classList.add('active');
             
             const list = document.getElementById('recipe-list');
             list.innerHTML = '';
             list.classList.add('active');
 
-            // Header for list
             const h2 = document.createElement('h2');
-            h2.innerText = category + " хоолнууд";
+            h2.innerText = category;
             h2.style.marginBottom = '20px';
             h2.style.fontFamily = 'var(--font-head)';
             list.appendChild(h2);
@@ -191,7 +212,7 @@
                 item.innerHTML = `
                     <div class="ri-info">
                         <div class="ri-title">${dish.t}</div>
-                        <div class="ri-meta">${dish.m}</div>
+                        <div class="ri-meta">Хугацаа: ${dish.m}</div>
                     </div>
                     <div class="ri-arrow">→</div>
                 `;
@@ -203,19 +224,31 @@
         function showCategories() {
             document.getElementById('cat-grid').style.display = 'grid';
             document.getElementById('hero-text').style.display = 'block';
+            document.getElementById('search-area').style.display = 'block'; // Show search again
             document.getElementById('back-nav').classList.remove('active');
             document.getElementById('recipe-list').classList.remove('active');
         }
 
+        // --- SEARCH & SELECT ---
+        function handleSearch(e) {
+            if(e.key === 'Enter') manualSearch();
+        }
+
+        function manualSearch() {
+            const val = document.getElementById('recipe-search').value.trim();
+            if(val) {
+                selectRecipe(val, "Search Result");
+            }
+        }
+
         function selectRecipe(title, category) {
-            // 1. Set the Title
+            // 1. Set Title
             localStorage.setItem('amt_selected_recipe', title);
             
-            // 2. Create a Mock State so detail.html works
-            // This tricks the AI into thinking we have all ingredients
+            // 2. Mock State for AI
             const mockState = {
-                skill: 3, // Default to Medium
-                ings: [title], // Main ingredient is the dish name
+                skill: 3, 
+                ings: [title], // The dish name becomes the main "ingredient" prompt context
                 activePantry: ["Standard Pantry"],
                 diet: [],
                 servings: 2,
@@ -225,7 +258,7 @@
             };
             localStorage.setItem('amt_state', JSON.stringify(mockState));
 
-            // 3. Go to Detail
+            // 3. Go
             window.location.href = 'detail.html';
         }
     </script>
