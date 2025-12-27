@@ -36,9 +36,9 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        /* --- MOBILE ZOOM LOGIC --- */
+        /* --- MOBILE ZOOM LOGIC (ONLY MOBILE) --- */
         @media only screen and (max-width: 768px) {
-            body { zoom: 65%; } /* Zoom out only on mobile */
+            body { zoom: 65%; } 
         }
 
         header {
@@ -116,7 +116,7 @@
                 <span class="card-icon">🍳</span><span class="card-title">Хоолны Жор</span><span class="card-desc">Гэрийн орцоор амттай хоол хийх</span>
             </div>
             <div class="nav-card" onclick="selectOption('history', this)">
-                <span class="card-icon">📜</span><span class="card-title">Таны Жор</span><span class="card-desc">Хадгалсан болон өмнөх түүх</span>
+                <span class="card-icon">📜</span><span class="card-title">Бэлэн Жор</span><span class="card-desc">Шилдэг хоолнуудын цэс</span>
             </div>
             <div class="nav-card" onclick="selectOption('drinks', this)">
                 <span class="card-icon">🍹</span><span class="card-title">Уух Зүйлс</span><span class="card-desc">Коктейль, смүүти, ундаа</span>
@@ -131,38 +131,65 @@
     <footer>&copy; 2025 AMT System. Action Method Technique.</footer>
     <script>
         const infoData = {
-            'food': { title: "Ухаалаг Жор Үүсгэгч", text: "Хөргөгчиндөө байгаа орцуудыг оруулаад, хиймэл оюун ухаанаар (AI) өөрт тохирсон 5 өөр төрлийн жорыг хормын дотор аваарай. Амтлагч, хэрэгсэл, цаг хугацаагаа тохируулах боломжтой.", link: "app.html" },
-            'history': { title: "Таны Түүх & Хадгалсан", text: "Таны өмнө нь хайж байсан жорууд болон амжилттай болсон хоолны түүхийг эндээс харах боломжтой. (Одоогоор хөгжүүлэлтийн шатанд)", link: "#" },
-            'drinks': { title: "Уух Зүйлс & Коктейль", text: "Гэрт байгаа жимс, сироп, уух зүйлсээ ашиглан мэргэжлийн бартендер шиг коктейль, смүүти, кофе найруулах жорууд.", link: "#" }
+            'food': { 
+                title: "Ухаалаг Жор Үүсгэгч", 
+                text: "Хөргөгчиндөө байгаа орцуудыг оруулаад, хиймэл оюун ухаанаар (AI) өөрт тохирсон 5 өөр төрлийн жорыг хормын дотор аваарай.", 
+                link: "index.html" // Usually goes to the inputs page
+            },
+            'history': { 
+                title: "Бэлэн Жор (Catalog)", 
+                text: "Монгол, Итали, Ази болон бусад төрлийн дэлхийн шилдэг хоолнуудын бэлэн жоруудаас сонгож хийх.", 
+                link: "catalog.html" // NEW LINK
+            },
+            'drinks': { 
+                title: "Уух Зүйлс & Коктейль", 
+                text: "Гэрт байгаа жимс, сироп, уух зүйлсээ ашиглан мэргэжлийн бартендер шиг коктейль, смүүти найруулах жорууд.", 
+                link: "#" 
+            }
         };
         let currentLink = "#";
         window.onload = () => { if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark'); };
+        
         function toggleTheme() {
             const isDark = document.body.getAttribute('data-theme') === 'dark';
             document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
             localStorage.setItem('theme', isDark ? 'light' : 'dark');
         }
+
         function selectOption(key, cardElement) {
             document.querySelectorAll('.nav-card').forEach(c => c.classList.remove('active'));
             cardElement.classList.add('active');
             const data = infoData[key];
             const panel = document.getElementById('info-panel');
             panel.classList.remove('visible');
+            
             setTimeout(() => {
                 document.getElementById('info-title').innerText = data.title;
                 document.getElementById('info-text').innerText = data.text;
                 currentLink = data.link;
                 const btn = document.getElementById('start-btn');
-                if(key === 'food') {
-                    btn.style.display = 'block'; btn.innerText = "ХООЛ ХИЙЖ ЭХЛЭХ →"; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+                
+                // ENABLE BUTTON FOR FOOD AND CATALOG
+                if(key === 'food' || key === 'history') {
+                    btn.style.display = 'block'; 
+                    btn.innerText = (key === 'history') ? "НЭЭХ →" : "ЭХЛҮҮЛЭХ →"; 
+                    btn.style.opacity = '1'; 
+                    btn.style.cursor = 'pointer';
                 } else {
-                    btn.style.display = 'block'; btn.innerText = "ТУН УДАХГҮЙ..."; btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed';
+                    btn.style.display = 'block'; 
+                    btn.innerText = "ТУН УДАХГҮЙ..."; 
+                    btn.style.opacity = '0.5'; 
+                    btn.style.cursor = 'not-allowed';
                 }
                 panel.classList.add('visible');
             }, 300);
         }
+
         function navigateToApp() {
-            if(document.getElementById('start-btn').innerText.includes("ЭХЛЭХ")) { window.location.href = currentLink; }
+            const btnText = document.getElementById('start-btn').innerText;
+            if(btnText.includes("ЭХЛЭХ") || btnText.includes("НЭЭХ")) { 
+                window.location.href = currentLink; 
+            }
         }
     </script>
 </body>
