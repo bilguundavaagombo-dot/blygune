@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#F8F9FB">
@@ -11,27 +10,13 @@
     <title>AMT - Дэлгэрэнгүй</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* --- BASE CSS --- */
+        /* --- EXACT SAME CSS AS BEFORE --- */
         :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --input-bg: #FFFFFF; --surface: #FFFFFF; --radius: 20px; --font: 'Inter', sans-serif; --font-head: 'Playfair Display', serif; --shadow: 0 10px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
         [data-theme="dark"] { --bg: #0F1115; --text: #F3F4F6; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #2D3748; --input-bg: #1A202C; --surface: #1A202C; --shadow: none; }
-        
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            background-color: var(--bg); color: var(--text); font-family: var(--font); 
-            min-height: 100vh; overflow-x: hidden; transition: background 0.3s, color 0.3s; 
-            padding-bottom: 40px; padding-top: env(safe-area-inset-top); 
-        }
-
-        header { 
-            padding: 15px 30px; padding-top: max(15px, env(safe-area-inset-top)); 
-            display: flex; justify-content: space-between; align-items: center; 
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 100; 
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass); 
-            border-bottom: 1px solid var(--border); 
-        }
+        body { background-color: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-x: hidden; transition: background 0.3s, color 0.3s; padding-bottom: 40px; padding-top: env(safe-area-inset-top); }
+        header { padding: 15px 30px; padding-top: max(15px, env(safe-area-inset-top)); display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 100; background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass); border-bottom: 1px solid var(--border); }
         [data-theme="dark"] header { background: rgba(15, 17, 21, 0.7); }
-
         .logo-group { cursor: pointer; display: flex; flex-direction: column; text-decoration: none; color: inherit; line-height: 1; }
         .logo { font-family: var(--font-head); font-weight: 900; font-size: 2rem; letter-spacing: -1px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .logo-sub { font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; color: var(--text); opacity: 0.8; }
@@ -44,23 +29,14 @@
         .detail-header { width: 100%; margin-bottom: 15px; text-align: center; }
         .detail-title { font-size: 2.2rem; font-family: var(--font-head); font-weight: 900; color: var(--text); line-height: 1.1; margin-bottom: 10px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        /* SKILL BADGE */
-        .skill-badge { 
-            display: inline-block; padding: 6px 14px; background: var(--surface); 
-            border: 1px solid var(--border); border-radius: 20px; 
-            font-size: 0.8rem; font-weight: 700; color: var(--accent); 
-            margin-bottom: 10px; box-shadow: var(--shadow); 
-        }
+        .skill-badge { display: inline-block; padding: 6px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; font-weight: 700; color: var(--accent); margin-bottom: 10px; box-shadow: var(--shadow); }
 
         .detail-content { width: 100%; background: var(--surface); padding: 30px; border-radius: 20px; border: 1px solid var(--border); line-height: 1.7; font-size: 1rem; box-shadow: var(--shadow); }
         
-        /* --- MOBILE WIDE VIEW OPTIMIZATION --- */
+        /* Mobile Optimization */
         @media (max-width: 768px) {
-            main { padding: 0 10px; } /* Less padding outside */
-            .detail-content { 
-                padding: 20px 15px; /* Less padding inside = Wider Text */
-                border-radius: 15px; 
-            }
+            main { padding: 0 10px; } 
+            .detail-content { padding: 20px 15px; border-radius: 15px; }
             .detail-title { font-size: 1.8rem; }
         }
 
@@ -78,17 +54,11 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
 
-        /* --- DONATION BUTTON --- */
-        .btn-donate {
-            width: 100%; margin-top: 25px; padding: 18px; 
-            border-radius: 18px; border: none; 
-            background: #22C55E; color: white; font-size: 1.1rem; font-weight: 800; 
-            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; 
-            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.2); transition: 0.3s;
-        }
+        /* BUTTONS */
+        .btn-donate { width: 100%; margin-top: 25px; padding: 18px; border-radius: 18px; border: none; background: #22C55E; color: white; font-size: 1.1rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 20px rgba(34, 197, 94, 0.2); transition: 0.3s; }
         .btn-donate:hover { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(34, 197, 94, 0.3); }
 
-        /* --- DONATION MODAL --- */
+        /* MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 1100; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-card { width: 100%; max-width: 400px; background: var(--bg); border-radius: 24px; padding: 30px; transform: scale(0.9); opacity: 0; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid var(--border); text-align: center; max-height: 90vh; overflow-y: auto; }
@@ -221,67 +191,49 @@
 
             const skillName = lvlNames[state.skill-1];
             
-            // SHOW TITLE AND SKILL BADGE
+            // Show Title & Badge
             document.getElementById('recipe-title').innerText = title;
             document.getElementById('skill-display').innerText = "Түвшин: " + skillName;
 
-            // --- ADJUST CLARITY BASED ON SKILL ---
+            // --- SMART LENGTH & STYLE ADJUSTMENT ---
             let visual = "";
-            let tone = "Expert Chef";
+            let tone = "";
             
             if (state.skill <= 2) {
-                // Beginner: Explain like I am 5
-                visual = "Explain simply using visual cues (e.g., 'size of a thumb'). Make steps short and easy.";
-                tone = "Kind Teacher";
-            } else if (state.skill >= 4) {
-                // Pro: Concise, professional terms
-                visual = "Use professional culinary terms. Keep steps concise.";
-                tone = "Professional Chef";
+                // Beginner: Very short, simple sentences
+                visual = "Explain extremely simply. Use visual cues (e.g. 'thumb size'). Short sentences.";
+                tone = "Friendly & Simple";
+            } else {
+                // Pro: Concise, professional
+                visual = "Use professional terms. Keep it very short and direct.";
+                tone = "Direct & Concise";
             }
 
-            // --- REMOVED "TOOLS/ХЭРЭГСЭЛ" FROM PROMPT ---
+            // --- UPDATED PROMPT: SHORT & NATIVE ---
             const promptText = `
-            Role: Experienced Mongolian Cooking Instructor.
-            Task: Write a detailed cooking guide for: "${title}".
+            Role: Native Mongolian Home Cook.
+            Task: Write a recipe for "${title}".
             
-            USER SELECTIONS (MUST FOLLOW):
-            1. Main Ingredients: ${state.ings.join(', ')}
-            2. Pantry/Seasonings: ${state.activePantry.join(', ')}
-            3. Cuisine Style: ${state.styles.join(', ') || "Any"}
-            4. Cooking Skill: ${lvlNames[state.skill-1]} (Tone: ${tone})
-            5. Dietary Restrictions: ${state.diet.join(', ') || "None"}
-            6. Servings: ${state.servings} people
-            7. Taste Profile: ${state.selectedTastes.join(', ') || "Standard"}
-            8. Appliances: ${state.apps.join(', ') || "Standard Kitchen"}
+            USER SELECTIONS:
+            - Ingredients: ${state.ings.join(', ')} (PLUS: ${state.activePantry.join(', ')})
+            - Servings: ${state.servings}
+            - Skill: ${skillName}
 
-            STRICT INGREDIENT RULES:
-            1. INGREDIENTS LIST must ONLY contain items from the user's selections.
-            2. DO NOT include "extra" items (No onions, milk, butter) unless listed.
-            3. ADAPT the recipe to work with ONLY these items.
+            STRICT RULES FOR OUTPUT (MUST FOLLOW):
+            1. **LENGTH:** Keep it SHORT. No long paragraphs. Use bullet points or short numbered steps.
+            2. **LANGUAGE:** Use NATIVE Mongolian phrasing (e.g., "Шаргал болтол хуурна", "Шөлөө таттал"). 
+            3. **STYLE:** Direct and imperative. (e.g. "Махаа хэрчинэ." instead of "Махаа хэрчих хэрэгтэй.")
+            4. **CONTENT:** NO "Tools" section. Only Ingredients and Steps.
 
-            CRITICAL LANGUAGE RULES (ZERO ENGLISH ALLOWED):
-            1. OUTPUT MUST BE 100% MONGOLIAN (Cyrillic). 
-            2. Do NOT use English headers like "Ingredients". Use "Орц".
-            3. Do NOT use English headers like "Instructions". Use "Хийх дараалал".
-            4. Do NOT use English headers like "Intro". Use "Товч танилцуулга".
-            5. Translate ALL culinary terms (Sauté -> Хуурах, Garnish -> Чимэглэх).
-
-            CONTENT RULES:
-            1. Tone: ${tone}.
-            2. Clarity: ${visual}
-            3. Structure:
-               - Appetizing Intro (1 sentence).
-               - Ingredients (Metric).
-               - Step-by-step instructions (Numbered). (NO TOOLS SECTION)
-               - Chef's Tip.
-
-            OUTPUT FORMAT: 
-            Raw HTML body only. 
-            <h3>Танилцуулга</h3> 
-            <h3>Орц</h3> 
-            <h3>Хийх дараалал</h3> (<ol>)
-            <strong>Тогоочийн зөвлөгөө</strong>
-            NO Markdown. NO <html> tags.
+            OUTPUT FORMAT (HTML ONLY):
+            <h3>Орц</h3>
+            <ul>...</ul>
+            <h3>Хийх арга</h3>
+            <ol>
+               <li>Step 1 (Max 15 words)</li>
+               <li>Step 2 (Max 15 words)</li>
+            </ol>
+            <strong>💡 Зөвлөгөө:</strong> (One short sentence)
             `;
 
             try {
