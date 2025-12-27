@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#F8F9FB">
@@ -191,49 +192,50 @@
 
             const skillName = lvlNames[state.skill-1];
             
-            // Show Title & Badge
             document.getElementById('recipe-title').innerText = title;
             document.getElementById('skill-display').innerText = "Түвшин: " + skillName;
 
-            // --- SMART LENGTH & STYLE ADJUSTMENT ---
+            // --- SMART SKILL LOGIC ---
             let visual = "";
             let tone = "";
-            
+            let guideType = "";
+
             if (state.skill <= 2) {
-                // Beginner: Very short, simple sentences
-                visual = "Explain extremely simply. Use visual cues (e.g. 'thumb size'). Short sentences.";
-                tone = "Friendly & Simple";
+                // BEGINNER: Detailed, Explain HOW.
+                guideType = "DETAILED & INSTRUCTIVE. Explain steps clearly for a beginner. Explain cuts and timings carefully.";
+            } else if (state.skill >= 4) {
+                // PRO: Concise, Fast.
+                guideType = "CONCISE & PROFESSIONAL. Use chef shorthand. Assume they know how to chop.";
             } else {
-                // Pro: Concise, professional
-                visual = "Use professional terms. Keep it very short and direct.";
-                tone = "Direct & Concise";
+                // NORMAL: Balanced.
+                guideType = "NORMAL HOME COOK STYLE. Balanced length. Clear and direct.";
             }
 
-            // --- UPDATED PROMPT: SHORT & NATIVE ---
+            // --- UPDATED PROMPT ---
             const promptText = `
             Role: Native Mongolian Home Cook.
             Task: Write a recipe for "${title}".
             
-            USER SELECTIONS:
+            USER CONTEXT:
             - Ingredients: ${state.ings.join(', ')} (PLUS: ${state.activePantry.join(', ')})
             - Servings: ${state.servings}
-            - Skill: ${skillName}
+            - User Skill: ${skillName} (${guideType})
 
-            STRICT RULES FOR OUTPUT (MUST FOLLOW):
-            1. **LENGTH:** Keep it SHORT. No long paragraphs. Use bullet points or short numbered steps.
-            2. **LANGUAGE:** Use NATIVE Mongolian phrasing (e.g., "Шаргал болтол хуурна", "Шөлөө таттал"). 
-            3. **STYLE:** Direct and imperative. (e.g. "Махаа хэрчинэ." instead of "Махаа хэрчих хэрэгтэй.")
-            4. **CONTENT:** NO "Tools" section. Only Ingredients and Steps.
+            RULES:
+            1. **LENGTH:** Normal length. Not too short, not a novel.
+            2. **STYLE:** ${guideType}
+            3. **LANGUAGE:** NATIVE Mongolian (Cyrillic). Natural phrasing.
+            4. **CONTENT:** Only Ingredients and Steps. No Tools section.
 
             OUTPUT FORMAT (HTML ONLY):
             <h3>Орц</h3>
             <ul>...</ul>
             <h3>Хийх арга</h3>
             <ol>
-               <li>Step 1 (Max 15 words)</li>
-               <li>Step 2 (Max 15 words)</li>
+               <li>Step 1...</li>
+               <li>Step 2...</li>
             </ol>
-            <strong>💡 Зөвлөгөө:</strong> (One short sentence)
+            <strong>💡 Зөвлөгөө:</strong> (Short sentence)
             `;
 
             try {
