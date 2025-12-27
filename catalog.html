@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#F8F9FB">
@@ -11,7 +10,6 @@
     <title>AMT - Бэлэн Жор</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* --- CORE VARIABLES --- */
         :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --surface: #FFFFFF; --radius: 20px; --font: 'Inter', sans-serif; --font-head: 'Playfair Display', serif; --shadow: 0 10px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
         [data-theme="dark"] { --bg: #0F1115; --text: #F3F4F6; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #2D3748; --surface: #1A202C; --shadow: none; }
         
@@ -23,10 +21,8 @@
             padding-top: env(safe-area-inset-top); padding-bottom: 40px; 
         }
 
-        /* MOBILE ZOOM */
         @media only screen and (max-width: 768px) { body { zoom: 65%; } }
 
-        /* HEADER */
         header { 
             padding: 15px 30px; padding-top: max(15px, env(safe-area-inset-top)); 
             display: flex; justify-content: space-between; align-items: center; 
@@ -42,31 +38,31 @@
         .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
         .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
-        /* MAIN */
         main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 800px; margin: 100px auto 0 auto; padding: 0 20px; }
         
         .hero { text-align: center; margin-bottom: 20px; width: 100%; }
         .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
 
-        /* SEARCH BAR */
         .search-container { width: 100%; position: relative; margin-bottom: 30px; }
         .search-input { width: 100%; padding: 18px 25px; padding-right: 60px; border-radius: 25px; background: var(--surface); border: 2px solid var(--border); font-size: 1.1rem; color: var(--text); outline: none; transition: 0.3s; box-shadow: var(--shadow); }
         .search-input:focus { border-color: var(--accent); }
         .search-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 45px; height: 45px; border-radius: 50%; background: var(--accent); color: white; border: none; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
-        /* CATEGORY GRID */
+        /* REGION TITLES */
+        .region-title { width: 100%; text-align: left; font-size: 1.2rem; font-weight: 900; color: var(--sub-text); margin: 25px 0 15px 0; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+
         .cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 100%; }
         .cat-card { 
             background: var(--surface); border: 1px solid var(--border); border-radius: 20px; 
-            padding: 30px 20px; text-align: center; cursor: pointer; transition: 0.3s; 
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            padding: 25px 15px; text-align: center; cursor: pointer; transition: 0.3s; 
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
             box-shadow: var(--shadow);
         }
         .cat-card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .cat-emoji { font-size: 3rem; }
-        .cat-name { font-weight: 800; font-size: 1.2rem; }
+        .cat-emoji { font-size: 2.5rem; }
+        .cat-name { font-weight: 800; font-size: 1.1rem; }
 
-        /* RECIPE LIST (Hidden by default) */
+        /* LIST VIEW */
         .recipe-list { display: none; width: 100%; flex-direction: column; gap: 15px; animation: fadeIn 0.3s ease; }
         .recipe-list.active { display: flex; }
         
@@ -92,7 +88,7 @@
     <header>
         <div class="logo-group" onclick="window.location.href='index.html'">
             <div class="logo">AMT<span>.</span></div>
-            <div class="logo-sub">Бэлэн Цэс</div>
+            <div class="logo-sub">Action • Method • Technique</div>
         </div>
         <div class="header-actions">
             <button class="icon-btn" onclick="toggleTheme()">◑</button>
@@ -101,70 +97,61 @@
 
     <main>
         <div class="back-nav" id="back-nav">
-            <button class="back-btn" onclick="showCategories()">← Төрөл сонгох</button>
+            <button class="back-btn" onclick="showCategories()">← Буцах</button>
         </div>
 
         <div class="hero" id="hero-text">
-            <h1>Ямар хоол идмээр байна?</h1>
-            <p>1000+ Жор & Хайлтын систем</p>
+            <h1>Бэлэн Цэс</h1>
+            <p>Дэлхийн шилдэг жоруудаас сонгоорой</p>
         </div>
 
         <div class="search-container" id="search-area">
-            <input type="text" id="recipe-search" class="search-input" placeholder="Хүссэн хоолоо бичнэ үү (Жишээ: Сүши)..." onkeypress="handleSearch(event)">
+            <input type="text" id="recipe-search" class="search-input" placeholder="Хайх хоолоо бичнэ үү..." onkeypress="handleSearch(event)">
             <button class="search-btn" onclick="manualSearch()">🔍</button>
         </div>
 
-        <div class="cat-grid" id="cat-grid"></div>
+        <div id="main-catalog-view">
+            
+            <div class="region-title">🌏 АЗИ (ASIA)</div>
+            <div class="cat-grid" id="grid-asia"></div>
+
+            <div class="region-title">🌍 ЕВРОП (EUROPE)</div>
+            <div class="cat-grid" id="grid-europe"></div>
+
+            <div class="region-title">🌎 АМЕРИК & БУСАД</div>
+            <div class="cat-grid" id="grid-america"></div>
+
+        </div>
 
         <div class="recipe-list" id="recipe-list"></div>
     </main>
 
     <script>
-        // --- EXPANDED DATABASE ---
-        const menuDB = {
-            "🇲🇳 Монгол": [
-                { t: "Цүйван", m: "45 мин" }, { t: "Бууз", m: "60 мин" }, { t: "Хуушуур", m: "40 мин" },
-                { t: "Банштай цай", m: "30 мин" }, { t: "Хорхог", m: "90 мин" }, { t: "Гурилтай шөл", m: "35 мин" },
-                { t: "Цувдай", m: "60 мин" }, { t: "Нийслэл салат", m: "25 мин" }, { t: "Бөөрөнхий мах", m: "40 мин" },
-                { t: "Шарсан элэг", m: "20 мин" }, { t: "Бантан", m: "15 мин" }, { t: "Хуйцаа", m: "50 мин" }
+        // --- DATABASE ---
+        const catalogDB = {
+            asia: [
+                { id: "mn", n: "Монгол", e: "🇲🇳", dishes: ["Цүйван", "Бууз", "Хуушуур", "Банштай цай", "Хорхог", "Цувдай", "Нийслэл салат"] },
+                { id: "kr", n: "Солонгос", e: "🇰🇷", dishes: ["Кимчи Жигэ", "Бүлгүги", "Бибимбап", "Токпокки", "Рамен"] },
+                { id: "jp", n: "Япон", e: "🇯🇵", dishes: ["Сүши", "Рамен", "Тахианы Терьяки", "Мисо шөл", "Кацу"] },
+                { id: "cn", n: "Хятад", e: "🇨🇳", dishes: ["Гунбао тахиа", "Шарсан будаа", "Бээжин нугас", "Банш"] }
             ],
-            "🇮🇹 Итали/Европ": [
-                { t: "Карбонара", m: "20 мин" }, { t: "Болонез", m: "60 мин" }, { t: "Лазанья", m: "75 мин" },
-                { t: "Пицца Маргарита", m: "40 мин" }, { t: "Ризотто", m: "45 мин" }, { t: "Стейк (Steak)", m: "30 мин" },
-                { t: "Грек салат", m: "15 мин" }, { t: "Мөөгтэй крем шөл", m: "30 мин" }, { t: "Шницель", m: "40 мин" }
+            europe: [
+                { id: "it", n: "Итали", e: "🇮🇹", dishes: ["Карбонара", "Болонез", "Лазанья", "Пицца Маргарита", "Ризотто"] },
+                { id: "fr", n: "Франц", e: "🇫🇷", dishes: ["Рататуй", "Круассан", "Сонгины шөл", "Омлет"] },
+                { id: "ru", n: "Орос", e: "🇷🇺", dishes: ["Борщ", "Гуляш", "Тефтели", "Оливье салат", "Пирошки"] },
+                { id: "de", n: "Герман", e: "🇩🇪", dishes: ["Шницель", "Зайдас", "Претцель"] }
             ],
-            "🇰🇷 Солонгос/Ази": [
-                { t: "Рамен", m: "20 мин" }, { t: "Кимчи Жигэ", m: "30 мин" }, { t: "Бибимбап", m: "25 мин" },
-                { t: "Шарсан будаа", m: "15 мин" }, { t: "Тахианы Терьяки", m: "25 мин" }, { t: "Сүши", m: "60 мин" },
-                { t: "Бүлгүги (Bulgogi)", m: "40 мин" }, { t: "Токпокки", m: "25 мин" }, { t: "Мантуун бууз", m: "60 мин" }
-            ],
-            "🇷🇺 Орос/Зөвлөлт": [
-                { t: "Борщ шөл", m: "90 мин" }, { t: "Тефтели", m: "45 мин" }, { t: "Котлет", m: "40 мин" },
-                { t: "Гуляш", m: "60 мин" }, { t: "Оливье салат", m: "30 мин" }, { t: "Пирошки", m: "60 мин" },
-                { t: "Винегрет", m: "25 мин" }, { t: "Солянка", m: "50 мин" }
-            ],
-            "🍔 Түргэн Хоол": [
-                { t: "Бургер", m: "30 мин" }, { t: "Шарсан төмс (Fries)", m: "20 мин" }, { t: "Хотдог", m: "15 мин" },
-                { t: "Тахианы далавч", m: "40 мин" }, { t: "Клаб Сэндвич", m: "15 мин" }, { t: "Тако", m: "30 мин" },
-                { t: "Кесадия", m: "20 мин" }
-            ],
-            "🥗 Эрүүл/Фитнесс": [
-                { t: "Авокадо Тоаст", m: "10 мин" }, { t: "Овьёос (Oatmeal)", m: "10 мин" }, { t: "Жимсний салат", m: "10 мин" },
-                { t: "Чанасан тахианы цээж", m: "25 мин" }, { t: "Ногооны зутан", m: "30 мин" }, { t: "Салмон загас", m: "25 мин" }
-            ],
-            "🍰 Амттан": [
-                { t: "Бялуу (Cake)", m: "60 мин" }, { t: "Панкэйк", m: "20 мин" }, { t: "Вафли", m: "25 мин" },
-                { t: "Брауни", m: "40 мин" }, { t: "Кекс", m: "45 мин" }, { t: "Жигнэмэг (Cookies)", m: "30 мин" }
-            ],
-            "☕ Уух зүйлс": [
-                { t: "Сүүтэй цай", m: "15 мин" }, { t: "Латте кофе", m: "10 мин" }, { t: "Жимсний смүүти", m: "5 мин" },
-                { t: "Халуун шоколад", m: "10 мин" }, { t: "Мөстэй цай", m: "5 мин" }
+            america: [
+                { id: "us", n: "Фаст Фүүд", e: "🍔", dishes: ["Бургер", "Хотдог", "Шарсан төмс", "Тахианы далавч", "Клаб Сэндвич"] },
+                { id: "mx", n: "Мексик", e: "🌮", dishes: ["Тако", "Буррито", "Кесадия", "Начос"] },
+                { id: "fit", n: "Эрүүл", e: "🥗", dishes: ["Цезарь Салат", "Авокадо Тоаст", "Салмон", "Ногооны зутан"] },
+                { id: "sw", n: "Амттан", e: "🍰", dishes: ["Бялуу", "Брауни", "Панкэйк", "Вафли"] }
             ]
         };
 
         window.onload = () => {
             if(localStorage.getItem('theme') === 'dark') document.body.setAttribute('data-theme', 'dark');
-            renderCategories();
+            renderAllGrids();
         };
 
         function toggleTheme() { 
@@ -173,27 +160,28 @@
             localStorage.setItem('theme', d ? 'light' : 'dark'); 
         }
 
-        function renderCategories() {
-            const grid = document.getElementById('cat-grid');
+        function renderAllGrids() {
+            renderSection('grid-asia', catalogDB.asia);
+            renderSection('grid-europe', catalogDB.europe);
+            renderSection('grid-america', catalogDB.america);
+        }
+
+        function renderSection(elementId, data) {
+            const grid = document.getElementById(elementId);
             grid.innerHTML = '';
-            
-            Object.keys(menuDB).forEach(key => {
-                const parts = key.split(' ');
-                const emoji = parts[0];
-                const name = parts.slice(1).join(' ');
-                
+            data.forEach(cat => {
                 const card = document.createElement('div');
                 card.className = 'cat-card';
-                card.innerHTML = `<div class="cat-emoji">${emoji}</div><div class="cat-name">${name}</div>`;
-                card.onclick = () => showDishes(key);
+                card.innerHTML = `<div class="cat-emoji">${cat.e}</div><div class="cat-name">${cat.n}</div>`;
+                card.onclick = () => showDishes(cat);
                 grid.appendChild(card);
             });
         }
 
-        function showDishes(category) {
-            document.getElementById('cat-grid').style.display = 'none';
+        function showDishes(categoryObj) {
+            document.getElementById('main-catalog-view').style.display = 'none';
             document.getElementById('hero-text').style.display = 'none';
-            document.getElementById('search-area').style.display = 'none'; // Hide search in list view
+            document.getElementById('search-area').style.display = 'none';
             document.getElementById('back-nav').classList.add('active');
             
             const list = document.getElementById('recipe-list');
@@ -201,65 +189,48 @@
             list.classList.add('active');
 
             const h2 = document.createElement('h2');
-            h2.innerText = category;
+            h2.innerText = categoryObj.e + " " + categoryObj.n;
             h2.style.marginBottom = '20px';
+            h2.style.textAlign = 'center';
             h2.style.fontFamily = 'var(--font-head)';
             list.appendChild(h2);
 
-            menuDB[category].forEach(dish => {
+            categoryObj.dishes.forEach(dishName => {
                 const item = document.createElement('div');
                 item.className = 'recipe-item';
                 item.innerHTML = `
                     <div class="ri-info">
-                        <div class="ri-title">${dish.t}</div>
-                        <div class="ri-meta">Хугацаа: ${dish.m}</div>
+                        <div class="ri-title">${dishName}</div>
                     </div>
                     <div class="ri-arrow">→</div>
                 `;
-                item.onclick = () => selectRecipe(dish.t, category);
+                // LINKS TO NEW PAGE
+                item.onclick = () => goToCatalogDetail(dishName);
                 list.appendChild(item);
             });
         }
 
         function showCategories() {
-            document.getElementById('cat-grid').style.display = 'grid';
+            document.getElementById('main-catalog-view').style.display = 'block';
             document.getElementById('hero-text').style.display = 'block';
-            document.getElementById('search-area').style.display = 'block'; // Show search again
+            document.getElementById('search-area').style.display = 'block';
             document.getElementById('back-nav').classList.remove('active');
             document.getElementById('recipe-list').classList.remove('active');
         }
 
-        // --- SEARCH & SELECT ---
-        function handleSearch(e) {
-            if(e.key === 'Enter') manualSearch();
-        }
+        function handleSearch(e) { if(e.key === 'Enter') manualSearch(); }
 
         function manualSearch() {
             const val = document.getElementById('recipe-search').value.trim();
-            if(val) {
-                selectRecipe(val, "Search Result");
-            }
+            if(val) goToCatalogDetail(val);
         }
 
-        function selectRecipe(title, category) {
-            // 1. Set Title
-            localStorage.setItem('amt_selected_recipe', title);
+        function goToCatalogDetail(dishName) {
+            // Save ONLY the dish name. We don't care about ingredients here.
+            localStorage.setItem('catalog_selected_dish', dishName);
             
-            // 2. Mock State for AI
-            const mockState = {
-                skill: 3, 
-                ings: [title], // The dish name becomes the main "ingredient" prompt context
-                activePantry: ["Standard Pantry"],
-                diet: [],
-                servings: 2,
-                styles: [category],
-                apps: ["Stove"],
-                mode: "catalog"
-            };
-            localStorage.setItem('amt_state', JSON.stringify(mockState));
-
-            // 3. Go
-            window.location.href = 'detail.html';
+            // --- NEW PAGE CONNECTED ONLY TO CATALOG ---
+            window.location.href = 'catalog_detail.html';
         }
     </script>
 </body>
