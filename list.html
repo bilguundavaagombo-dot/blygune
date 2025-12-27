@@ -2,16 +2,21 @@
 <html lang="mn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#F8F9FB">
+
     <title>AMT - Жорууд</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* EXACT SAME CSS FROM INDEX.HTML + NEW STYLES FOR HEALTH INFO */
+        /* EXACT SAME CSS AS BEFORE */
         :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --input-bg: #FFFFFF; --surface: #FFFFFF; --radius: 20px; --font: 'Inter', sans-serif; --font-head: 'Playfair Display', serif; --shadow: 0 10px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
         [data-theme="dark"] { --bg: #0F1115; --text: #F3F4F6; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #2D3748; --input-bg: #1A202C; --surface: #1A202C; --shadow: none; }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-x: hidden; transition: background 0.3s, color 0.3s; padding-bottom: 20px; }
-        header { padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 100; background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass); border-bottom: 1px solid var(--border); }
+        body { background-color: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-x: hidden; transition: background 0.3s, color 0.3s; padding-bottom: 20px; padding-top: env(safe-area-inset-top); }
+        header { padding: 15px 30px; padding-top: max(15px, env(safe-area-inset-top)); display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 100; background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass); border-bottom: 1px solid var(--border); }
         [data-theme="dark"] header { background: rgba(15, 17, 21, 0.7); }
         .logo-group { cursor: pointer; display: flex; flex-direction: column; text-decoration: none; color: inherit; line-height: 1; }
         .logo { font-family: var(--font-head); font-weight: 900; font-size: 2rem; letter-spacing: -1px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -28,11 +33,12 @@
         .rc-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 8px; font-family: var(--font-head); }
         .rc-desc { color: var(--sub-text); font-size: 0.9rem; line-height: 1.4; margin-bottom: 12px; }
         
-        /* NEW STYLES FOR CALORIES & HEALTH */
+        /* META TAGS (Calories, Time, Health) */
         .rc-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 5px; }
         .rc-badge { font-size: 0.75rem; padding: 6px 12px; border-radius: 20px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
         .rc-cal { background: rgba(255, 69, 0, 0.1); color: var(--accent); }
-        .rc-health { background: var(--border); color: var(--text); }
+        .rc-time { background: var(--border); color: var(--text); }
+        .rc-health { background: var(--surface); border: 1px solid var(--border); color: var(--sub-text); }
         
         .rc-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--accent); font-weight: 900; font-size: 1.5rem; }
 
@@ -59,7 +65,6 @@
         <span class="spinner">🥘</span>
         <h2 style="font-family: var(--font-head);">Бодож байна...</h2>
         <p style="color:var(--sub-text); margin-top:10px;">Түр хүлээнэ үү</p>
-        
         <div class="loader-tip" id="loader-tip">💡 Зөвлөгөө: Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал шүүслэг болдог.</div>
     </div>
 
@@ -102,7 +107,6 @@
             const tipEl = document.getElementById('loader-tip');
             let i = Math.floor(Math.random() * loadingTips.length);
             tipEl.innerText = loadingTips[i];
-
             setInterval(() => {
                 i = (i + 1) % loadingTips.length;
                 tipEl.innerText = loadingTips[i];
@@ -116,33 +120,43 @@
                 return;
             }
 
-            // --- REFINED PROMPT ---
-            // 1. Enforces FAST logic if easy.
-            // 2. Requests Calories and Health Tags.
-            // 3. Enforces SHORT Description.
+            // --- STRICT "FAST RECIPE" LOGIC ---
+            let moodInstruction = "";
+            let timeLimit = "";
+            
+            if (state.mode === 'easy') {
+                // FORCE FAST RECIPES
+                moodInstruction = "STRICTLY FAST FOOD. Maximum 20 minutes cooking time. Stir-frys, Salads, Quick Soups, Sandwiches. NO baking, NO slow cooking, NO stewing.";
+                timeLimit = "Under 20 mins";
+            } else {
+                moodInstruction = "Gourmet, Impressive, Delicious.";
+                timeLimit = "Normal";
+            }
+
             const promptText = `
             Role: Elite Mongolian Chef.
             Language: Native Mongolian (Cyrillic).
-            Task: Create 5 distinct recipe ideas using ONLY: ${state.ings.join(', ')} and ${state.activePantry.join(', ')}.
+            Task: Create 5 distinct recipe ideas based on these inputs.
 
             USER SETTINGS:
-            - Mood: ${state.mode === 'easy' ? 'EXTREMELY FAST (Ready in 20 mins, Minimal effort, Lazy cooking)' : 'Gourmet & Impressive'}
-            - Cuisine: ${state.styles.join(', ') || "Any"}
-            - Diet: ${state.diet.join(', ') || "None"}
+            - Mood/Type: ${moodInstruction} (CRITICAL!)
+            - Ingredients: ${state.ings.join(', ')} (PLUS: ${state.activePantry.join(', ')})
+            - Diet: ${state.diet.join(', ')}
             - Servings: ${state.servings}
-            - Appliances: ${state.apps.join(', ') || "Stove"}
 
-            STRICT INGREDIENT RULES:
-            1. USE ONLY PROVIDED INGREDIENTS. Do NOT add extra stuff (No onions if not listed).
-            2. If ingredients are limited, suggest very simple dishes (e.g., Boiled meat, Fried egg).
+            STRICT RULES:
+            1. Use ONLY provided ingredients if possible.
+            2. If "FAST" mode is selected, recipes MUST be very quick (e.g. Хуурга, Салат, Шөл).
+            3. Output strictly JSON.
 
-            OUTPUT FORMAT (JSON ARRAY ONLY):
+            OUTPUT FORMAT (JSON ARRAY):
             [
                 {
                     "title": "Recipe Name (Mongolian)", 
-                    "desc": "Very short appetizing description (Max 12 words).",
-                    "cal": "Approximate Calories (e.g. 450 ккал)",
-                    "health": "Health Benefit (e.g. Өндөр уурагтай / Витаминлаг / Эслэг ихтэй)"
+                    "desc": "Short appetizing description (Max 12 words).",
+                    "cal": "Calories (e.g. 450 ккал)",
+                    "time": "Time (e.g. 15 мин)",
+                    "health": "Benefit (e.g. Өндөр уураг)"
                 }
             ]
             `;
@@ -179,6 +193,7 @@
                 card.innerHTML = `
                     <div class="rc-title">${r.title}</div>
                     <div class="rc-meta">
+                        <span class="rc-badge rc-time">⏱️ ${r.time}</span>
                         <span class="rc-badge rc-cal">🔥 ${r.cal}</span>
                         <span class="rc-badge rc-health">🌿 ${r.health}</span>
                     </div>
