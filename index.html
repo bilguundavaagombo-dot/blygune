@@ -6,7 +6,6 @@
     <title>AMT - Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* EXACT SAME CSS AS BEFORE */
         :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --card-bg: rgba(255, 255, 255, 0.7); --radius: 24px; --shadow: 0 15px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
         [data-theme="dark"] { --bg: #0F1115; --text: #F9FAFB; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #1F2937; --card-bg: rgba(31, 41, 55, 0.6); --shadow: 0 15px 40px -10px rgba(0,0,0,0.4); }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -76,12 +75,12 @@
             'food': { 
                 title: "Ухаалаг Жор Үүсгэгч", 
                 text: "Хөргөгчиндөө байгаа орцуудыг оруулаад, хиймэл оюун ухаанаар (AI) өөрт тохирсон 5 өөр төрлийн жорыг хормын дотор аваарай.", 
-                link: "app.html" // CORRECT LINK TO YOUR APP
+                link: "app.html" // Link to the second file
             },
             'history': { 
                 title: "Бэлэн Жор (Catalog)", 
                 text: "Монгол, Итали, Ази болон бусад төрлийн дэлхийн шилдэг хоолнуудын бэлэн жоруудаас сонгож хийх.", 
-                link: "catalog.html" // LINK TO CATALOG
+                link: "catalog.html" 
             },
             'drinks': { 
                 title: "Уух Зүйлс & Коктейль", 
@@ -128,7 +127,7 @@
 
         function navigateToApp() {
             const btnText = document.getElementById('start-btn').innerText;
-            if(btnText.includes("ЭХЛЭХ") || btnText.includes("НЭЭХ")) { 
+            if(btnText.includes("ЭХЛҮҮЛЭХ") || btnText.includes("НЭЭХ")) { 
                 window.location.href = currentLink; 
             }
         }
