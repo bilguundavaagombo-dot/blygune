@@ -11,7 +11,7 @@
     <title>AMT - Дэлгэрэнгүй</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* --- CORE VARIABLES (Matched to Index/List) --- */
+        /* --- CORE VARIABLES --- */
         :root { 
             --bg: #F8F9FB; 
             --text: #1F2937; 
@@ -53,7 +53,6 @@
             flex-direction: column;
         }
 
-        /* --- CRITICAL: MOBILE ZOOM (Matches Index/List) --- */
         @media only screen and (max-width: 768px) { 
             body { zoom: 65%; } 
             main { padding-top: 100px !important; }
@@ -78,7 +77,6 @@
         .icon-btn { width: 45px; height: 45px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.4rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: center; }
         .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
         
-        /* --- MAIN LAYOUT --- */
         main { 
             flex: 1; 
             display: flex; 
@@ -90,7 +88,6 @@
             width: 100%; 
         }
 
-        /* --- NAVIGATION --- */
         .back-btn { 
             align-self: flex-start; 
             background: none; 
@@ -108,10 +105,9 @@
         }
         .back-btn:hover { color: var(--accent); transform: translateX(-5px); }
         
-        /* --- RECIPE HEADER --- */
         .detail-header { width: 100%; margin-bottom: 30px; text-align: center; animation: fadeIn 0.8s ease; }
         .detail-title { 
-            font-size: 3rem; /* Increased size */
+            font-size: 3rem; 
             font-family: var(--font-head); 
             font-weight: 900; 
             color: var(--text); 
@@ -135,7 +131,6 @@
             box-shadow: 0 5px 15px rgba(255, 69, 0, 0.15); 
         }
 
-        /* --- CONTENT CARD --- */
         .detail-content { 
             width: 100%; 
             background: var(--surface); 
@@ -143,12 +138,11 @@
             border-radius: var(--radius); 
             border: 1px solid var(--border); 
             line-height: 1.8; 
-            font-size: 1.15rem; /* Increased readable font size */
+            font-size: 1.15rem; 
             box-shadow: var(--shadow); 
             animation: fadeIn 1s ease;
         }
         
-        /* Typography inside content */
         .detail-content h3 { 
             color: var(--text); 
             margin: 35px 0 20px 0; 
@@ -165,16 +159,42 @@
         .detail-content strong { color: var(--text); font-weight: 800; }
         .detail-content p { margin-bottom: 20px; color: var(--sub-text); }
 
-        /* --- LOADING SCREEN --- */
+        /* --- FIXED LOADER SCREEN (Android Fix) --- */
         .loader-screen { 
-            display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background: var(--bg); z-index: 2000; flex-direction: column; 
-            align-items: center; justify-content: center; text-align: center; 
+            display: flex; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; /* Use all 4 coordinates to force full screen */
+            width: 100%; 
+            height: 100dvh; /* Dynamic Viewport Height for Android Address Bar */
+            background: var(--bg); 
+            z-index: 9999; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
             padding: 40px;
+            /* Force Hardware Acceleration for Smoothness */
+            -webkit-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
         }
+        
         .loader-screen.hidden { display: none; }
-        .spinner { font-size: 4rem; animation: spin 2s infinite; display: block; margin-bottom: 25px; }
+        
+        .spinner { 
+            font-size: 4rem; 
+            animation: spin 1.5s infinite linear; /* Linear is smoother for spinning */
+            display: block; 
+            margin-bottom: 25px; 
+            /* Prevent Jitter */
+            -webkit-backface-visibility: hidden; 
+            backface-visibility: hidden;
+        }
+        
         .loader-title { font-family: var(--font-head); font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; }
+        
         .loader-tip { 
             margin-top: 40px; padding: 20px 30px; 
             background: var(--surface); border: 1px solid var(--accent); 
@@ -183,7 +203,6 @@
             font-style: italic; animation: fadeIn 0.5s ease; box-shadow: var(--shadow);
         }
 
-        /* --- DONATE BUTTON --- */
         .btn-donate { 
             width: 100%; 
             margin-top: 40px; 
@@ -204,7 +223,6 @@
         }
         .btn-donate:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(34, 197, 94, 0.35); }
 
-        /* --- MODAL --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 1100; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-card { width: 100%; max-width: 500px; background: var(--bg); border-radius: 30px; padding: 40px; transform: scale(0.9); opacity: 0; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid var(--border); text-align: center; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow); }
@@ -345,10 +363,7 @@
             document.getElementById('recipe-title').innerText = title;
             document.getElementById('skill-display').innerText = "Түвшин: " + skillName;
 
-            let visual = "";
-            let tone = "";
             let guideType = "";
-
             if (state.skill <= 2) {
                 guideType = "DETAILED & INSTRUCTIVE. Explain steps clearly for a beginner. Explain cuts and timings carefully.";
             } else if (state.skill >= 4) {
@@ -394,27 +409,24 @@
                 
                 if (data.output) {
                     let html = data.output;
-                    if(data.candidates) html = data.candidates[0].content.parts[0].text; // Fallback for Gemini format
-                    
+                    if(data.candidates) html = data.candidates[0].content.parts[0].text; 
                     html = html.replace(/```html/g, '').replace(/```/g, '');
-                    
                     document.getElementById('detail-container').innerHTML = html;
                     document.getElementById('loader-screen').classList.add('hidden');
                     document.getElementById('main-content').style.display = 'flex';
                 }
             } catch (err) {
                 console.error(err);
-                // Demo content if API fails, remove for production
+                 // Fallback
                  document.getElementById('detail-container').innerHTML = `
                     <h3>Орц</h3>
                     <ul><li>Жишээ орц 1</li><li>Жишээ орц 2</li></ul>
                     <h3>Хийх арга</h3>
                     <ol><li>Жишээ алхам 1...</li><li>Жишээ алхам 2...</li></ol>
-                    <strong>💡 Зөвлөгөө:</strong> Энэ бол жишээ текст юм.
+                    <strong>💡 Зөвлөгөө:</strong> Ачаалахад алдаа гарлаа.
                  `;
                  document.getElementById('loader-screen').classList.add('hidden');
                  document.getElementById('main-content').style.display = 'flex';
-                // alert("Жорыг ачаалж чадсангүй. Дахин оролдоно уу.");
             }
         }
     </script>
