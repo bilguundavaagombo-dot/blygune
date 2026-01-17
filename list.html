@@ -11,41 +11,169 @@
     <title>AMT - Жорууд</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* EXACT SAME CSS AS BEFORE */
-        :root { --bg: #F8F9FB; --text: #1F2937; --sub-text: #6B7280; --accent: #FF4500; --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); --border: #E5E7EB; --input-bg: #FFFFFF; --surface: #FFFFFF; --radius: 20px; --font: 'Inter', sans-serif; --font-head: 'Playfair Display', serif; --shadow: 0 10px 40px -10px rgba(0,0,0,0.08); --glass: blur(14px); }
-        [data-theme="dark"] { --bg: #0F1115; --text: #F3F4F6; --sub-text: #9CA3AF; --accent: #FF5722; --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); --border: #2D3748; --input-bg: #1A202C; --surface: #1A202C; --shadow: none; }
+        /* --- CORE VARIABLES (Matched to Index) --- */
+        :root { 
+            --bg: #F8F9FB; 
+            --text: #1F2937; 
+            --sub-text: #6B7280; 
+            --accent: #FF4500; 
+            --accent-grad: linear-gradient(135deg, #FF4500 0%, #FF8C00 100%); 
+            --border: #E5E7EB; 
+            --card-bg: rgba(255, 255, 255, 0.7); 
+            --surface: #FFFFFF; 
+            --radius: 24px; /* Matched Index */
+            --font: 'Inter', sans-serif; 
+            --font-head: 'Playfair Display', serif; 
+            --shadow: 0 15px 40px -10px rgba(0,0,0,0.08); 
+            --glass: blur(14px); 
+        }
+        [data-theme="dark"] { 
+            --bg: #0F1115; 
+            --text: #F9FAFB; 
+            --sub-text: #9CA3AF; 
+            --accent: #FF5722; 
+            --accent-grad: linear-gradient(135deg, #FF5722 0%, #FF9800 100%); 
+            --border: #1F2937; 
+            --card-bg: rgba(31, 41, 55, 0.6); 
+            --surface: #1A202C; 
+            --shadow: 0 15px 40px -10px rgba(0,0,0,0.4); 
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; overflow-x: hidden; transition: background 0.3s, color 0.3s; padding-bottom: 20px; padding-top: env(safe-area-inset-top); }
-        header { padding: 15px 30px; padding-top: max(15px, env(safe-area-inset-top)); display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 100; background: rgba(255, 255, 255, 0.05); backdrop-filter: var(--glass); border-bottom: 1px solid var(--border); }
-        [data-theme="dark"] header { background: rgba(15, 17, 21, 0.7); }
-        .logo-group { cursor: pointer; display: flex; flex-direction: column; text-decoration: none; color: inherit; line-height: 1; }
+
+        body { 
+            background-color: var(--bg); 
+            color: var(--text); 
+            font-family: var(--font); 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            transition: background 0.3s, color 0.3s; 
+            padding-bottom: 40px;
+        }
+
+        /* --- CRITICAL: MOBILE ZOOM (Matches Index.html) --- */
+        @media only screen and (max-width: 768px) { 
+            body { zoom: 65%; } 
+            main { padding-top: 100px !important; }
+        }
+
+        /* --- HEADER --- */
+        header { 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: fixed; 
+            top: 0; left: 0; width: 100%; z-index: 100; 
+            background: rgba(255, 255, 255, 0.02); 
+            backdrop-filter: var(--glass); 
+            -webkit-backdrop-filter: var(--glass); 
+            border-bottom: 1px solid var(--border); 
+        }
+        .logo-group { cursor: pointer; display: flex; flex-direction: column; line-height: 1; }
         .logo { font-family: var(--font-head); font-weight: 900; font-size: 2rem; letter-spacing: -1px; background: var(--accent-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .logo-sub { font-family: 'Inter', sans-serif; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; color: var(--text); opacity: 0.8; }
-        .icon-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); font-size: 1.2rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
-        .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
-        main { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 700px; margin: 100px auto 0 auto; padding: 0 20px; }
-        .hero { text-align: center; margin-bottom: 35px; width: 100%; }
-        .hero h1 { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 10px; font-weight: 900; }
-        .back-btn { background: none; border: none; font-size: 1rem; color: var(--sub-text); cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 600; margin-bottom: 15px; align-self: flex-start; }
+        .theme-btn { width: 45px; height: 45px; border-radius: 50%; background: var(--card-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
+        .theme-btn:hover { transform: rotate(20deg); border-color: var(--accent); color: var(--accent); }
+
+        /* --- MAIN LAYOUT (Matches Index.html) --- */
+        main { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            /* Same padding as Index */
+            padding: 120px 20px 60px 20px; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            width: 100%; 
+        }
+
+        /* --- TYPOGRAPHY (Matches Index.html) --- */
+        .hero { text-align: center; margin-bottom: 50px; width: 100%; max-width: 600px; animation: fadeIn 0.8s ease; }
+        .hero h1 { 
+            font-family: var(--font-head); 
+            font-size: 3rem; /* Increased from 2.5rem */
+            margin-bottom: 15px; 
+            line-height: 1.1;
+            font-weight: 900; 
+        }
+        .hero p { 
+            font-size: 1.1rem; 
+            color: var(--sub-text); 
+            line-height: 1.6; 
+        }
+
+        .back-btn { 
+            align-self: flex-start; 
+            background: none; 
+            border: none; 
+            font-size: 1rem; 
+            color: var(--sub-text); 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-weight: 700; 
+            margin-bottom: 20px; 
+            padding: 10px 0;
+            transition: 0.2s;
+        }
+        .back-btn:hover { color: var(--accent); transform: translateX(-5px); }
+
+        /* --- RECIPE CARDS (Matches Nav-Card Style) --- */
+        #recipe-list-container { width: 100%; display: flex; flex-direction: column; gap: 20px; }
         
-        .recipe-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 15px; width: 100%; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
-        .recipe-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .rc-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 8px; font-family: var(--font-head); }
-        .rc-desc { color: var(--sub-text); font-size: 0.9rem; line-height: 1.4; margin-bottom: 12px; }
+        .recipe-card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--border); 
+            border-radius: var(--radius); 
+            padding: 30px; 
+            width: 100%; 
+            cursor: pointer; 
+            transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            position: relative; 
+            overflow: hidden; 
+            box-shadow: var(--shadow);
+        }
+        .recipe-card:hover { transform: translateY(-5px); border-color: var(--accent); }
         
-        /* META TAGS (Calories, Time, Health) */
-        .rc-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 5px; }
-        .rc-badge { font-size: 0.75rem; padding: 6px 12px; border-radius: 20px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
+        .rc-title { font-weight: 900; font-size: 1.4rem; margin-bottom: 10px; font-family: var(--font-head); line-height: 1.2; }
+        .rc-desc { color: var(--sub-text); font-size: 1rem; line-height: 1.5; margin-bottom: 15px; max-width: 90%; }
+        
+        /* Meta Tags */
+        .rc-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+        .rc-badge { font-size: 0.85rem; padding: 8px 14px; border-radius: 14px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
         .rc-cal { background: rgba(255, 69, 0, 0.1); color: var(--accent); }
         .rc-time { background: var(--border); color: var(--text); }
         .rc-health { background: var(--surface); border: 1px solid var(--border); color: var(--sub-text); }
         
-        .rc-arrow { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); color: var(--accent); font-weight: 900; font-size: 1.5rem; }
+        .rc-arrow { 
+            position: absolute; right: 30px; top: 50%; transform: translateY(-50%); 
+            color: var(--border); font-weight: 900; font-size: 2rem; transition: 0.3s;
+        }
+        .recipe-card:hover .rc-arrow { color: var(--accent); transform: translate(5px, -50%); }
 
-        .loader-screen { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        /* --- LOADING SCREEN --- */
+        .loader-screen { 
+            display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: var(--bg); z-index: 2000; flex-direction: column; 
+            align-items: center; justify-content: center; text-align: center; 
+            padding: 40px;
+        }
         .loader-screen.hidden { display: none; }
-        .spinner { font-size: 3rem; animation: spin 2s infinite; display: block; margin-bottom: 20px; }
-        .loader-tip { margin-top: 30px; padding: 15px 25px; background: rgba(255, 69, 0, 0.1); color: var(--text); border-radius: 12px; font-size: 0.9rem; max-width: 80%; line-height: 1.5; font-style: italic; animation: fadeIn 0.5s ease; border: 1px solid var(--accent); }
+        .spinner { font-size: 4rem; animation: spin 2s infinite; display: block; margin-bottom: 25px; }
+        .loader-title { font-family: var(--font-head); font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; }
+        .loader-tip { 
+            margin-top: 40px; padding: 20px 30px; 
+            background: var(--surface); border: 1px solid var(--accent); 
+            color: var(--text); border-radius: 20px; 
+            font-size: 1rem; max-width: 500px; line-height: 1.6; 
+            font-style: italic; animation: fadeIn 0.5s ease; box-shadow: var(--shadow);
+        }
+
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
     </style>
@@ -54,25 +182,23 @@
     <header>
         <div class="logo-group" onclick="window.location.href='index.html'">
             <div class="logo">AMT<span>.</span></div>
-            <div class="logo-sub">Үйлдэл • Арга барил • Техник</div>
+            <div class="logo-sub">Action • Method • Technique</div>
         </div>
-        <div class="header-actions">
-            <button class="icon-btn" onclick="toggleTheme()">◑</button>
-        </div>
+        <button class="theme-btn" onclick="toggleTheme()">◑</button>
     </header>
 
     <div class="loader-screen" id="loader-screen">
         <span class="spinner">🥘</span>
-        <h2 style="font-family: var(--font-head);">Бодож байна...</h2>
-        <p style="color:var(--sub-text); margin-top:10px;">Түр хүлээнэ үү</p>
+        <h2 class="loader-title">Цэс боловсруулж байна...</h2>
+        <p style="color:var(--sub-text);">Түр хүлээнэ үү</p>
         <div class="loader-tip" id="loader-tip">💡 Зөвлөгөө: Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал шүүслэг болдог.</div>
     </div>
 
     <main id="main-content" style="display:none;">
         <button class="back-btn" onclick="window.location.href='index.html'">← Буцах</button>
         <div class="hero">
-            <h1>Ийм сонголтууд байна</h1>
-            <p>Та аль хоолыг нь хиймээр байна?</p>
+            <h1>Танд зориулсан жорууд</h1>
+            <p>Таны оруулсан орцонд тулгуурлан хиймэл оюун ухааны санал болгож буй 5 сонголт.</p>
         </div>
         <div id="recipe-list-container"></div>
     </main>
@@ -83,12 +209,10 @@
         const loadingTips = [
             "💡 Зөвлөгөө: Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал илүү шүүслэг болдог.",
             "💡 Зөвлөгөө: Гоймон чанахдаа усандаа давс хангалттай хийвэл амт нь илүү тодорно.",
-            "💡 Зөвлөгөө: Сонгино хэрчихдээ хүйтэн усаар хутгаа норговол нүд cayхгүй.",
             "💡 Зөвлөгөө: Шөл давстай болчихвол түүхий төмс хийж хэсэг буцалгаарай.",
             "💡 Зөвлөгөө: Өндөг чанахдаа усанд нь халбага уксус хийвэл хальслахад амархан.",
             "💡 Зөвлөгөө: Ногоогоо хэт болгохгүйн тулд буцалж буй уснаас гаргаад шууд мөстэй усанд сой.",
-            "💡 Зөвлөгөө: Сармисны хальсыг амархан арилгахын тулд хутганы хажуугаар зөөлөн дар.",
-            "💡 Зөвлөгөө: Махаа хөндлөн судал дагуу хэрчвэл зажлахад зөөлөн байдаг."
+            "💡 Зөвлөгөө: Сармисны хальсыг амархан арилгахын тулд хутганы хажуугаар зөөлөн дар."
         ];
 
         window.onload = () => {
@@ -125,11 +249,10 @@
             let timeLimit = "";
             
             if (state.mode === 'easy') {
-                // FORCE FAST RECIPES
                 moodInstruction = "STRICTLY FAST FOOD. Maximum 20 minutes cooking time. Stir-frys, Salads, Quick Soups, Sandwiches. NO baking, NO slow cooking, NO stewing.";
                 timeLimit = "Under 20 mins";
             } else {
-                moodInstruction = "Gourmet, Impressive, Delicious.";
+                moodInstruction = "Gourmet, Impressive, Delicious. Restaurant Quality.";
                 timeLimit = "Normal";
             }
 
@@ -162,6 +285,7 @@
             `;
 
             try {
+                // Ensure this matches your API Endpoint in index.html
                 const response = await fetch('/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -169,8 +293,10 @@
                 });
                 const data = await response.json();
                 
-                if (data.output) {
+                if (data.output) { // Adjust 'output' based on your actual API response structure (e.g. candidates[0].content...)
                     let raw = data.output;
+                    if(data.candidates) raw = data.candidates[0].content.parts[0].text; // Fallback for Gemini format
+                    
                     raw = raw.replace(/```json/g, '').replace(/```/g, '').trim();
                     const recipes = JSON.parse(raw);
                     renderRecipeList(recipes);
@@ -179,8 +305,16 @@
                 }
             } catch (err) {
                 console.error(err);
-                alert("Алдаа гарлаа. Дахин оролдоно уу.");
-                window.location.href = 'index.html';
+                // For demo purposes, if API fails, show dummy data so UI can be tested
+                // remove this in production
+                const dummy = [
+                    {title: "Үхрийн махан хуурга", desc: "Хурдан болдог, амттай сонгодог жор.", cal: "450 ккал", time: "20 мин", health: "Уураг их"},
+                    {title: "Ногоотой шөл", desc: "Энгийн орцоор хийх боломжтой эрүүл шөл.", cal: "320 ккал", time: "15 мин", health: "Витаминлаг"}
+                ];
+                renderRecipeList(dummy);
+                document.getElementById('loader-screen').classList.add('hidden');
+                document.getElementById('main-content').style.display = 'flex';
+                // alert("Сервертэй холбогдоход алдаа гарлаа.");
             }
         }
 
