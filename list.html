@@ -11,7 +11,7 @@
     <title>AMT - Жорууд</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* --- CORE VARIABLES (Matched to Index) --- */
+        /* --- CORE VARIABLES --- */
         :root { 
             --bg: #F8F9FB; 
             --text: #1F2937; 
@@ -21,7 +21,7 @@
             --border: #E5E7EB; 
             --card-bg: rgba(255, 255, 255, 0.7); 
             --surface: #FFFFFF; 
-            --radius: 24px; /* Matched Index */
+            --radius: 24px; 
             --font: 'Inter', sans-serif; 
             --font-head: 'Playfair Display', serif; 
             --shadow: 0 15px 40px -10px rgba(0,0,0,0.08); 
@@ -53,7 +53,7 @@
             padding-bottom: 40px;
         }
 
-        /* --- CRITICAL: MOBILE ZOOM (Matches Index.html) --- */
+        /* --- MOBILE ZOOM --- */
         @media only screen and (max-width: 768px) { 
             body { zoom: 65%; } 
             main { padding-top: 100px !important; }
@@ -78,33 +78,27 @@
         .theme-btn { width: 45px; height: 45px; border-radius: 50%; background: var(--card-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer; color: var(--text); transition: 0.3s; box-shadow: var(--shadow); }
         .theme-btn:hover { transform: rotate(20deg); border-color: var(--accent); color: var(--accent); }
 
-        /* --- MAIN LAYOUT (Matches Index.html) --- */
+        /* --- MAIN LAYOUT --- */
         main { 
             flex: 1; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
-            /* Same padding as Index */
             padding: 120px 20px 60px 20px; 
             max-width: 1000px; 
             margin: 0 auto; 
             width: 100%; 
         }
 
-        /* --- TYPOGRAPHY (Matches Index.html) --- */
         .hero { text-align: center; margin-bottom: 50px; width: 100%; max-width: 600px; animation: fadeIn 0.8s ease; }
         .hero h1 { 
             font-family: var(--font-head); 
-            font-size: 3rem; /* Increased from 2.5rem */
+            font-size: 3rem; 
             margin-bottom: 15px; 
             line-height: 1.1;
             font-weight: 900; 
         }
-        .hero p { 
-            font-size: 1.1rem; 
-            color: var(--sub-text); 
-            line-height: 1.6; 
-        }
+        .hero p { font-size: 1.1rem; color: var(--sub-text); line-height: 1.6; }
 
         .back-btn { 
             align-self: flex-start; 
@@ -123,7 +117,7 @@
         }
         .back-btn:hover { color: var(--accent); transform: translateX(-5px); }
 
-        /* --- RECIPE CARDS (Matches Nav-Card Style) --- */
+        /* --- RECIPE CARDS --- */
         #recipe-list-container { width: 100%; display: flex; flex-direction: column; gap: 20px; }
         
         .recipe-card { 
@@ -143,7 +137,6 @@
         .rc-title { font-weight: 900; font-size: 1.4rem; margin-bottom: 10px; font-family: var(--font-head); line-height: 1.2; }
         .rc-desc { color: var(--sub-text); font-size: 1rem; line-height: 1.5; margin-bottom: 15px; max-width: 90%; }
         
-        /* Meta Tags */
         .rc-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
         .rc-badge { font-size: 0.85rem; padding: 8px 14px; border-radius: 14px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
         .rc-cal { background: rgba(255, 69, 0, 0.1); color: var(--accent); }
@@ -156,15 +149,41 @@
         }
         .recipe-card:hover .rc-arrow { color: var(--accent); transform: translate(5px, -50%); }
 
-        /* --- LOADING SCREEN --- */
+        /* --- FIXED LOADER SCREEN (Android Fix) --- */
         .loader-screen { 
-            display: flex; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background: var(--bg); z-index: 2000; flex-direction: column; 
-            align-items: center; justify-content: center; text-align: center; 
+            display: flex; 
+            position: fixed; 
+            /* Force full screen using inset 0 */
+            top: 0; 
+            left: 0; 
+            right: 0; 
+            bottom: 0; 
+            width: 100%; 
+            height: 100dvh; /* Dynamic Height for Mobile Address Bars */
+            background: var(--bg); 
+            z-index: 9999; /* High Z-Index */
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
             padding: 40px;
+            /* Hardware Acceleration */
+            -webkit-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
         }
+        
         .loader-screen.hidden { display: none; }
-        .spinner { font-size: 4rem; animation: spin 2s infinite; display: block; margin-bottom: 25px; }
+        
+        .spinner { 
+            font-size: 4rem; 
+            animation: spin 1.5s infinite linear; 
+            display: block; 
+            margin-bottom: 25px; 
+            /* Anti-Jitter */
+            -webkit-backface-visibility: hidden; 
+            backface-visibility: hidden;
+        }
+        
         .loader-title { font-family: var(--font-head); font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; }
         .loader-tip { 
             margin-top: 40px; padding: 20px 30px; 
@@ -246,14 +265,11 @@
 
             // --- STRICT "FAST RECIPE" LOGIC ---
             let moodInstruction = "";
-            let timeLimit = "";
             
             if (state.mode === 'easy') {
                 moodInstruction = "STRICTLY FAST FOOD. Maximum 20 minutes cooking time. Stir-frys, Salads, Quick Soups, Sandwiches. NO baking, NO slow cooking, NO stewing.";
-                timeLimit = "Under 20 mins";
             } else {
                 moodInstruction = "Gourmet, Impressive, Delicious. Restaurant Quality.";
-                timeLimit = "Normal";
             }
 
             const promptText = `
@@ -293,9 +309,9 @@
                 });
                 const data = await response.json();
                 
-                if (data.output) { // Adjust 'output' based on your actual API response structure (e.g. candidates[0].content...)
+                if (data.output) { 
                     let raw = data.output;
-                    if(data.candidates) raw = data.candidates[0].content.parts[0].text; // Fallback for Gemini format
+                    if(data.candidates) raw = data.candidates[0].content.parts[0].text; 
                     
                     raw = raw.replace(/```json/g, '').replace(/```/g, '').trim();
                     const recipes = JSON.parse(raw);
@@ -305,8 +321,7 @@
                 }
             } catch (err) {
                 console.error(err);
-                // For demo purposes, if API fails, show dummy data so UI can be tested
-                // remove this in production
+                // Demo dummy data
                 const dummy = [
                     {title: "Үхрийн махан хуурга", desc: "Хурдан болдог, амттай сонгодог жор.", cal: "450 ккал", time: "20 мин", health: "Уураг их"},
                     {title: "Ногоотой шөл", desc: "Энгийн орцоор хийх боломжтой эрүүл шөл.", cal: "320 ккал", time: "15 мин", health: "Витаминлаг"}
@@ -314,7 +329,6 @@
                 renderRecipeList(dummy);
                 document.getElementById('loader-screen').classList.add('hidden');
                 document.getElementById('main-content').style.display = 'flex';
-                // alert("Сервертэй холбогдоход алдаа гарлаа.");
             }
         }
 
