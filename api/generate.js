@@ -33,7 +33,7 @@ export default async function handler(req, res) {
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: "gpt-5.2",
+                model: "gpt-5.2-pro",
                 messages: [
                     { role: "system", content: "You are a helpful chef." },
                     { role: "user", content: prompt }
