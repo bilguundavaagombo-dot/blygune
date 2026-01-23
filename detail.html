@@ -54,7 +54,7 @@
         }
 
         @media only screen and (max-width: 768px) { 
-            body { zoom: 65%; } 
+            body { zoom: 90%; } 
             main { padding-top: 100px !important; }
         }
 
@@ -83,7 +83,7 @@
             flex-direction: column; 
             align-items: center; 
             padding: 120px 20px 60px 20px; 
-            max-width: 900px; 
+            max-width: 1000px; 
             margin: 0 auto; 
             width: 100%; 
         }
@@ -99,7 +99,7 @@
             align-items: center; 
             gap: 8px; 
             font-weight: 700; 
-            margin-bottom: 30px; 
+            margin-bottom: 20px; 
             padding: 10px 0;
             transition: 0.2s;
         }
@@ -107,12 +107,12 @@
         
         .detail-header { width: 100%; margin-bottom: 30px; text-align: center; animation: fadeIn 0.8s ease; }
         .detail-title { 
-            font-size: 3rem; 
+            font-size: 2.5rem; 
             font-family: var(--font-head); 
             font-weight: 900; 
             color: var(--text); 
             line-height: 1.1; 
-            margin-bottom: 15px; 
+            margin-bottom: 10px; 
             background: var(--accent-grad); 
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent; 
@@ -120,55 +120,79 @@
         
         .skill-badge { 
             display: inline-flex; 
-            padding: 8px 18px; 
+            padding: 6px 14px; 
             background: var(--surface); 
             border: 1px solid var(--accent); 
             border-radius: 50px; 
-            font-size: 0.9rem; 
+            font-size: 0.8rem; 
             font-weight: 700; 
             color: var(--accent); 
             margin-bottom: 15px; 
             box-shadow: 0 5px 15px rgba(255, 69, 0, 0.15); 
         }
 
-        .detail-content { 
+        /* --- NEW RECIPE CARD STYLE (Modern Culinary Elegance) --- */
+        .recipe-card { 
             width: 100%; 
             background: var(--surface); 
-            padding: 40px; 
+            padding: 0; /* Remove padding for full-width image */
             border-radius: var(--radius); 
             border: 1px solid var(--border); 
-            line-height: 1.8; 
-            font-size: 1.15rem; 
+            overflow: hidden; /* For image */
             box-shadow: var(--shadow); 
             animation: fadeIn 1s ease;
+            margin-bottom: 40px;
+        }
+
+        /* Generated Image Container */
+        .recipe-image-container {
+            width: 100%;
+            height: 350px;
+            background-color: #ddd;
+            position: relative;
+            overflow: hidden;
         }
         
-        .detail-content h3 { 
+        .recipe-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .recipe-image:hover { transform: scale(1.05); }
+
+        .recipe-body { padding: 40px; }
+
+        .recipe-body h2 {
+            font-family: var(--font-head);
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+        
+        .recipe-body h3 { 
             color: var(--text); 
-            margin: 35px 0 20px 0; 
-            font-size: 1.5rem; 
+            margin: 30px 0 15px 0; 
+            font-size: 1.3rem; 
             border-bottom: 2px solid var(--border); 
-            padding-bottom: 10px; 
+            padding-bottom: 8px; 
             font-family: var(--font-head); 
-            font-weight: 900;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .detail-content h3:first-child { margin-top: 0; }
         
-        .detail-content ul, .detail-content ol { padding-left: 25px; margin-bottom: 25px; }
-        .detail-content li { margin-bottom: 12px; color: var(--text); }
-        .detail-content strong { color: var(--text); font-weight: 800; }
-        .detail-content p { margin-bottom: 20px; color: var(--sub-text); }
+        .recipe-body ul, .recipe-body ol { padding-left: 20px; margin-bottom: 25px; }
+        .recipe-body li { margin-bottom: 10px; color: var(--sub-text); font-size: 1.05rem; line-height: 1.6; }
+        .recipe-body strong { color: var(--text); font-weight: 700; }
+        .recipe-body p { margin-bottom: 20px; color: var(--sub-text); line-height: 1.6; }
 
         /* --- FIXED LOADER SCREEN (Android Fix) --- */
         .loader-screen { 
             display: flex; 
             position: fixed; 
-            top: 0; 
-            left: 0; 
-            right: 0; 
-            bottom: 0; /* Use all 4 coordinates to force full screen */
-            width: 100%; 
-            height: 100dvh; /* Dynamic Viewport Height for Android Address Bar */
+            top: 0; left: 0; right: 0; bottom: 0;
+            width: 100%; height: 100dvh; 
             background: var(--bg); 
             z-index: 9999; 
             flex-direction: column; 
@@ -176,7 +200,6 @@
             justify-content: center; 
             text-align: center; 
             padding: 40px;
-            /* Force Hardware Acceleration for Smoothness */
             -webkit-transform: translate3d(0,0,0);
             transform: translate3d(0,0,0);
         }
@@ -185,10 +208,9 @@
         
         .spinner { 
             font-size: 4rem; 
-            animation: spin 1.5s infinite linear; /* Linear is smoother for spinning */
+            animation: spin 1.5s infinite linear; 
             display: block; 
             margin-bottom: 25px; 
-            /* Prevent Jitter */
             -webkit-backface-visibility: hidden; 
             backface-visibility: hidden;
         }
@@ -204,25 +226,16 @@
         }
 
         .btn-donate { 
-            width: 100%; 
-            margin-top: 40px; 
-            padding: 22px; 
-            border-radius: var(--radius); 
-            border: none; 
-            background: #22C55E; 
-            color: white; 
-            font-size: 1.2rem; 
-            font-weight: 800; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 12px; 
-            box-shadow: 0 15px 30px rgba(34, 197, 94, 0.25); 
-            transition: 0.3s; 
+            width: 100%; margin-top: 40px; padding: 22px; 
+            border-radius: var(--radius); border: none; 
+            background: #22C55E; color: white; font-size: 1.2rem; 
+            font-weight: 800; cursor: pointer; display: flex; 
+            align-items: center; justify-content: center; gap: 12px; 
+            box-shadow: 0 15px 30px rgba(34, 197, 94, 0.25); transition: 0.3s; 
         }
         .btn-donate:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(34, 197, 94, 0.35); }
 
+        /* MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 1100; opacity: 0; pointer-events: none; transition: 0.3s; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-card { width: 100%; max-width: 500px; background: var(--bg); border-radius: 30px; padding: 40px; transform: scale(0.9); opacity: 0; transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid var(--border); text-align: center; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow); }
@@ -260,8 +273,8 @@
 
     <div class="loader-screen" id="loader-screen">
         <span class="spinner">🥘</span>
-        <h2 class="loader-title">Зааврыг бэлдэж байна...</h2>
-        <p style="color:var(--sub-text);">Түр хүлээнэ үү</p>
+        <h2 class="loader-title">Ухаалаг жор бэлдэж байна...</h2>
+        <p style="color:var(--sub-text);">AI таны орцонд тохируулан бодож байна.</p>
         <div class="loader-tip" id="loader-tip">💡 Зөвлөгөө: Махаа шарахын өмнө тасалгааны хэмд 20 минут байлгавал шүүслэг болдог.</div>
     </div>
 
@@ -270,10 +283,10 @@
         
         <div class="detail-header">
             <div id="skill-display" class="skill-badge"></div>
-            <h1 class="detail-title" id="recipe-title"></h1>
+            <h1 class="detail-title">Танд Санал Болгох Жор</h1>
         </div>
         
-        <div id="detail-container" class="detail-content"></div>
+        <div id="detail-container" style="width: 100%;"></div>
 
         <button class="btn-donate" onclick="openDonate()">
             <span>☕ Төсөл дэмжих</span>
@@ -307,9 +320,7 @@
             "💡 Зөвлөгөө: Гоймон чанахдаа усандаа давс хангалттай хийвэл амт нь илүү тодорно.",
             "💡 Зөвлөгөө: Сонгино хэрчихдээ хүйтэн усаар хутгаа норговол нүд cayхгүй.",
             "💡 Зөвлөгөө: Шөл давстай болчихвол түүхий төмс хийж хэсэг буцалгаарай.",
-            "💡 Зөвлөгөө: Өндөг чанахдаа усанд нь халбага уксус хийвэл хальслахад амархан.",
-            "💡 Зөвлөгөө: Ногоогоо хэт болгохгүйн тулд буцалж буй уснаас гаргаад шууд мөстэй усанд сой.",
-            "💡 Зөвлөгөө: Сармисны хальсыг амархан арилгахын тулд хутганы хажуугаар зөөлөн дар."
+            "💡 Зөвлөгөө: Өндөг чанахдаа усанд нь халбага уксус хийвэл хальслахад амархан."
         ];
 
         window.onload = () => {
@@ -351,55 +362,59 @@
 
         async function getFullRecipe() {
             const state = JSON.parse(localStorage.getItem('amt_state'));
-            const title = localStorage.getItem('amt_selected_recipe');
             
-            if(!state || !title) {
+            if(!state) {
                 window.location.href = 'index.html';
                 return;
             }
 
             const skillName = lvlNames[state.skill-1];
-            
-            document.getElementById('recipe-title').innerText = title;
             document.getElementById('skill-display').innerText = "Түвшин: " + skillName;
 
-            let guideType = "";
-            if (state.skill <= 2) {
-                guideType = "DETAILED & INSTRUCTIVE. Explain steps clearly for a beginner. Explain cuts and timings carefully.";
-            } else if (state.skill >= 4) {
-                guideType = "CONCISE & PROFESSIONAL. Use chef shorthand. Assume they know how to chop.";
-            } else {
-                guideType = "NORMAL HOME COOK STYLE. Balanced length. Clear and direct.";
-            }
-
+            // --- COMPLEX PROMPT CONSTRUCTION (As requested) ---
             const promptText = `
-            Role: Native Mongolian Home Cook.
-            Task: Write a recipe for "${title}".
+            Task: Analyze the provided ingredients: ${state.ings.join(', ')} (Pantry: ${state.activePantry ? state.activePantry.join(', ') : 'None'}).
             
-            USER CONTEXT:
-            - Ingredients: ${state.ings.join(', ')} (PLUS: ${state.activePantry.join(', ')})
-            - Servings: ${state.servings}
-            - User Skill: ${skillName} (${guideType})
+            Identify potential distinct recipes. Based on these, generate a SINGLE, BEST recipe suggestion.
+            
+            REQUIREMENTS:
+            1. Language: MONGOLIAN (Cyrillic).
+            2. Structure: Create a well-structured HTML representation (div class="recipe-card").
+            3. Image: Include an <img> tag at the top of the card. Since you cannot generate real images, use this placeholder format with the English name of the dish: 
+               <div class="recipe-image-container"><img src="https://source.unsplash.com/1600x900/?{EnglishDishName}" class="recipe-image" alt="Dish Image"></div>
+            4. Content:
+               - Recipe Title (Mongolian)
+               - Ingredients List (Clear and exhaustive)
+               - Step-by-step detailed instructions.
+               - A compelling, descriptive text suitable for generating a photorealistic image (Keep this text hidden or formatted as a caption in English: "Image Prompt: ...").
+            
+            DESIGN:
+            Ensure the HTML layout is user-friendly and visually appealing, following a modern culinary elegance design with clear typography and generous whitespace. Use the CSS classes: .recipe-card, .recipe-body, h2, h3, ul, ol.
 
-            RULES:
-            1. **LENGTH:** Normal length. Not too short, not a novel.
-            2. **STYLE:** ${guideType}
-            3. **LANGUAGE:** NATIVE Mongolian (Cyrillic). Natural phrasing.
-            4. **CONTENT:** Only Ingredients and Steps. No Tools section.
-
-            OUTPUT FORMAT (HTML ONLY):
-            <h3>Орц</h3>
-            <ul>...</ul>
-            <h3>Хийх арга</h3>
-            <ol>
-               <li>Step 1...</li>
-               <li>Step 2...</li>
-            </ol>
-            <strong>💡 Зөвлөгөө:</strong> (Short sentence)
+            OUTPUT FORMAT (HTML Fragment Only):
+            <div class="recipe-card">
+                <div class="recipe-image-container">
+                    <img src="https://source.unsplash.com/1600x900/?{DishNameEnglish}" class="recipe-image" alt="Food">
+                </div>
+                <div class="recipe-body">
+                    <h2>{Recipe Title in Mongolian}</h2>
+                    <p><em>{Short appetizing description in Mongolian}</em></p>
+                    
+                    <h3>Орц</h3>
+                    <ul>...</ul>
+                    
+                    <h3>Хийх арга</h3>
+                    <ol>...</ol>
+                    
+                    <div style="margin-top:20px; padding:15px; background:var(--bg); border-radius:10px; font-size:0.8rem; color:var(--sub-text);">
+                        <strong>AI Image Prompt:</strong> {Detailed English description for photorealistic image generation...}
+                    </div>
+                </div>
+            </div>
             `;
 
             try {
-                // Ensure this matches your API Endpoint in index.html
+                // Ensure this matches your API Endpoint in index.html logic
                 const response = await fetch('/api/generate', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -409,21 +424,30 @@
                 
                 if (data.output) {
                     let html = data.output;
-                    if(data.candidates) html = data.candidates[0].content.parts[0].text; 
+                    // Cleanup markdown if AI sends it
                     html = html.replace(/```html/g, '').replace(/```/g, '');
                     document.getElementById('detail-container').innerHTML = html;
+                    
                     document.getElementById('loader-screen').classList.add('hidden');
                     document.getElementById('main-content').style.display = 'flex';
                 }
             } catch (err) {
                 console.error(err);
-                 // Fallback
+                 // Fallback Display for testing without API
                  document.getElementById('detail-container').innerHTML = `
-                    <h3>Орц</h3>
-                    <ul><li>Жишээ орц 1</li><li>Жишээ орц 2</li></ul>
-                    <h3>Хийх арга</h3>
-                    <ol><li>Жишээ алхам 1...</li><li>Жишээ алхам 2...</li></ol>
-                    <strong>💡 Зөвлөгөө:</strong> Ачаалахад алдаа гарлаа.
+                    <div class="recipe-card">
+                        <div class="recipe-image-container">
+                            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1600&q=80" class="recipe-image" alt="Food">
+                        </div>
+                        <div class="recipe-body">
+                            <h2>Жишээ: Эрүүл Салат (API Алдаа)</h2>
+                            <p><em>Танд холболтын алдаа гарсан тул жишээ жор харуулж байна.</em></p>
+                            <h3>Орц</h3>
+                            <ul><li>2 ширхэг өндөг</li><li>1 багц ногоон сонгино</li><li>Давс, перц</li></ul>
+                            <h3>Хийх арга</h3>
+                            <ol><li>Ногоогоо угааж цэвэрлэнэ.</li><li>Өндгөө чанаж хэрчинэ.</li><li>Бүгдийг холиод амтална.</li></ol>
+                        </div>
+                    </div>
                  `;
                  document.getElementById('loader-screen').classList.add('hidden');
                  document.getElementById('main-content').style.display = 'flex';
